@@ -1,0 +1,61 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="jumbotron">
+            <h1>คะแนนโปรเจค</h1>
+            <p>เลือกโปรเจคที่ต้องการให้คะแนน</p>
+            <div class="form-group">
+                <label for="sel1">รายการโปรเจค:</label>
+                <select class="form-control" id="data_proj">
+                    {% for name in Projectset %}
+                        <option>{{name.proj_name_th}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <script>
+                $('#data_proj').change(function () {
+                    var selectedText = $(this).find("option:selected").text();
+                    // $(".test").text(selectedText);
+                });
+            </script>
+            <!-- <div class="test"></div> -->
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="warning">
+                        {% for col_name in column_name%}
+                        <th>{{col_name}}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in "123456789" %}
+                    <td>
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="s" +{{i}} style="width: 100%">
+                                {% for j in range %}
+                                    <option value={{j}}>{{j}}</option>
+                                {% endfor %}
+                            </select>
+                    </td>
+                    {% endfor %}
+
+                    <!-- <script>
+                        for (i = 1; i < 10; i++) {
+                            $('#s'+i).change(function () {
+                                var selectedText = $(this).find("option:selected").text();
+                            // $(".test").text(selectedText);
+                            });
+                        }
+                    </script> -->
+                </tbody>
+            </table>
+        </div>
+        <button id="reset_score" type="button" class="btn btn-success"><h4>ส่งผลคะแนน</h4></button>
+        <div class="col-xs-10">
+            <button id="submit_score" type="button" class="btn btn-danger"><h4>รีเซ็ตผลคะแนน</h4></button>
+        </div>
+    </div>
+</div>
+{% endblock %}

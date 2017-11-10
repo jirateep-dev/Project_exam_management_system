@@ -1,0 +1,81 @@
+ {% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %} {% if next %} {% if user.is_authenticated %}
+
+<p>Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
+{% else %}
+
+<p>Please login to see this page.</p>
+{% endif %} {% endif %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>ระบบจัดตารางสอบวิชาโครงงาน</title>
+	<!-- Core CSS - Include with every page -->
+	<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+	<link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+	<div class="wrapper">
+		<div class="container">
+			<h1>Welcome</h1>
+			<h3>ระบบจัดตารางสอบวิชาโครงงาน</h3>
+			<form method="post" action="{% url 'login' %}">
+				{% csrf_token %}
+				<!-- <input type="text" placeholder="Username">
+				<input type="password" placeholder="Password"> -->
+				<div class="fieldWrapper" id="username">
+					{{ form.username }}
+				</div>
+				<div class="fieldWrapper" id="password">
+					{{ form.password }}
+				</div>
+				
+				<!-- <table>
+						<tr>
+							<td>{{ form.username }}</td>
+						</tr>
+						<tr>
+							<td>{{ form.password }}</td>
+						</tr>
+					</table> -->
+				<button type="submit" value="login">Login</button>
+				<input type="hidden" name="next" value="{{ next }}" />
+			</form>
+		</div>
+
+		<ul class="bg-bubbles">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+
+	{% block javascript %} 
+		{% if not user.is_authenticated %}
+		<script>
+			$("ul.nav.navbar-nav.navbar-right").css("display", "none");
+		</script>
+		{% endif %} 
+		<script type="text/javascript" >
+			$(document).ready(function(){
+				$("#username").attr('placeholder', '{{form.username.label}}');
+				$("#password").attr('placeholder', '{{form.password.label}}');
+			});
+		</script>
+	{% endblock %}
+</body>
+
+</html>
