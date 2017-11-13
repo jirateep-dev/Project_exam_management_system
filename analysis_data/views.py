@@ -76,59 +76,66 @@ def manage_room(request):
     date_selected = request.POST.get('date_selected',None)
 
     date_time = datetime.datetime.strptime(date_selected, "%d/%m/%Y")
-    list_proj_id, list_proj_name = [], []
+    list_proj_id, list_date, result_manage = [], [], []
     list_teachers = manageTeacher(major_selected, date_selected)
 
-    list_date = []
-    
+    # check date in database and insert
     dataframe_date = pd.DataFrame(list(DateExam.objects.values('date_exam')))
     for i in range(len(dataframe_date)):
-        list_date.append(dataframe_date[i]['date_exam'])
+        list_date.append(dataframe_date.iloc[i]['date_exam'])
     
     if date_selected not in list_date:
         date_insert = DateExam(date_exam=date_selected)
         date_insert.save()
+    # /////////////////////////////////////
 
+    # check proj of teacher
     for i in range(3):
         proj_of_teacher = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=date_time.year+543, proj_advisor=list_teachers[i])))
         for j in range(len(proj_of_teacher)):
             if proj_of_teacher.iloc[j]['id'] not in list_proj_id:
                 list_proj_id.append(proj_of_teacher.iloc[j]['id'])
-    
+    # /////////////////////////////////////
+
+    # update teacher_group_exam
     count_loop = 1
     while True:
         if not Teacher.objects.filter(proj_group_exam=count_loop).exists():
-            for i in range(list_teachers):
-                teacher_group.filter(teacher_name=list_teachers[i]).update(proj_group_exam=count_loop)
+            for i in range(len(list_teachers)):
+                Teacher.objects.filter(teacher_name=list_teachers[i]).update(proj_group_exam=count_loop)
             break
         count_loop += 1
-    
+    # /////////////////////////////////////
+
+    # create data of table schedule
     for i in range(5):
-        list_proj_name.append(pd.DataFrame(list(Project.objects.values('proj_name_th').filter(id=list_proj_id[i]))).iloc[0]['proj_name_th'])
-        if(period_selected == 0):
+        if(int(period_selected) == 0):
             schedule = ScheduleRoom(teacher_group=count_loop, room_id_id=int(room_selected), \
                         date_id_id=DateExam.objects.values('id').filter(date_exam=date_selected)[0]['id'], \
                         proj_id_id=list_proj_id[i], time_id_id=i+1)
             schedule.save()
-        if(period_selected == 0):
+        if(int(period_selected) == 1):
             schedule = ScheduleRoom(teacher_group=count_loop, room_id_id=int(room_selected), \
                         date_id_id=DateExam.objects.values('id').filter(date_exam=date_selected)[0]['id'], \
                         proj_id_id=list_proj_id[i], time_id_id=i+6)
             schedule.save()
+    # //////////////////////////////////////
 
-    print(list_proj_name)
-    if 'room_selected' in request.POST and 'major_selected' in request.POST and 'period_selected' in request.POST:
-        message_1 = 'Room : %r' % room_selected
-        message_2 = 'Major : %r' % major_selected
-        message_3 = 'Period : %r' % period_selected
-        message_4 = 'Date : %r' % date_selected
-        boo = True
-    else:
-        message = 'You submitted an empty form.'
-        boo = False
-    # return HttpResponse(message_1+"<br>"+message_2+"<br>"+message_3+"<br>"+message_4) if boo == True else HttpResponse(message)
-    return render(request,"result_room.html",{'list_result': manageTeacher(major_selected, date_selected), \
-                    'time_exam': TimeExam.objects.all(), 'list_proj_name': list_proj_name})
+    # query data to html
+    schedule_all = pd.read_sql_query(str(ScheduleRoom.objects.all().query), connection)
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+    print(schedule_all)
+    for i in range(len(schedule_all)):
+        room_result = pd.DataFrame(list(Room.objects.values('room_name').filter(id=schedule_all.iloc[i]['room_id_id']))).iloc[0]['room_name']
+        date_result = pd.DataFrame(list(DateExam.objects.values('date_exam').filter(id=schedule_all.iloc[i]['date_id_id']))).iloc[0]['date_exam']
+        proj_result = pd.DataFrame(list(Project.objects.values('proj_name_th').filter(id=schedule_all.iloc[i]['proj_id_id']))).iloc[0]['proj_name_th']
+        time_result = pd.DataFrame(list(TimeExam.objects.values('time_exam').filter(id=schedule_all.iloc[i]['time_id_id']))).iloc[0]['time_exam']
+
+        result_manage.append({'teacher_group': schedule_all.iloc[i]['teacher_group'], 'room_name': room_result ,'date_exam': date_result, 'proj_name_th': proj_result, 'time_exam': time_result})
+    
+    print(result_manage)
+    return render(request,"result_room.html",{'list_result_teacher': manageTeacher(major_selected, date_selected), \
+                    'ScheduleRoom': result_manage})
 
 def admin_required(login_url=None):
     return user_passes_test(lambda u: u.is_superuser, login_url=login_url)

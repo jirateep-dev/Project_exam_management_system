@@ -6,25 +6,32 @@
             <p>การสอบโปรเจคภาคเรียนที่ 1 ปีการศึกษา 2560</p>
         </div>
         <div class='col-md-5'>
-            {% for obj in list_result %} 
-                {{obj}}<br> 
+            {% for teacher in list_result_teacher %} 
+                {{teacher}}<br> 
             {% endfor %}
         </div>
-        <!-- <table class="table table-hover">
+        <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>ระยะเวลา</th>
-                    <th>รายชื่อโปรเจค</th>
+                    <th>กลุ่มอาจารย์</th>
+                    <th>ห้อง</th>
+                    <th>วันที่</th>
+                    <th>รายที่โปรเจค</th>
+                    <th>เวลา</th>
                 </tr>
             </thead>
             <tbody>
+                {% for result in ScheduleRoom %} 
                 <tr>
-                    <td>John</td>
-                    <td>Doe</td>
-                    <td>john@example.com</td>
+                    <td>{{result.teacher_group}}</td>
+                    <td>{{result.room_name}}</td>
+                    <td>{{result.date_exam}}</td>
+                    <td>{{result.proj_name_th}}</td>
+                    <td>{{result.time_exam}}</td>
                 </tr>
+                {% endfor %}
             </tbody>
-        </table> -->
+        </table>
     </div>
     
 </div>
