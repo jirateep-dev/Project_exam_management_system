@@ -1,0 +1,31 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+    <div class="row">
+        <div class="jumbotron">
+            <h1>จัดการสอบ</h1>
+            <p>การสอบโปรเจคภาคเรียนที่ 1 ปีการศึกษา 2560</p>
+        </div>
+        <div class='col-md-5'>
+            {% for obj in list_result %} 
+                {{obj}}<br> 
+            {% endfor %}
+        </div>
+        <!-- <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ระยะเวลา</th>
+                    <th>รายชื่อโปรเจค</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>John</td>
+                    <td>Doe</td>
+                    <td>john@example.com</td>
+                </tr>
+            </tbody>
+        </table> -->
+    </div>
+    
+</div>
+{% endblock %}
