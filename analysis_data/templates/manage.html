@@ -1,0 +1,67 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="jumbotron">
+            <h1>จัดการสอบ</h1>
+            <p>การสอบโปรเจคภาคเรียนที่ 1 ปีการศึกษา 2560</p>
+        </div>
+        <form action="{% url 'manage_room' %}" method="POST" id="generate_form" style="margin-left: 100px">
+            {% csrf_token %}
+            <div class='col-md-5'>
+                <div class="form-group">
+                    <label for="sel1">เลือกวันที่ :</label>
+                    <input type="text" class="form-control" name="date_selected" />
+                </div>
+            </div>
+            {% block javascript %} 
+                <script type="text/javascript">
+                    $(document).ready(function(){
+                        $('input[name="date_selected"]').datepicker({
+                            startDate: new Date(),
+                            singleDatePicker: true,
+                            showDropdowns: true,
+                            format: 'dd/mm/yyyy'
+                            }).datepicker("setDate", new Date());
+                    });
+                </script>
+            {% endblock %}
+            <div class='col-md-5'>
+                <div class="form-group">
+                    <label for="sel1">เลือกช่วงเวลา :</label>
+                    <select class="form-control" name="period_selected">
+                        <option value="0">ช่วงเช้า</option>
+                        <option value="1">ช่วงบ่าย</option>
+                    </select>
+                </div>
+            </div>
+            <div class='col-md-5'>
+                <div class="form-group">
+                    <label for="sel1">เลือกห้อง:</label>
+                    <select class="form-control" name="room_selected">
+                        {% for room in rooms %}
+                            <option value={{room.id}}>{{room.room_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class='col-md-5'>
+                <div class="form-group">
+                    <label for="sel1">เลือกแขนง:</label>
+                    <select class="form-control" name="major_selected">
+                        {% for major in majors %}
+                            <option value={{major.id}}>{{major.major_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+        </form>
+    </div>
+    <div class="row" style="margin-left: 85%">
+        <button type="submit" class="btn btn-success" form="generate_form"><h4>Generate</h4></button>
+    </div>
+
+
+</div>
+{% endblock %}

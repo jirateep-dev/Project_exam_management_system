@@ -5,7 +5,7 @@ from django.utils import timezone
 import datetime
 
 class Major(models.Model):
-    major_name = models.CharField(max_length=30)
+    major_name = models.CharField(max_length=1024)
     objects = models.Manager()
 
     class Meta:
@@ -15,7 +15,7 @@ class Major(models.Model):
         return self.major_name
 
 class Room(models.Model):
-    room_name = models.CharField(max_length=10)
+    room_name = models.CharField(max_length=1024)
     objects = models.Manager()
 
     class Meta:
@@ -44,9 +44,9 @@ class Project(models.Model):
     proj_semester = models.IntegerField(default=1)
     proj_name_th = models.CharField(max_length=1024)
     proj_name_en = models.CharField(max_length=1024)
-    proj_major = models.CharField(max_length=50)
-    proj_advisor = models.CharField(max_length=45)
-    proj_co_advisor = models.CharField(max_length=45)
+    proj_major = models.CharField(max_length=1024)
+    proj_advisor = models.CharField(max_length=1024)
+    proj_co_advisor = models.CharField(max_length=1024)
     objects = models.Manager()
 
     class Meta:
@@ -100,10 +100,10 @@ class ScoreAdvisor(models.Model):
 
 class Teacher(models.Model):
     login_user = models.ForeignKey(User, on_delete=models.CASCADE)
-    teacher_name = models.CharField(max_length=45)
+    teacher_name = models.CharField(max_length=1024)
     proj_group_exam = models.IntegerField(default=0)
     proj_group_poster = models.IntegerField(default=0)
-    levels_teacher = models.IntegerField(default=2)
+    levels_teacher = models.IntegerField(default=1)
     score_projs = models.ManyToManyField(ScoreProj)
     score_posters = models.ManyToManyField(ScorePoster)
     score_advisor = models.ManyToManyField(ScoreAdvisor)

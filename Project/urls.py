@@ -21,5 +21,5 @@ urlpatterns = [
     url(r'', include('core.urls')),
     url(r'^login/', auth_views.login, {'template_name': 'login.html'}, name='login'),
     url(r'^logout/', auth_views.logout, {'next_page': '/login'}), 
-    url(r'^kmean/', include('analysis_data.urls')),
+    url(r'^manage/', include('analysis_data.urls')),
 ]
