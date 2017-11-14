@@ -35,6 +35,7 @@ class TimeExam(models.Model):
 class DateExam(models.Model):
     date_exam = models.CharField(max_length=256)
     time_period = models.IntegerField(default=0)
+    room_id = models.ForeignKey(Room, on_delete=models.CASCADE, null=True)
     objects = models.Manager()
 
     class Meta:

@@ -78,7 +78,6 @@ def manage_room(request):
 
     date_time = datetime.datetime.strptime(date_selected, "%d/%m/%Y")
     list_proj_id, result_manage, teacher_groups = [], [], []
-    # list_date, list_period = [], []
     dict_date = {}
     create_schedule = False
     list_teachers = manageTeacher(major_selected, date_selected)
@@ -86,17 +85,17 @@ def manage_room(request):
     # check date in database and insert
     dataframe_date = pd.DataFrame(list(DateExam.objects.values('date_exam')))
     dataframe_period = pd.DataFrame(list(DateExam.objects.values('time_period')))
+    dataframe_room = pd.DataFrame(list(DateExam.objects.values('room_id_id')))
     for i in range(len(dataframe_date)):
-        # list_date.append(dataframe_date.iloc[i]['date_exam'])
-        dict_date[dataframe_date.iloc[i]['date_exam']] = dataframe_period.iloc[i]['time_period']
+        dict_date[dataframe_date.iloc[i]['date_exam']] = (dataframe_period.iloc[i]['time_period'], dataframe_room.iloc[i]['room_id_id'])
     print('wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww')
     print(dict_date)
-    if ((date_selected not in dict_date) and (int(period_selected) not in dict_date.values())) or\
-        ((date_selected in dict_date) and (int(period_selected) not in dict_date.values())):
+    if not ((date_selected in dict_date) and (int(period_selected) == dict_date[dataframe_date.iloc[i]['date_exam']][0])\
+        and (room_selected == dict_date[dataframe_date.iloc[i]['date_exam']][1])):
         create_schedule = True
         print('wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww')
         print(date_selected+" "+period_selected)
-        date_insert = DateExam(date_exam=date_selected, time_period=period_selected)
+        date_insert = DateExam(date_exam=date_selected, time_period=period_selected, room_id_id=room_selected)
         date_insert.save()
     # /////////////////////////////////////
 
@@ -144,29 +143,25 @@ def manage_room(request):
     # /////////////////////////////////////
 
     # create data of table schedule
-    if create_schedule and len(list_proj_id) > 4:
-        for i in range(5):
-            if(int(period_selected) == 0):
+    
+
+    proj_in_schedule = ScheduleRoom.objects.values('proj_id_id')
+    list_temp = list_proj_id
+    if proj_in_schedule.exists():
+        for i in list_temp:
+            for j in range(len(proj_in_schedule)):
+                if i == pd.DataFrame(list(proj_in_schedule)).iloc[j]['proj_id_id'] and i in list_proj_id:
+                    list_proj_id.remove(i)
+    loop_schedule = 5 if len(list_proj_id) > 4 else len(list_proj_id)
+    if create_schedule:
+        print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+        print(list_proj_id)
+        for i in range(loop_schedule):
+            time_id_condition = 1 if(int(period_selected) == 0) else 6
+            if not ScheduleRoom.objects.filter(time_id_id=i+time_id_condition, room_id_id=int(room_selected)).exists():
                 schedule = ScheduleRoom(teacher_group=count_loop, room_id_id=int(room_selected), \
                             date_id_id=DateExam.objects.values('id').filter(date_exam=date_selected)[0]['id'], \
-                            proj_id_id=list_proj_id[i], time_id_id=i+1)
-                schedule.save()
-            if(int(period_selected) == 1):
-                schedule = ScheduleRoom(teacher_group=count_loop, room_id_id=int(room_selected), \
-                            date_id_id=DateExam.objects.values('id').filter(date_exam=date_selected)[0]['id'], \
-                            proj_id_id=list_proj_id[i], time_id_id=i+6)
-                schedule.save()
-    if create_schedule and len(list_proj_id) < 4:
-        for i in range(len(list_proj_id)):
-            if(int(period_selected) == 0):
-                schedule = ScheduleRoom(teacher_group=count_loop, room_id_id=int(room_selected), \
-                            date_id_id=DateExam.objects.values('id').filter(date_exam=date_selected)[0]['id'], \
-                            proj_id_id=list_proj_id[i], time_id_id=i+1)
-                schedule.save()
-            if(int(period_selected) == 1):
-                schedule = ScheduleRoom(teacher_group=count_loop, room_id_id=int(room_selected), \
-                            date_id_id=DateExam.objects.values('id').filter(date_exam=date_selected)[0]['id'], \
-                            proj_id_id=list_proj_id[i], time_id_id=i+6)
+                            proj_id_id=list_proj_id[i], time_id_id=i+time_id_condition)
                 schedule.save()
     # //////////////////////////////////////
 
