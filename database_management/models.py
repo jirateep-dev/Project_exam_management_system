@@ -24,16 +24,6 @@ class Room(models.Model):
     def __str__(self):
         return self.room_name
 
-class DateExam(models.Model):
-    date_exam = models.CharField(max_length=256)
-    objects = models.Manager()
-
-    class Meta:
-        verbose_name_plural = 'ตารางวันที่สอบ'
-    
-    def __str__(self):
-        return self.date_exam
-
 class TimeExam(models.Model):
     time_exam = models.CharField(max_length=256)
     time_period = models.IntegerField(default=0)
@@ -41,6 +31,17 @@ class TimeExam(models.Model):
 
     class Meta:
         verbose_name_plural = 'ตารางเวลา'
+
+class DateExam(models.Model):
+    date_exam = models.CharField(max_length=256)
+    time_period = models.IntegerField(default=0)
+    objects = models.Manager()
+
+    class Meta:
+        verbose_name_plural = 'ตารางวันที่สอบ'
+    
+    def __str__(self):
+        return self.date_exam
 
 class Project(models.Model):
     room_id = models.ForeignKey(Room, on_delete=models.CASCADE, null=True)

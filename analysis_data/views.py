@@ -29,17 +29,18 @@ def calkmean():
 
 
 # manageTeacher('1', '13/11/2017')
-def manageTeacher(major_id, date_input):
-    # clustering teacher and set levels to schema Teacher
-    data = pd.read_sql_query(callsql.LEVELS_TEACHER,connection)
-    data_kmeans = calkmean()
-    for i in range(len(data)):
-        data.set_value(i,'levels_teacher',data_kmeans[i])
-        Teacher.objects.filter(id = data.loc[i]['id']).update(levels_teacher = data.loc[i]['levels_teacher'])
+# def manageTeacher(major_id, date_input):
+#     # clustering teacher and set levels to schema Teacher
+#     data = pd.read_sql_query(callsql.LEVELS_TEACHER,connection)
+#     data_kmeans = calkmean()
+#     for i in range(len(data)):
+#         data.set_value(i,'levels_teacher',data_kmeans[i])
+#         Teacher.objects.filter(id = data.loc[i]['id']).update(levels_teacher = data.loc[i]['levels_teacher'])
 
-    # //////////////////////////////////////////////////////////////////
-    # calculate levels of group exam proj
-    # //////////////////////////////////////////////////////////////////
+#     # //////////////////////////////////////////////////////////////////
+#     # calculate levels of group exam proj
+#     # //////////////////////////////////////////////////////////////////
+def manageTeacher(major_id, date_input):
     date_time = datetime.datetime.strptime(date_input, "%d/%m/%Y")
     get_major_name = Major.objects.get(id = int(major_id))
     advisor = Project.objects.values('proj_advisor').filter(proj_major = get_major_name.major_name,\
@@ -76,17 +77,61 @@ def manage_room(request):
     date_selected = request.POST.get('date_selected',None)
 
     date_time = datetime.datetime.strptime(date_selected, "%d/%m/%Y")
-    list_proj_id, list_date, result_manage = [], [], []
+    list_proj_id, result_manage, teacher_groups = [], [], []
+    # list_date, list_period = [], []
+    dict_date = {}
+    create_schedule = False
     list_teachers = manageTeacher(major_selected, date_selected)
 
     # check date in database and insert
     dataframe_date = pd.DataFrame(list(DateExam.objects.values('date_exam')))
+    dataframe_period = pd.DataFrame(list(DateExam.objects.values('time_period')))
     for i in range(len(dataframe_date)):
-        list_date.append(dataframe_date.iloc[i]['date_exam'])
-    
-    if date_selected not in list_date:
-        date_insert = DateExam(date_exam=date_selected)
+        # list_date.append(dataframe_date.iloc[i]['date_exam'])
+        dict_date[dataframe_date.iloc[i]['date_exam']] = dataframe_period.iloc[i]['time_period']
+    print('wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww')
+    print(dict_date)
+    if ((date_selected not in dict_date) and (int(period_selected) not in dict_date.values())) or\
+        ((date_selected in dict_date) and (int(period_selected) not in dict_date.values())):
+        create_schedule = True
+        print('wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww')
+        print(date_selected+" "+period_selected)
+        date_insert = DateExam(date_exam=date_selected, time_period=period_selected)
         date_insert.save()
+    # /////////////////////////////////////
+
+    # update teacher_group_exam
+    count_loop = 1
+    if create_schedule:
+        while True:
+            check_status = 0
+            for i in list_teachers:
+                if Teacher.objects.filter(teacher_name=i, proj_group_exam__lte=count_loop).exists():
+                    check_status += 1
+            if not Teacher.objects.filter(proj_group_exam=count_loop).exists() and check_status == len(list_teachers):
+                for i in range(len(list_teachers)):
+                    Teacher.objects.filter(teacher_name=list_teachers[i]).update(proj_group_exam=count_loop)
+                break
+            else:
+                list_teachers = manageTeacher(major_selected, date_selected)
+            count_loop += 1
+
+    # count_loop = 1
+    # while True:
+    #     check_status = 0
+    #     for i in list_teachers:
+    #         if not Teacher.objects.filter(teacher_name=i, proj_group_exam=count_loop).exists():
+    #             check_status += 1
+    #     if not Teacher.objects.filter(proj_group_exam=count_loop).exists() and check_status == len(list_teachers):
+    #         for i in range(len(list_teachers)):
+    #             # Teacher.objects.filter(teacher_name=list_teachers[i]).update(proj_group_exam=count_loop)
+    #             print(list_teachers[i])
+    #         break
+    #     else:
+    #         print('eieieieieeieiieieieieieieiie')
+    #         list_teachers = manageTeacher('1', '14/11/2017')
+    #     count_loop += 1
+    print(list_teachers)
     # /////////////////////////////////////
 
     # check proj of teacher
@@ -95,32 +140,43 @@ def manage_room(request):
         for j in range(len(proj_of_teacher)):
             if proj_of_teacher.iloc[j]['id'] not in list_proj_id:
                 list_proj_id.append(proj_of_teacher.iloc[j]['id'])
-    # /////////////////////////////////////
-
-    # update teacher_group_exam
-    count_loop = 1
-    while True:
-        if not Teacher.objects.filter(proj_group_exam=count_loop).exists():
-            for i in range(len(list_teachers)):
-                Teacher.objects.filter(teacher_name=list_teachers[i]).update(proj_group_exam=count_loop)
-            break
-        count_loop += 1
+    print(list_proj_id)
     # /////////////////////////////////////
 
     # create data of table schedule
-    for i in range(5):
-        if(int(period_selected) == 0):
-            schedule = ScheduleRoom(teacher_group=count_loop, room_id_id=int(room_selected), \
-                        date_id_id=DateExam.objects.values('id').filter(date_exam=date_selected)[0]['id'], \
-                        proj_id_id=list_proj_id[i], time_id_id=i+1)
-            schedule.save()
-        if(int(period_selected) == 1):
-            schedule = ScheduleRoom(teacher_group=count_loop, room_id_id=int(room_selected), \
-                        date_id_id=DateExam.objects.values('id').filter(date_exam=date_selected)[0]['id'], \
-                        proj_id_id=list_proj_id[i], time_id_id=i+6)
-            schedule.save()
+    if create_schedule and len(list_proj_id) > 4:
+        for i in range(5):
+            if(int(period_selected) == 0):
+                schedule = ScheduleRoom(teacher_group=count_loop, room_id_id=int(room_selected), \
+                            date_id_id=DateExam.objects.values('id').filter(date_exam=date_selected)[0]['id'], \
+                            proj_id_id=list_proj_id[i], time_id_id=i+1)
+                schedule.save()
+            if(int(period_selected) == 1):
+                schedule = ScheduleRoom(teacher_group=count_loop, room_id_id=int(room_selected), \
+                            date_id_id=DateExam.objects.values('id').filter(date_exam=date_selected)[0]['id'], \
+                            proj_id_id=list_proj_id[i], time_id_id=i+6)
+                schedule.save()
+    if create_schedule and len(list_proj_id) < 4:
+        for i in range(len(list_proj_id)):
+            if(int(period_selected) == 0):
+                schedule = ScheduleRoom(teacher_group=count_loop, room_id_id=int(room_selected), \
+                            date_id_id=DateExam.objects.values('id').filter(date_exam=date_selected)[0]['id'], \
+                            proj_id_id=list_proj_id[i], time_id_id=i+1)
+                schedule.save()
+            if(int(period_selected) == 1):
+                schedule = ScheduleRoom(teacher_group=count_loop, room_id_id=int(room_selected), \
+                            date_id_id=DateExam.objects.values('id').filter(date_exam=date_selected)[0]['id'], \
+                            proj_id_id=list_proj_id[i], time_id_id=i+6)
+                schedule.save()
     # //////////////////////////////////////
 
+    # query teacher_group
+    for i in range(len(Teacher.objects.filter(~Q(proj_group_exam=0)))):
+        teacher_groups.append({'proj_group_exam':pd.DataFrame(list(Teacher.objects.values('proj_group_exam').filter(~Q(proj_group_exam=0)))).iloc[i]['proj_group_exam'], \
+                            'teacher_name': pd.DataFrame(list(Teacher.objects.values('teacher_name').filter(~Q(proj_group_exam=0)))).iloc[i]['teacher_name']})
+    # //////////////////////////////////////
+    print('/////////////+++++++++++++++++++++++++++++++++++++++++////////////////////')
+    print(teacher_groups)
     # query data to html
     schedule_all = pd.read_sql_query(str(ScheduleRoom.objects.all().query), connection)
     print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
@@ -134,7 +190,7 @@ def manage_room(request):
         result_manage.append({'teacher_group': schedule_all.iloc[i]['teacher_group'], 'room_name': room_result ,'date_exam': date_result, 'proj_name_th': proj_result, 'time_exam': time_result})
     
     print(result_manage)
-    return render(request,"result_room.html",{'list_result_teacher': manageTeacher(major_selected, date_selected), \
+    return render(request,"result_room.html",{'list_result_teacher': teacher_groups, \
                     'ScheduleRoom': result_manage})
 
 def admin_required(login_url=None):
