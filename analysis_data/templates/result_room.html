@@ -5,44 +5,64 @@
             <h1>จัดการสอบ</h1>
             <p>การสอบโปรเจคภาคเรียนที่ 1 ปีการศึกษา 2560</p>
         </div>
-        <table class="table table-hover">
-                <thead>
+        <div class="panel panel-default">
+            <div class="panel-heading" data-toggle="collapse" href="#table_teacher">
+                <h4 class="panel-title">
+                    <a>ตารางคณะกรรมการคุมสอบ</a>
+                </h4>
+            </div>
+        </div>
+        <div id="table_teacher" class="panel-collapse collapse in">
+            <table class="table table-hover" >
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>กลุ่มอาจารย์</th>
+                            <th>รายชื่ออาจารย์</th>
+                            <th>ระดับความใจดี</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for teacher in list_result_teacher %} 
+                        <tr>
+                            <td class="active">{{teacher.proj_group_exam}}</td>
+                            <td class="warning">{{teacher.teacher_name}}</td>
+                            <td class="info">{{teacher.levels_teacher}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+            </table>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" data-toggle="collapse" href="#table_project">
+                <h4 class="panel-title">
+                    <a>ตารางการสอบโปรเจค</a>
+                </h4>
+            </div>
+        </div>
+        <div id="table_project" class="panel-collapse collapse in">
+            <table class="table table-hover" id="table_project">
+                <thead class="thead-dark">
                     <tr>
                         <th>กลุ่มอาจารย์</th>
-                        <th>รายชื่ออาจารย์</th>
+                        <th>ห้อง</th>
+                        <th>วันที่</th>
+                        <th>รายที่โปรเจค</th>
+                        <th>เวลา</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for teacher in list_result_teacher %} 
+                    {% for result in ScheduleRoom %} 
                     <tr>
-                        <td>{{teacher.proj_group_exam}}</td>
-                        <td>{{teacher.teacher_name}}</td>
+                        <td class="active">{{result.teacher_group}}</td>
+                        <td class="danger">{{result.room_name}}</td>
+                        <td class="warning">{{result.date_exam}}</td>
+                        <td class="success">{{result.proj_name_th}}</td>
+                        <td class="info">{{result.time_exam}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>กลุ่มอาจารย์</th>
-                    <th>ห้อง</th>
-                    <th>วันที่</th>
-                    <th>รายที่โปรเจค</th>
-                    <th>เวลา</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for result in ScheduleRoom %} 
-                <tr>
-                    <td>{{result.teacher_group}}</td>
-                    <td>{{result.room_name}}</td>
-                    <td>{{result.date_exam}}</td>
-                    <td>{{result.proj_name_th}}</td>
-                    <td>{{result.time_exam}}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        </div>
     </div>
     
 </div>

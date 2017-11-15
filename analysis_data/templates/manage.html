@@ -55,12 +55,22 @@
                     </select>
                 </div>
             </div>
-            
         </form>
     </div>
-    <div class="row" style="margin-left: 85%">
+    <!-- <div class="row" style="margin-left: 75%">
         <button type="submit" class="btn btn-success" form="generate_form"><h4>Generate</h4></button>
-    </div>
+    </div> -->
+    <form action="{% url 'manage' %}" method="POST" id="reset_form" style="margin-left: 100px">
+        {% csrf_token %}
+        <div class="row" style="margin-left: 70%">
+            <div class='col-md-5'>
+                <button type="submit" class="btn btn-danger" form="reset_form" name="reset_gen" value="1"><h4>RESET</h4></button>
+            </div>
+            <div class='col-md-5'>
+                <button type="submit" class="btn btn-success" form="generate_form"><h4>Generate</h4></button>
+            </div>
+        </div>
+    </form>
 
 
 </div>
