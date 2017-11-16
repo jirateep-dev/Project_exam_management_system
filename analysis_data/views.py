@@ -39,8 +39,6 @@ def manageTeacher(major_id, date_input):
 
     # //////////////////////////////////////////////////////////////////
     # calculate levels of group exam proj
-    # //////////////////////////////////////////////////////////////////
-# def manageTeacher(major_id, date_input):
     date_time = datetime.datetime.strptime(date_input, "%d/%m/%Y")
     get_major_name = Major.objects.get(id = int(major_id))
     advisor = Project.objects.values('proj_advisor').filter(proj_major = get_major_name.major_name,\
@@ -57,13 +55,7 @@ def manageTeacher(major_id, date_input):
                 list_teachers.append(teacher)
         for i in range(len(list_teachers)):
             list_levels.append(pd.DataFrame(list(to_levels.filter(teacher_name=list_teachers[i]))).iloc[0]['levels_teacher'])
-        # if sum(list_levels) > 2 and sum(list_levels) < 5:
-        #     rand_teacher = randint(1,31)
-        #     list_levels.append(pd.DataFrame(list(to_levels.filter(id=rand_teacher))).iloc[0]['levels_teacher'])
-        #     list_teachers.append(pd.DataFrame(list(to_name.filter(id=rand_teacher))).iloc[0]['teacher_name'])
-        #     break
-        # if sum(list_levels) <= 2 and list_levels.count(1) >= 1:
-        if sum(list_levels) <= 3:
+        if sum(list_levels) <= 3 and sum(list_levels) != 0:
             rand_teacher = randint(1,31)
             levels_rand = pd.DataFrame(list(to_levels.filter(id=rand_teacher))).iloc[0]['levels_teacher']
             teacher_get = pd.DataFrame(list(to_name.filter(id=rand_teacher))).iloc[0]['teacher_name']
@@ -74,7 +66,6 @@ def manageTeacher(major_id, date_input):
             
     return list_teachers
 
-
 def manage_room(request):
     room_selected = request.POST.get('room_selected',None)
     major_selected = request.POST.get('major_selected',None)
@@ -82,7 +73,8 @@ def manage_room(request):
     date_selected = request.POST.get('date_selected',None)
 
     date_time = datetime.datetime.strptime(date_selected, "%d/%m/%Y")
-    list_proj_id, result_manage, teacher_groups = [], [], []
+    list_proj_id, result_manage = [], []
+    real_teacher, teacher_groups = [], []
     dict_date = {}
     create_schedule = False
     list_teachers = manageTeacher(major_selected, date_selected)
@@ -102,6 +94,31 @@ def manage_room(request):
     # /////////////////////////////////////
 
     # update teacher_group_exam
+
+    chklist_t = 0
+    if create_schedule:
+        while True:
+            chklist_t = 0
+            for i in list_teachers:
+                if not Teacher.objects.get(teacher_name=i).schedule_teacher.all().exists():
+                    chklist_t += 1
+                else:
+                    tid_sch = Teacher.objects.get(teacher_name=i).schedule_teacher.all()
+                    sche_r = ScheduleRoom.objects.all()
+                    chk_schedule = 0;
+                    for obj in tid_sch:
+                        date_id_check = sche_r.values('date_id_id').get(id=obj.id)['date_id_id']
+                        date_exam_chk = DateExam.objects.values('date_exam').get(id=date_id_check)['date_exam']
+                        time_period_chk = DateExam.objects.values('time_period').get(id=date_id_check)['time_period']
+                        # room_chk = DateExam.objects.values('room_id_id').get(id=date_id_check)['room_id_id']
+                        if not (date_exam_chk == date_selected and time_period_chk == int(period_selected)):
+                            chk_schedule += 1
+                        if chk_schedule == len(tid_sch):
+                            chklist_t += 1
+            if chklist_t == 4:
+                break
+            list_teachers = manageTeacher(major_selected, date_selected)
+
     count_loop = 1
     if create_schedule:
         while True:
@@ -113,8 +130,6 @@ def manage_room(request):
                 for i in range(len(list_teachers)):
                     Teacher.objects.filter(teacher_name=list_teachers[i]).update(proj_group_exam=count_loop)
                 break
-            else:
-                list_teachers = manageTeacher(major_selected, date_selected)
             count_loop += 1
 
     # /////////////////////////////////////
@@ -122,12 +137,13 @@ def manage_room(request):
     # check proj of teacher
     mobj_name = Major.objects.values('major_name')
     for i in range(3):
-        proj_of_teacher = pd.DataFrame(list(Project.objects.values('id').\
-            filter(proj_years=date_time.year+543, proj_advisor=list_teachers[i], schedule_id_id=None, \
-            proj_major=mobj_name.get(id=major_selected)['major_name'])))
-        for j in range(len(proj_of_teacher)):
-            if proj_of_teacher.iloc[j]['id'] not in list_proj_id:
-                list_proj_id.append(proj_of_teacher.iloc[j]['id'])
+        proj_of_teacher = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=date_time.year+543, \
+                        proj_advisor=list_teachers[i], schedule_id_id=None, \
+                        proj_major=mobj_name.get(id=major_selected)['major_name'])))
+        if not proj_of_teacher.empty:
+            rand_index = randint(0,len(proj_of_teacher)-1)
+            if proj_of_teacher.iloc[rand_index]['id'] not in list_proj_id:
+                list_proj_id.append(proj_of_teacher.iloc[rand_index]['id'])
     
     proj_major_selected = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=date_time.year+543, schedule_id_id=None,\
              proj_major=mobj_name.get(id=major_selected)['major_name'])))
@@ -144,15 +160,34 @@ def manage_room(request):
                             date_id_id=DateExam.objects.values('id').filter(date_exam=date_selected)[0]['id'], \
                             proj_id=list_proj_id[i], time_id_id=i+time_id_condition)
                 schedule.save()
+                for name in list_teachers:
+                    teacher_r = Teacher.objects.get(teacher_name=name)
+                    teacher_r.schedule_teacher.add(schedule)
+                    teacher_r.save()
                 Project.objects.filter(id=list_proj_id[i]).update(schedule_id_id=schedule.id)
 
     # //////////////////////////////////////
 
     # query teacher_group
-    for i in range(len(Teacher.objects.filter(~Q(proj_group_exam=0)))):
-        teacher_groups.append({'proj_group_exam':pd.DataFrame(list(Teacher.objects.values('proj_group_exam').filter(~Q(proj_group_exam=0)))).iloc[i]['proj_group_exam'], \
-                            'teacher_name': pd.DataFrame(list(Teacher.objects.values('teacher_name').filter(~Q(proj_group_exam=0)))).iloc[i]['teacher_name'],
-                            'levels_teacher': pd.DataFrame(list(Teacher.objects.values('levels_teacher').filter(~Q(proj_group_exam=0)))).iloc[i]['levels_teacher']})
+
+    # for i in range(len(Teacher.objects.filter(~Q(proj_group_exam=0)))):
+    #     teacher_groups.append({'proj_group_exam':pd.DataFrame(list(Teacher.objects.values('proj_group_exam').filter(~Q(proj_group_exam=0)))).iloc[i]['proj_group_exam'], \
+    #                         'teacher_name': pd.DataFrame(list(Teacher.objects.values('teacher_name').filter(~Q(proj_group_exam=0)))).iloc[i]['teacher_name'],
+    #                         'levels_teacher': pd.DataFrame(list(Teacher.objects.values('levels_teacher').filter(~Q(proj_group_exam=0)))).iloc[i]['levels_teacher']})
+    
+    sched_r = ScheduleRoom.objects.all()
+    list_group = list(sched_r.values('teacher_group').distinct())
+    count_teacher, count_len = 0, 0
+    for i in list_group:
+        dtset_id_sch = sched_r.values('id').filter(teacher_group=i['teacher_group'])
+        for j in range(4):
+            id_sch = dtset_id_sch[0]['id']
+            tch_obj = list(sched_r.get(id=id_sch).teacher_set.all())[j]
+            teacher_groups.append({'proj_group_exam': i['teacher_group'], \
+                                'teacher_name': tch_obj.teacher_name, \
+                                'levels_teacher': tch_obj.levels_teacher})
+    
+
     # //////////////////////////////////////
 
     # query data to html

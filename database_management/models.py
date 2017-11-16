@@ -48,7 +48,6 @@ class ScheduleRoom(models.Model):
     room_id = models.ForeignKey(Room, on_delete=models.CASCADE)
     date_id = models.ForeignKey(DateExam, on_delete=models.CASCADE, null=True)
     time_id = models.ForeignKey(TimeExam, on_delete=models.CASCADE, null=True)
-    # proj_id = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
     proj_id = models.IntegerField(default=0)
     teacher_group = models.IntegerField(default=0)
     objects = models.Manager()
@@ -127,6 +126,7 @@ class Teacher(models.Model):
     score_posters = models.ManyToManyField(ScorePoster)
     score_advisor = models.ManyToManyField(ScoreAdvisor)
     major_teacher = models.ManyToManyField(Major)
+    schedule_teacher = models.ManyToManyField(ScheduleRoom)
     objects = models.Manager()
 
     class Meta:
