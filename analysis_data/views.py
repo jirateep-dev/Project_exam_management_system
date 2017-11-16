@@ -86,11 +86,17 @@ def manage_room(request):
     for i in range(len(dataframe_date)):
         dict_date[dataframe_date.iloc[i]['date_exam']] = (dataframe_period.iloc[i]['time_period'], dataframe_room.iloc[i]['room_id_id'])
 
-    if not ((date_selected in dict_date) and (int(period_selected) == dict_date[dataframe_date.iloc[i]['date_exam']][0])\
-        and (int(room_selected) == dict_date[dataframe_date.iloc[i]['date_exam']][1])):
+    if dict_date == {}:
         create_schedule = True
         date_insert = DateExam(date_exam=date_selected, time_period=period_selected, room_id_id=room_selected)
         date_insert.save()
+    else:
+        for i in range(len(dict_date)):
+            if not ((date_selected in dict_date) and (int(period_selected) == dict_date[dataframe_date.iloc[i]['date_exam']][0])\
+                and (int(room_selected) == dict_date[dataframe_date.iloc[i]['date_exam']][1])):
+                create_schedule = True
+                date_insert = DateExam(date_exam=date_selected, time_period=period_selected, room_id_id=room_selected)
+                date_insert.save()
     # /////////////////////////////////////
 
     # update teacher_group_exam
@@ -110,7 +116,6 @@ def manage_room(request):
                         date_id_check = sche_r.values('date_id_id').get(id=obj.id)['date_id_id']
                         date_exam_chk = DateExam.objects.values('date_exam').get(id=date_id_check)['date_exam']
                         time_period_chk = DateExam.objects.values('time_period').get(id=date_id_check)['time_period']
-                        # room_chk = DateExam.objects.values('room_id_id').get(id=date_id_check)['room_id_id']
                         if not (date_exam_chk == date_selected and time_period_chk == int(period_selected)):
                             chk_schedule += 1
                         if chk_schedule == len(tid_sch):
@@ -170,11 +175,6 @@ def manage_room(request):
 
     # query teacher_group
 
-    # for i in range(len(Teacher.objects.filter(~Q(proj_group_exam=0)))):
-    #     teacher_groups.append({'proj_group_exam':pd.DataFrame(list(Teacher.objects.values('proj_group_exam').filter(~Q(proj_group_exam=0)))).iloc[i]['proj_group_exam'], \
-    #                         'teacher_name': pd.DataFrame(list(Teacher.objects.values('teacher_name').filter(~Q(proj_group_exam=0)))).iloc[i]['teacher_name'],
-    #                         'levels_teacher': pd.DataFrame(list(Teacher.objects.values('levels_teacher').filter(~Q(proj_group_exam=0)))).iloc[i]['levels_teacher']})
-    
     sched_r = ScheduleRoom.objects.all()
     list_group = list(sched_r.values('teacher_group').distinct())
     count_teacher, count_len = 0, 0
