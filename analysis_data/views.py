@@ -14,6 +14,8 @@ from random import randint
 from collections import Counter
 from django.db.models import Max
 
+this_year = Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
+
 def change_positionlevels(number1, number2, kmean):
     for i in range(len(kmean)):
         kmean[i] = number1 if kmean[i] == number2 else number2 if kmean[i] == number1 else kmean[i]
@@ -69,8 +71,39 @@ def manageTeacher(major_id, date_input):
     return list_teachers
 
 def count_proj(major):
-    this_year = Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
     return len(Project.objects.filter(proj_years=this_year, schedule_id_id=None, proj_major=major))
+
+def prepare_render():
+    result = []
+    dic = {}
+    room = Room.objects.values('room_name')
+    date = DateExam.objects.values('date_exam').distinct()
+    date_all = DateExam.objects.all()
+    pc_result = [{'bi':count_proj('Business Intelligence'), 'ds':count_proj('Data Science'), 'es':count_proj('Embedded Systems'), \
+                'mu':count_proj('Multimedia'), 'nw':count_proj('Network and Communication'), 'se':count_proj('Software Development')}]
+    date_result = [date[i]['date_exam'] for i in range(len(date))]
+    
+    for i in date_result:
+        period_zero = [0 for i in range(len(room))]
+        period_one = [0 for i in range(len(room))]
+        tp_date = DateExam.objects.values('time_period').filter(date_exam=i)
+        rm_date = DateExam.objects.values('room_id_id').filter(date_exam=i)
+        dic_keep = {}
+
+        for j in range(len(tp_date)):
+            dic_keep[j] = (rm_date[j]['room_id_id']-1, tp_date[j]['time_period'])
+
+        for j in range(len(dic_keep)):
+            if dic_keep[j][1] == 0:
+                period_zero[dic_keep[j][0]] = 1 
+            else:
+                period_one[dic_keep[j][0]] = 1
+        dic[i] = (period_zero, period_one)
+    result.append(pc_result)
+    # result.append(date_result)
+    result.append(dic)
+
+    return result
 
 def manage_room(request):
     room_selected = request.POST.get('room_selected',None)
@@ -183,12 +216,11 @@ def manage_room(request):
                     teacher_r.schedule_teacher.add(schedule)
                     teacher_r.save()
                 Project.objects.filter(id=list_proj_id[i]).update(schedule_id_id=schedule.id)
-
-    this_year = Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
-    pc_result = [{'bi':count_proj('Business Intelligence'), 'ds':count_proj('Data Science'), 'es':count_proj('Embedded Systems'), \
-                'mu':count_proj('Multimedia'), 'nw':count_proj('Network and Communication'), 'se':count_proj('Software Development')}]
-                
-    return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pc_result})
+    else:
+        DateExam.objects.filter(id=id_dateexam).delete()
+    pre = prepare_render()
+    return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
+                    'room_period':pre[1]})
 
 def table_room(request):
     teacher_groups = []
@@ -231,18 +263,17 @@ def admin_required(login_url=None):
 @login_required
 @admin_required(login_url="login/")
 def manage(request):
-    this_year = Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
-    pc_result = [{'bi':count_proj('Business Intelligence'), 'ds':count_proj('Data Science'), 'es':count_proj('Embedded Systems'), \
-                'mu':count_proj('Multimedia'), 'nw':count_proj('Network and Communication'), 'se':count_proj('Software Development')}]
+    pre = prepare_render()
     try:
         reset_selected = int(request.POST.get('reset_gen',None))
-
         if reset_selected:
             Project.objects.filter(proj_years=this_year).update(schedule_id_id=None)
             DateExam.objects.all().delete()
             Teacher.objects.all().order_by('proj_group_exam').update(proj_group_exam=0)
             Teacher.save()
-            
-        return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pc_result})
+        return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
+                    'room_period':pre[1]})
     except Exception as error:
-        return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pc_result})
+        print(error)
+        return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
+                    'room_period':pre[1]})

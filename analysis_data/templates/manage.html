@@ -19,7 +19,31 @@
                 {% endfor %}
             </h4>
         </div>
-        <form action="{% url 'manage_room' %}" method="POST" id="generate_form" style="margin-left: 100px;margin-top: 100px">
+        <table class='table-hover col-md-8' style="margin-left: 20%;margin-top: 30px;">
+            <tr>
+                <th>วันที่</th>
+                <th> </th>
+                {% for room in rooms%}
+                    <th>{{room}}</th>
+                {% endfor %}
+            </tr>
+            {% for key, values in room_period.items %}
+                <tr>
+                    <td rowspan="2">{{key}}</td>
+                    <td>ช่วงเช้า</td>
+                    {% for i in values.0%}
+                        <td>{{i}}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>ช่วงบ่าย</td>
+                    {% for i in values.1%}
+                        <td>{{i}}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+        <form action="{% url 'manage_room' %}" method="POST" id="generate_form" style="margin-left: 100px;margin-top: 170px">
             {% csrf_token %}
             <div class='col-md-5'>
                 <div class="form-group">
