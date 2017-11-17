@@ -46,7 +46,8 @@
                         <th>กลุ่มอาจารย์</th>
                         <th>ห้อง</th>
                         <th>วันที่</th>
-                        <th>รายที่โปรเจค</th>
+                        <th>รายชื่อโปรเจค</th>
+                        <th>แขนงโปรเจค</th>
                         <th>เวลา</th>
                     </tr>
                 </thead>
@@ -57,6 +58,7 @@
                         <td class="danger">{{result.room_name}}</td>
                         <td class="warning">{{result.date_exam}}</td>
                         <td class="success">{{result.proj_name_th}}</td>
+                        <td class="success">{{result.major_name}}</td>
                         <td class="info">{{result.time_exam}}</td>
                     </tr>
                     {% endfor %}
