@@ -12,6 +12,7 @@ from database_management.models import *
 from django.db.models import Q
 from random import randint
 from collections import Counter
+from django.db.models import Max
 
 def change_positionlevels(number1, number2, kmean):
     for i in range(len(kmean)):
@@ -67,6 +68,10 @@ def manageTeacher(major_id, date_input):
             
     return list_teachers
 
+def count_proj(major):
+    this_year = Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
+    return len(Project.objects.filter(proj_years=this_year, schedule_id_id=None, proj_major=major))
+
 def manage_room(request):
     room_selected = request.POST.get('room_selected',None)
     major_selected = request.POST.get('major_selected',None)
@@ -74,9 +79,8 @@ def manage_room(request):
     date_selected = request.POST.get('date_selected',None)
 
     date_time = datetime.datetime.strptime(date_selected, "%d/%m/%Y")
-    list_proj_id, result_manage = [], []
-    real_teacher, teacher_groups = [], []
-    dict_date = {}
+    list_proj_id = []
+    real_teacher = []
     create_schedule = False
     fail_teacher = False
     list_teachers = manageTeacher(major_selected, date_selected)
@@ -87,23 +91,12 @@ def manage_room(request):
     dataframe_room = pd.DataFrame(list(DateExam.objects.values('room_id_id')))
 
     id_dateexam = int((date_selected+period_selected+room_selected).replace('/',''))
-    for i in range(len(dataframe_date)):
-        dict_date[i] = (dataframe_date.iloc[i]['date_exam'], dataframe_period.iloc[i]['time_period'], dataframe_room.iloc[i]['room_id_id'])
 
-    if dict_date == {}:
+    if not DateExam.objects.filter(id=id_dateexam).exists():
         create_schedule = True
         date_insert = DateExam(id=id_dateexam, date_exam=date_selected, time_period=period_selected, room_id_id=room_selected)
         date_insert.save()
-    else:
-        check_date = 1
-        for i in dict_date:
-            if (dict_date[i] == (date_selected, int(period_selected), int(room_selected))):
-                check_date = 0
-        
-        if check_date == 1:
-            create_schedule = True
-            date_insert = DateExam(id=id_dateexam ,date_exam=date_selected, time_period=period_selected, room_id_id=room_selected)
-            date_insert.save()
+
     # /////////////////////////////////////
 
     # update teacher_group_exam
@@ -191,8 +184,15 @@ def manage_room(request):
                     teacher_r.save()
                 Project.objects.filter(id=list_proj_id[i]).update(schedule_id_id=schedule.id)
 
-    # //////////////////////////////////////
+    this_year = Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
+    pc_result = [{'bi':count_proj('Business Intelligence'), 'ds':count_proj('Data Science'), 'es':count_proj('Embedded Systems'), \
+                'mu':count_proj('Multimedia'), 'nw':count_proj('Network and Communication'), 'se':count_proj('Software Development')}]
+                
+    return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pc_result})
 
+def table_room(request):
+    teacher_groups = []
+    result_manage = []
     # query teacher_group
 
     sched_r = ScheduleRoom.objects.all()
@@ -223,8 +223,7 @@ def manage_room(request):
         result_manage.append({'teacher_group': schedule_all.iloc[i]['teacher_group'], 'room_name': room_result ,\
                     'date_exam': date_result, 'proj_name_th': proj_result, 'major_name':major_result, 'time_exam': time_result})
     
-    return render(request,"result_room.html",{'list_result_teacher': teacher_groups, \
-                    'ScheduleRoom': result_manage})
+    return render(request,"result_room.html",{'list_result_teacher': teacher_groups, 'ScheduleRoom': result_manage})
 
 def admin_required(login_url=None):
     return user_passes_test(lambda u: u.is_superuser, login_url=login_url)
@@ -232,20 +231,18 @@ def admin_required(login_url=None):
 @login_required
 @admin_required(login_url="login/")
 def manage(request):
+    this_year = Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
+    pc_result = [{'bi':count_proj('Business Intelligence'), 'ds':count_proj('Data Science'), 'es':count_proj('Embedded Systems'), \
+                'mu':count_proj('Multimedia'), 'nw':count_proj('Network and Communication'), 'se':count_proj('Software Development')}]
     try:
         reset_selected = int(request.POST.get('reset_gen',None))
 
         if reset_selected:
-            try:
-                Project.objects.filter(proj_years=datetime.datetime.now().year+543).update(schedule_id_id=None)
-            except Exception:
-                Project.objects.filter(proj_years=datetime.datetime.now().year+542).update(schedule_id_id=None)
-            
-            # ScheduleRoom.objects.all().delete()
+            Project.objects.filter(proj_years=this_year).update(schedule_id_id=None)
             DateExam.objects.all().delete()
             Teacher.objects.all().order_by('proj_group_exam').update(proj_group_exam=0)
             Teacher.save()
             
-        return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all()})
+        return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pc_result})
     except Exception as error:
-        return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all()})
+        return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pc_result})

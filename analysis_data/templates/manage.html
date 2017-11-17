@@ -6,7 +6,20 @@
             <h1>จัดการสอบ</h1>
             <p>การสอบโปรเจคภาคเรียนที่ 1 ปีการศึกษา 2560</p>
         </div>
-        <form action="{% url 'manage_room' %}" method="POST" id="generate_form" style="margin-left: 100px">
+        <div class='col-md-8' style="margin-left: 20%">
+            <h4>
+                <label for="sel1">จำนวนโปรเจคที่เหลือ :</label>
+                {% for pc in proj_count %}
+                    <span>BI : {{pc.bi}}  | </span>
+                    <span>DS : {{pc.ds}}  | </span>
+                    <span>ES : {{pc.es}}  | </span>
+                    <span>MU : {{pc.mu}}  | </span>
+                    <span>NW : {{pc.nw}}  | </span>
+                    <span>SE : {{pc.se}} </span>
+                {% endfor %}
+            </h4>
+        </div>
+        <form action="{% url 'manage_room' %}" method="POST" id="generate_form" style="margin-left: 100px;margin-top: 100px">
             {% csrf_token %}
             <div class='col-md-5'>
                 <div class="form-group">
@@ -57,12 +70,9 @@
             </div>
         </form>
     </div>
-    <!-- <div class="row" style="margin-left: 75%">
-        <button type="submit" class="btn btn-success" form="generate_form"><h4>Generate</h4></button>
-    </div> -->
     <form action="{% url 'manage' %}" method="POST" id="reset_form" style="margin-left: 100px">
         {% csrf_token %}
-        <div class="row" style="margin-left: 70%">
+        <div class="row" style="margin-left: 70%;margin-top: 30px">
             <div class='col-md-5'>
                 <button type="submit" class="btn btn-danger" form="reset_form" name="reset_gen" value="1"><h4>RESET</h4></button>
             </div>
