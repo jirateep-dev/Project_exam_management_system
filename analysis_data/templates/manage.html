@@ -5,21 +5,22 @@
         <div class="jumbotron">
             <h1>จัดการสอบ</h1>
             <p>การสอบโปรเจคภาคเรียนที่ 1 ปีการศึกษา 2560</p>
+            <div class='col-sm-8' style="margin-left: 15%;background-color: #F5F5F5;text-align: center;">
+                <h4>
+                    <label for="sel1">จำนวนโปรเจคที่เหลือ :</label>
+                    {% for pc in proj_count %}
+                        <span>BI : {{pc.bi}}  | </span>
+                        <span>DS : {{pc.ds}}  | </span>
+                        <span>ES : {{pc.es}}  | </span>
+                        <span>MU : {{pc.mu}}  | </span>
+                        <span>NW : {{pc.nw}}  | </span>
+                        <span>SE : {{pc.se}} </span>
+                    {% endfor %}
+                </h4>
+            </div>
         </div>
-        <div class='col-md-8' style="margin-left: 15%;background-color: #F5F5F5;text-align: center;margin-top: 0">
-            <h4>
-                <label for="sel1">จำนวนโปรเจคที่เหลือ :</label>
-                {% for pc in proj_count %}
-                    <span>BI : {{pc.bi}}  | </span>
-                    <span>DS : {{pc.ds}}  | </span>
-                    <span>ES : {{pc.es}}  | </span>
-                    <span>MU : {{pc.mu}}  | </span>
-                    <span>NW : {{pc.nw}}  | </span>
-                    <span>SE : {{pc.se}} </span>
-                {% endfor %}
-            </h4>
-        </div>
-        <table class='table table-bordered table-striped col-md-8' style="margin-top: 30px;background-color: #F5F5F5;text-align: center">
+        
+        <table class='table table-bordered table-striped table-hover col-md-8' style="background-color: #F5F5F5;text-align: center">
             <tr>
                 <th style="text-align: center"><h4>วันที่</h4></th>
                 <th> </th>
