@@ -6,7 +6,7 @@
             <h1>จัดการสอบ</h1>
             <p>การสอบโปรเจคภาคเรียนที่ 1 ปีการศึกษา 2560</p>
         </div>
-        <div class='col-md-8' style="margin-left: 20%">
+        <div class='col-md-8' style="margin-left: 15%;background-color: #F5F5F5;text-align: center;margin-top: 0">
             <h4>
                 <label for="sel1">จำนวนโปรเจคที่เหลือ :</label>
                 {% for pc in proj_count %}
@@ -19,12 +19,12 @@
                 {% endfor %}
             </h4>
         </div>
-        <table class='table-hover col-md-8' style="margin-left: 20%;margin-top: 30px;">
+        <table class='table table-bordered table-striped col-md-8' style="margin-top: 30px;background-color: #F5F5F5;text-align: center">
             <tr>
-                <th>วันที่</th>
+                <th style="text-align: center"><h4>วันที่</h4></th>
                 <th> </th>
                 {% for room in rooms%}
-                    <th>{{room}}</th>
+                    <th style="text-align: center">{{room}}</th>
                 {% endfor %}
             </tr>
             {% for key, values in room_period.items %}
@@ -43,7 +43,7 @@
                 </tr>
             {% endfor %}
         </table>
-        <form action="{% url 'manage_room' %}" method="POST" id="generate_form" style="margin-left: 100px;margin-top: 170px">
+        <form action="{% url 'manage_room' %}" method="POST" id="generate_form" style="margin-left: 100px;margin-top: 260px">
             {% csrf_token %}
             <div class='col-md-5'>
                 <div class="form-group">
