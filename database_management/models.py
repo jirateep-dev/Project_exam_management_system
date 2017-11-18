@@ -119,7 +119,7 @@ class ScoreAdvisor(models.Model):
 class Teacher(models.Model):
     login_user = models.ForeignKey(User, on_delete=models.CASCADE)
     teacher_name = models.CharField(max_length=1024)
-    proj_group_exam = models.IntegerField(default=0)
+    # proj_group_exam = models.IntegerField(default=0)
     proj_group_poster = models.IntegerField(default=0)
     levels_teacher = models.IntegerField(default=1)
     score_projs = models.ManyToManyField(ScoreProj)

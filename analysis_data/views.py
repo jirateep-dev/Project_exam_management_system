@@ -213,19 +213,6 @@ def manage_room(request):
         
         proj_major_selected = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=date_time.year+543, schedule_id_id=None,\
                 proj_major=mobj_name.get(id=major_selected)['major_name'])))
-
-    count_loop = 1
-    if create_schedule and not fail_teacher and list_proj_id != []:
-        while True:
-            check_status = 0
-            for i in list_teachers:
-                if Teacher.objects.filter(teacher_name=i, proj_group_exam__lte=count_loop).exists():
-                    check_status += 1
-            if not Teacher.objects.filter(proj_group_exam=count_loop).exists() and check_status == len(list_teachers):
-                for i in range(len(list_teachers)):
-                    Teacher.objects.filter(teacher_name=list_teachers[i]).update(proj_group_exam=count_loop)
-                break
-            count_loop += 1
     
     if not fail_teacher:
         for i in range(len(proj_major_selected)):
@@ -233,12 +220,16 @@ def manage_room(request):
                 list_proj_id.append(proj_major_selected.iloc[i]['id'])
     
 
+    NoneType = type(None)
+    max_count = ScheduleRoom.objects.all().aggregate(Max('teacher_group'))['teacher_group__max']
+    if type(max_count) == NoneType:
+        max_count = 0
 
     if create_schedule and not fail_teacher :
         for i in range(len(list_proj_id)):
             time_id_condition = 1 if(int(period_selected) == 0) else 6
             if not ScheduleRoom.objects.filter(date_id_id=id_dateexam, time_id_id=i+time_id_condition, room_id_id=int(room_selected)).exists():
-                schedule = ScheduleRoom(teacher_group=count_loop, room_id_id=int(room_selected), \
+                schedule = ScheduleRoom(teacher_group=max_count+1, room_id_id=int(room_selected), \
                             date_id_id=id_dateexam, proj_id=list_proj_id[i], time_id_id=i+time_id_condition)
                 schedule.save()
                 for name in list_teachers:
