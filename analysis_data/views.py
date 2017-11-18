@@ -67,12 +67,18 @@ def manageTeacher(major_id, date_input, period_input):
             proj_years = (date_time.year+543)).distinct()
     dataframe = pd.DataFrame(list(advisor))
 
+    kind_teacher = Teacher.objects.values('teacher_name').filter(levels_teacher=2)
+
     to_name = Teacher.objects.values('teacher_name')
     to_levels = Teacher.objects.values('levels_teacher')
 
     dic_apv = {}
     for i in range(len(advisor)):
         dic_apv[advisor[i]['proj_advisor']] = 0
+    
+    dic_kind = {}
+    for i in range(len(kind_teacher)):
+        dic_kind[kind_teacher[i]['teacher_name']] = 0
     
     while True:
         list_teachers, list_levels = [], []
@@ -83,7 +89,13 @@ def manageTeacher(major_id, date_input, period_input):
                 list_teachers.append(teacher)
             if app_tch == False and teacher in dic_apv:
                 dic_apv[teacher] = 1
+            if app_tch == False and teacher in dic_kind:
+                dic_kind[teacher] = 1
             count_dict_apv = Counter(dic_apv.values())
+            count_dict_kind = Counter(dic_kind.values())
+            if count_dict_kind[0] == 0:
+                list_teachers = []
+                break
             if count_dict_apv[0] == 3:
                 list_teachers = []
                 for key, values in dic_apv.items():
@@ -95,7 +107,6 @@ def manageTeacher(major_id, date_input, period_input):
                 else:
                     list_teachers = []
                 break
-        
         if list_teachers == []:
             break
         for i in range(len(list_teachers)):
