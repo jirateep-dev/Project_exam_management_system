@@ -67,9 +67,9 @@ def manageTeacher(major_id, date_input, period_input):
             proj_years = (date_time.year+543)).distinct()
     dataframe = pd.DataFrame(list(advisor))
 
-    kind_teacher = Teacher.objects.values('teacher_name').filter(levels_teacher=2)
+    kind_teacher = Teacher.objects.filter(levels_teacher=2)
 
-    to_name = Teacher.objects.values('teacher_name')
+    # to_name = Teacher.objects.values('teacher_name')
     to_levels = Teacher.objects.values('levels_teacher')
 
     dic_apv = {}
@@ -78,7 +78,7 @@ def manageTeacher(major_id, date_input, period_input):
     
     dic_kind = {}
     for i in range(len(kind_teacher)):
-        dic_kind[kind_teacher[i]['teacher_name']] = 0
+        dic_kind[kind_teacher.values('teacher_name')[i]['teacher_name']] = 0
     
     while True:
         list_teachers, list_levels = [], []
@@ -115,10 +115,18 @@ def manageTeacher(major_id, date_input, period_input):
             list_levels = []
             break
         if sum(list_levels) <= 3 and sum(list_levels) != 0:
-            rand_teacher = randint(1,31)
-            levels_rand = pd.DataFrame(list(to_levels.filter(id=rand_teacher))).iloc[0]['levels_teacher']
-            teacher_get = pd.DataFrame(list(to_name.filter(id=rand_teacher))).iloc[0]['teacher_name']
+            rand_teacher = randint(0,len(kind_teacher)-1)
+            # levels_rand = pd.DataFrame(list(to_levels.filter(id=rand_teacher))).iloc[0]['levels_teacher']
+            # teacher_get = pd.DataFrame(list(to_name.filter(id=rand_teacher))).iloc[0]['teacher_name']
+            teacher_get = kind_teacher.values('teacher_name')[rand_teacher]['teacher_name']
+            levels_rand = kind_teacher.values('levels_teacher')[rand_teacher]['levels_teacher']
             app_tch_last = approve_teacher(teacher_get, date_input, period_input)
+            if app_tch_last == False and teacher_get in dic_kind:
+                dic_kind[teacher_get] = 1
+            count_dict_kind = Counter(dic_kind.values())
+            if count_dict_kind[0] == 0:
+                list_teachers = []
+                break
             if levels_rand == 2 and teacher_get not in list_teachers and app_tch_last :
                 list_levels.append(levels_rand)
                 list_teachers.append(teacher_get)
