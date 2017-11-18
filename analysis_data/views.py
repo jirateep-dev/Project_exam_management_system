@@ -85,14 +85,13 @@ def manageTeacher(major_id, date_input, period_input):
                 dic_apv[teacher] = 1
             count_dict_apv = Counter(dic_apv.values())
             if count_dict_apv[0] == 3:
-                count_chk = 0
                 list_teachers = []
                 for key, values in dic_apv.items():
                     app_last_group = approve_teacher(key, date_input, period_input)
-                    if values == 0 and app_last_group:\
-                        count_chk +=1
-                if count_chk == 3:
-                    list_teachers.append(key)
+                    if values == 0 and app_last_group:
+                        list_teachers.append(key)
+                if len(list_teachers) == 3:
+                    break
                 else:
                     list_teachers = []
                 break
@@ -178,7 +177,7 @@ def manage_room(request):
         date_insert.save()
 
     # /////////////////////////////////////
-    if list_teachers == []:
+    if list_teachers == [] or len(list_teachers) < 4:
         fail_teacher = True
     # check proj of teacher
     mobj_name = Major.objects.values('major_name')
