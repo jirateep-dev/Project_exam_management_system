@@ -111,7 +111,7 @@ def manageTeacher(major_id, date_input, period_input):
             break
         for i in range(len(list_teachers)):
             list_levels.append(pd.DataFrame(list(to_levels.filter(teacher_name=list_teachers[i]))).iloc[0]['levels_teacher'])
-        if sum(list_levels) > 3 and count_dict_apv[0] == 3:
+        if (sum(list_levels) > 3 and count_dict_apv[0] == 3) or (sum(list_levels) == 0 and count_dict_apv[0] == 3):
             list_levels = []
             break
         if sum(list_levels) <= 3 and sum(list_levels) != 0:
