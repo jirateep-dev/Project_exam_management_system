@@ -48,7 +48,7 @@ def approve_teacher(tch_name, date_selected, period_selected):
                 chk_schedule += 1
             if chk_schedule == len(tid_sch):
                 approve_tch = True
-        
+
     return approve_tch
 
 def manageTeacher(major_id, date_input, period_input):
@@ -64,75 +64,115 @@ def manageTeacher(major_id, date_input, period_input):
     date_time = datetime.datetime.strptime(date_input, "%d/%m/%Y")
     get_major_name = Major.objects.get(id = int(major_id))
     advisor = Project.objects.values('proj_advisor').filter(proj_major = get_major_name.major_name,\
-            proj_years = (date_time.year+543)).distinct()
+            proj_years = (date_time.year+543), schedule_id_id=None).distinct()
     dataframe = pd.DataFrame(list(advisor))
 
-    kind_teacher = Teacher.objects.filter(levels_teacher=2)
+    advisor_m = Project.objects.values('proj_advisor').filter(proj_major = get_major_name.major_name,\
+            proj_years = (date_time.year+543)).distinct()
 
-    # to_name = Teacher.objects.values('teacher_name')
+    kind_teacher = Teacher.objects.filter(levels_teacher=2)
+    normal_teacher = Teacher.objects.filter(levels_teacher=1)
+
+    to_name = Teacher.objects.values('teacher_name')
     to_levels = Teacher.objects.values('levels_teacher')
 
     dic_apv = {}
     for i in range(len(advisor)):
         dic_apv[advisor[i]['proj_advisor']] = 0
-    
+
     dic_kind = {}
     for i in range(len(kind_teacher)):
         dic_kind[kind_teacher.values('teacher_name')[i]['teacher_name']] = 0
     
-    while True:
-        list_teachers, list_levels = [], []
-        while (len(list_teachers) != 3):
-            teacher = dataframe.iloc[randint(0,len(list(advisor))-1)]['proj_advisor']
-            app_tch = approve_teacher(teacher, date_input, period_input)
-            if(teacher not in list_teachers) and app_tch:
-                list_teachers.append(teacher)
-            if app_tch == False and teacher in dic_apv:
-                dic_apv[teacher] = 1
-            if app_tch == False and teacher in dic_kind:
-                dic_kind[teacher] = 1
-            count_dict_apv = Counter(dic_apv.values())
-            count_dict_kind = Counter(dic_kind.values())
-            if count_dict_kind[0] == 0:
-                list_teachers = []
-                break
-            if count_dict_apv[0] == 3:
-                list_teachers = []
-                for key, values in dic_apv.items():
-                    app_last_group = approve_teacher(key, date_input, period_input)
-                    if values == 0 and app_last_group:
-                        list_teachers.append(key)
+    if len(advisor) > 2:
+        while True:
+            list_teachers, list_levels = [], []
+            while True:
+                teacher = dataframe.iloc[randint(0,len(list(advisor))-1)]['proj_advisor']
+                app_tch = approve_teacher(teacher, date_input, period_input)
+                if(teacher not in list_teachers) and app_tch:
+                    list_teachers.append(teacher)
+                if app_tch == False and teacher in dic_apv:
+                    dic_apv[teacher] = 1
+                if app_tch == False and teacher in dic_kind:
+                    dic_kind[teacher] = 1
+                count_dict_apv = Counter(dic_apv.values())
+                count_dict_kind = Counter(dic_kind.values())
+                if count_dict_kind[0] == 0:
+                    list_teachers = []
+                    break
+                if count_dict_apv[0] == 3:
+                    list_teachers = []
+                    for key, values in dic_apv.items():
+                        app_last_group = approve_teacher(key, date_input, period_input)
+                        if values == 0 and app_last_group:
+                            list_teachers.append(key)
+                    if len(list_teachers) == 3:
+                        break
+                    else:
+                        list_teachers = []
+                    break
+                if count_dict_apv[0] < 3:
+                    list_teachers = []
+                    for key, values in dic_apv.items():
+                        app_group = approve_teacher(key, date_input, period_input)
+                        if values == 0 and app_group:
+                            list_teachers.append(key)
+                    for i in range(len(normal_teacher)):
+                        teacher = pd.DataFrame(list(to_name.filter(levels_teacher=1))).iloc[i]['teacher_name']
+                        app_t = approve_teacher(teacher, date_input, period_input)
+                        if app_t and len(list_teachers) < 3 and teacher not in list_teachers:
+                            list_teachers.append(teacher)
                 if len(list_teachers) == 3:
                     break
-                else:
-                    list_teachers = []
+            if list_teachers == []:
                 break
-        if list_teachers == []:
-            break
-        for i in range(len(list_teachers)):
-            list_levels.append(pd.DataFrame(list(to_levels.filter(teacher_name=list_teachers[i]))).iloc[0]['levels_teacher'])
-        if (sum(list_levels) > 3 and count_dict_apv[0] == 3) or (sum(list_levels) == 0 and count_dict_apv[0] == 3):
-            list_levels = []
-            break
-        if sum(list_levels) <= 3 and sum(list_levels) != 0:
-            rand_teacher = randint(0,len(kind_teacher)-1)
-            # levels_rand = pd.DataFrame(list(to_levels.filter(id=rand_teacher))).iloc[0]['levels_teacher']
-            # teacher_get = pd.DataFrame(list(to_name.filter(id=rand_teacher))).iloc[0]['teacher_name']
-            teacher_get = kind_teacher.values('teacher_name')[rand_teacher]['teacher_name']
-            levels_rand = kind_teacher.values('levels_teacher')[rand_teacher]['levels_teacher']
-            app_tch_last = approve_teacher(teacher_get, date_input, period_input)
-            if app_tch_last == False and teacher_get in dic_kind:
-                dic_kind[teacher_get] = 1
-            count_dict_kind = Counter(dic_kind.values())
-            if count_dict_kind[0] == 0:
+            for i in range(len(list_teachers)):
+                list_levels.append(pd.DataFrame(list(to_levels.filter(teacher_name=list_teachers[i]))).iloc[0]['levels_teacher'])
+            
+            if (sum(list_levels) == 0 and count_dict_apv[0] == 3):
                 list_teachers = []
                 break
-            if levels_rand == 2 and teacher_get not in list_teachers and app_tch_last :
-                list_levels.append(levels_rand)
+            if (sum(list_levels) > 3):
+                for i in range(len(normal_teacher)):
+                    teacher_get = normal_teacher.values('teacher_name')[i]['teacher_name']
+                    app_t = approve_teacher(teacher_get, date_input, period_input)
+                    if app_t and teacher_get not in list_teachers:
+                        list_teachers.append(teacher_get)
+                        break
+                if len(list_teachers) == 4:
+                    break
+            if sum(list_levels) <= 3 and sum(list_levels) != 0:
+                rand_teacher = randint(0,len(kind_teacher)-1)
+                teacher_get = kind_teacher.values('teacher_name')[rand_teacher]['teacher_name']
+                levels_rand = kind_teacher.values('levels_teacher')[0]['levels_teacher']
+                app_tch_last = approve_teacher(teacher_get, date_input, period_input)
+                if app_tch_last == False and teacher_get in dic_kind:
+                    dic_kind[teacher_get] = 1
+                count_dict_kind = Counter(dic_kind.values())
+                if count_dict_kind[0] == 0:
+                    list_teachers = []
+                    break
+                if teacher_get not in list_teachers and app_tch_last :
+                    list_levels.append(levels_rand)
+                    list_teachers.append(teacher_get)
+                    break
+    else:
+        list_teachers = []
+        for i in range(len(advisor)):
+            teacher = advisor[i]['proj_advisor']
+            app_t = approve_teacher(teacher, date_input, period_input)
+            if app_t:
+                list_teachers.append(teacher)
+        for i in range(len(normal_teacher)):
+            teacher_get = normal_teacher.values('teacher_name')[i]['teacher_name']
+            app_t = approve_teacher(teacher_get, date_input, period_input)
+            if app_t and len(list_teachers) < 5 and teacher_get not in list_teachers:
                 list_teachers.append(teacher_get)
-                break
-        
-            
+
+
+
+
     return list_teachers
 
 def count_proj(major):
@@ -147,7 +187,7 @@ def prepare_render():
     pc_result = [{'bi':count_proj('Business Intelligence'), 'ds':count_proj('Data Science'), 'es':count_proj('Embedded Systems'), \
                 'mu':count_proj('Multimedia'), 'nw':count_proj('Network and Communication'), 'se':count_proj('Software Development')}]
     date_result = [date[i]['date_exam'] for i in range(len(date))]
-    
+
     for i in date_result:
         period_zero = [0 for i in range(len(room))]
         period_one = [0 for i in range(len(room))]
@@ -160,12 +200,11 @@ def prepare_render():
 
         for j in range(len(dic_keep)):
             if dic_keep[j][1] == 0:
-                period_zero[dic_keep[j][0]] = 1 
+                period_zero[dic_keep[j][0]] = 1
             else:
                 period_one[dic_keep[j][0]] = 1
         dic[i] = (period_zero, period_one)
     result.append(pc_result)
-    # result.append(date_result)
     result.append(dic)
 
     return result
@@ -177,7 +216,7 @@ def manage_room(request):
     date_selected = request.POST.get('date_selected',None)
 
     date_time = datetime.datetime.strptime(date_selected, "%d/%m/%Y")
-    list_proj_id = []
+    list_proj_id, keep_proj_id = [], []
     real_teacher = []
     create_schedule = False
     fail_teacher = False
@@ -190,42 +229,60 @@ def manage_room(request):
 
     id_dateexam = int((date_selected+period_selected+room_selected).replace('/',''))
 
-    if not DateExam.objects.filter(id=id_dateexam).exists():
+    if not DateExam.objects.filter(id=id_dateexam).exists() and not (list_teachers == [] or len(list_teachers) < 4):
         create_schedule = True
         date_insert = DateExam(id=id_dateexam, date_exam=date_selected, time_period=period_selected, room_id_id=room_selected)
         date_insert.save()
 
     # /////////////////////////////////////
-    if list_teachers == [] or len(list_teachers) < 4:
-        fail_teacher = True
+    # if list_teachers == [] or len(list_teachers) < 4:
+    #     fail_teacher = True
+    #     DateExam.objects.filter(id=id_dateexam).delete()
+
     # check proj of teacher
     mobj_name = Major.objects.values('major_name')
-
-    if not fail_teacher:
+    if create_schedule:
+        proj_tch_advisor = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=date_time.year+543, \
+                        proj_advisor__in=[list_teachers[0], list_teachers[1], list_teachers[2]], \
+                        schedule_id_id=None, proj_major=mobj_name.get(id=major_selected)['major_name'])))
         for i in range(3):
             proj_of_teacher = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=date_time.year+543, \
-                            proj_advisor=list_teachers[i], schedule_id_id=None, \
-                            proj_major=mobj_name.get(id=major_selected)['major_name'])))
+                        proj_advisor=list_teachers[i], schedule_id_id=None, proj_major=mobj_name.get(id=major_selected)['major_name'])))
             if not proj_of_teacher.empty:
                 rand_index = randint(0,len(proj_of_teacher)-1)
-                if proj_of_teacher.iloc[rand_index]['id'] not in list_proj_id:
+                if proj_of_teacher.iloc[rand_index]['id'] not in list_proj_id and len(list_proj_id) < 5:
                     list_proj_id.append(proj_of_teacher.iloc[rand_index]['id'])
-        
-        proj_major_selected = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=date_time.year+543, schedule_id_id=None,\
-                proj_major=mobj_name.get(id=major_selected)['major_name'])))
-    
-    if not fail_teacher:
-        for i in range(len(proj_major_selected)):
-            if proj_major_selected.iloc[i]['id'] not in list_proj_id and len(list_proj_id) < 5:
-                list_proj_id.append(proj_major_selected.iloc[i]['id'])
-    
+        for i in range(len(proj_tch_advisor)):
+            if not proj_tch_advisor.empty:
+                if proj_tch_advisor.iloc[i]['id'] not in list_proj_id and len(list_proj_id) < 5:
+                    list_proj_id.append(proj_tch_advisor.iloc[i]['id'])
+    if list_proj_id == []:
+        DateExam.objects.filter(id=id_dateexam).delete()
+    #     for i in range(3):
+    #         proj_of_teacher = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=date_time.year+543, \
+    #                         proj_advisor=list_teachers[i], schedule_id_id=None, \
+    #                         proj_major=mobj_name.get(id=major_selected)['major_name'])))
+
+    #         if not proj_of_teacher.empty:
+    #             rand_index = randint(0,len(proj_of_teacher)-1)
+    #             if proj_of_teacher.iloc[rand_index]['id'] not in list_proj_id:
+    #                 list_proj_id.append(proj_of_teacher.iloc[rand_index]['id'])
+
+        # proj_major_selected = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=date_time.year+543, schedule_id_id=None,\
+        #         proj_major=mobj_name.get(id=major_selected)['major_name'])))
+
+    # if not fail_teacher:
+    #     for i in range(len(proj_major_selected)):
+    #         if proj_major_selected.iloc[i]['id'] not in list_proj_id and len(list_proj_id) < 5:
+    #             list_proj_id.append(proj_major_selected.iloc[i]['id'])
+
 
     NoneType = type(None)
     max_count = ScheduleRoom.objects.all().aggregate(Max('teacher_group'))['teacher_group__max']
     if type(max_count) == NoneType:
         max_count = 0
 
-    if create_schedule and not fail_teacher :
+    if create_schedule:
         for i in range(len(list_proj_id)):
             time_id_condition = 1 if(int(period_selected) == 0) else 6
             if not ScheduleRoom.objects.filter(date_id_id=id_dateexam, time_id_id=i+time_id_condition, room_id_id=int(room_selected)).exists():
@@ -237,8 +294,7 @@ def manage_room(request):
                     teacher_r.schedule_teacher.add(schedule)
                     teacher_r.save()
                 Project.objects.filter(id=list_proj_id[i]).update(schedule_id_id=schedule.id)
-    else:
-        DateExam.objects.filter(id=id_dateexam).delete()
+
     pre = prepare_render()
     return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
                     'room_period':pre[1]})
@@ -259,7 +315,7 @@ def table_room(request):
             teacher_groups.append({'proj_group_exam': i['teacher_group'], \
                                 'teacher_name': tch_obj.teacher_name, \
                                 'levels_teacher': tch_obj.levels_teacher})
-    
+
 
     # //////////////////////////////////////
 
@@ -272,10 +328,10 @@ def table_room(request):
         proj_result = proj_objs.proj_name_th
         time_result = TimeExam.objects.values('time_exam').get(id=schedule_all.iloc[i]['time_id_id'])['time_exam']
         major_result = Major.objects.values('major_name').get(major_name=proj_objs.proj_major)['major_name']
- 
+
         result_manage.append({'teacher_group': schedule_all.iloc[i]['teacher_group'], 'room_name': room_result ,\
                     'date_exam': date_result, 'proj_name_th': proj_result, 'major_name':major_result, 'time_exam': time_result})
-    
+
     return render(request,"result_room.html",{'list_result_teacher': teacher_groups, 'ScheduleRoom': result_manage})
 
 def admin_required(login_url=None):
@@ -284,7 +340,6 @@ def admin_required(login_url=None):
 @login_required
 @admin_required(login_url="login/")
 def manage(request):
-    pre = prepare_render()
     try:
         reset_selected = int(request.POST.get('reset_gen',None))
         if reset_selected:
@@ -292,9 +347,10 @@ def manage(request):
             DateExam.objects.all().delete()
             Teacher.objects.all().order_by('proj_group_exam').update(proj_group_exam=0)
             Teacher.save()
+        pre = prepare_render()
         return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
                     'room_period':pre[1]})
     except Exception as error:
-        print(error)
+        pre = prepare_render()
         return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
                     'room_period':pre[1]})
