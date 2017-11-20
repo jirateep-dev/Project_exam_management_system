@@ -167,11 +167,10 @@ def manageTeacher(major_id, date_input, period_input):
         for i in range(len(normal_teacher)):
             teacher_get = normal_teacher.values('teacher_name')[i]['teacher_name']
             app_t = approve_teacher(teacher_get, date_input, period_input)
-            if app_t and len(list_teachers) < 5 and teacher_get not in list_teachers:
+            if app_t and teacher_get not in list_teachers:
                 list_teachers.append(teacher_get)
-
-
-
+            if len(list_teachers) == 4:
+                break
 
     return list_teachers
 
@@ -258,24 +257,6 @@ def manage_room(request):
                     list_proj_id.append(proj_tch_advisor.iloc[i]['id'])
     if list_proj_id == []:
         DateExam.objects.filter(id=id_dateexam).delete()
-    #     for i in range(3):
-    #         proj_of_teacher = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=date_time.year+543, \
-    #                         proj_advisor=list_teachers[i], schedule_id_id=None, \
-    #                         proj_major=mobj_name.get(id=major_selected)['major_name'])))
-
-    #         if not proj_of_teacher.empty:
-    #             rand_index = randint(0,len(proj_of_teacher)-1)
-    #             if proj_of_teacher.iloc[rand_index]['id'] not in list_proj_id:
-    #                 list_proj_id.append(proj_of_teacher.iloc[rand_index]['id'])
-
-        # proj_major_selected = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=date_time.year+543, schedule_id_id=None,\
-        #         proj_major=mobj_name.get(id=major_selected)['major_name'])))
-
-    # if not fail_teacher:
-    #     for i in range(len(proj_major_selected)):
-    #         if proj_major_selected.iloc[i]['id'] not in list_proj_id and len(list_proj_id) < 5:
-    #             list_proj_id.append(proj_major_selected.iloc[i]['id'])
-
 
     NoneType = type(None)
     max_count = ScheduleRoom.objects.all().aggregate(Max('teacher_group'))['teacher_group__max']
@@ -326,11 +307,13 @@ def table_room(request):
         room_result = Room.objects.values('room_name').get(id=schedule_all.iloc[i]['room_id_id'])['room_name']
         date_result = DateExam.objects.values('date_exam').get(id=schedule_all.iloc[i]['date_id_id'])['date_exam']
         proj_result = proj_objs.proj_name_th
+        advisor_result = proj_objs.proj_advisor
         time_result = TimeExam.objects.values('time_exam').get(id=schedule_all.iloc[i]['time_id_id'])['time_exam']
         major_result = Major.objects.values('major_name').get(major_name=proj_objs.proj_major)['major_name']
 
         result_manage.append({'teacher_group': schedule_all.iloc[i]['teacher_group'], 'room_name': room_result ,\
-                    'date_exam': date_result, 'proj_name_th': proj_result, 'major_name':major_result, 'time_exam': time_result})
+                    'date_exam': date_result, 'proj_name_th': proj_result, 'major_name':major_result, \
+                    'time_exam': time_result, 'proj_advisor':advisor_result})
 
     return render(request,"result_room.html",{'list_result_teacher': teacher_groups, 'ScheduleRoom': result_manage})
 
