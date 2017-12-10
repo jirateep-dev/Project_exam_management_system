@@ -150,7 +150,7 @@ def manageTeacher(major_id, date_input, period_input):
                 if app_tch_last == False and teacher_get in dic_kind:
                     dic_kind[teacher_get] = 1
                 count_dict_kind = Counter(dic_kind.values())
-                if count_dict_kind[0] == 0:
+                if count_dict_kind[0] == 0 or (count_dict_kind[0] == 1 and teacher_get in list_teachers):
                     list_teachers = []
                     break
                 if teacher_get not in list_teachers and app_tch_last :
@@ -234,9 +234,6 @@ def manage_room(request):
         date_insert.save()
 
     # /////////////////////////////////////
-    # if list_teachers == [] or len(list_teachers) < 4:
-    #     fail_teacher = True
-    #     DateExam.objects.filter(id=id_dateexam).delete()
 
     # check proj of teacher
     mobj_name = Major.objects.values('major_name')
@@ -296,7 +293,6 @@ def table_room(request):
             teacher_groups.append({'proj_group_exam': i['teacher_group'], \
                                 'teacher_name': tch_obj.teacher_name, \
                                 'levels_teacher': tch_obj.levels_teacher})
-
 
     # //////////////////////////////////////
 
