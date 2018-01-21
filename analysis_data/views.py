@@ -64,11 +64,11 @@ def manageTeacher(major_id, date_input, period_input):
     date_time = datetime.datetime.strptime(date_input, "%d/%m/%Y")
     get_major_name = Major.objects.get(id = int(major_id))
     advisor = Project.objects.values('proj_advisor').filter(proj_major = get_major_name.major_name,\
-            proj_years = (date_time.year+543), schedule_id_id=None).distinct()
+            proj_years = (this_year), schedule_id_id=None).distinct()
     dataframe = pd.DataFrame(list(advisor))
 
     advisor_m = Project.objects.values('proj_advisor').filter(proj_major = get_major_name.major_name,\
-            proj_years = (date_time.year+543)).distinct()
+            proj_years = (this_year)).distinct()
 
     kind_teacher = Teacher.objects.filter(levels_teacher=2)
     normal_teacher = Teacher.objects.filter(levels_teacher=1)
@@ -238,11 +238,11 @@ def manage_room(request):
     # check proj of teacher
     mobj_name = Major.objects.values('major_name')
     if create_schedule:
-        proj_tch_advisor = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=date_time.year+543, \
+        proj_tch_advisor = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=this_year, \
                         proj_advisor__in=[list_teachers[0], list_teachers[1], list_teachers[2]], \
                         schedule_id_id=None, proj_major=mobj_name.get(id=major_selected)['major_name'])))
         for i in range(3):
-            proj_of_teacher = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=date_time.year+543, \
+            proj_of_teacher = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=this_year, \
                         proj_advisor=list_teachers[i], schedule_id_id=None, proj_major=mobj_name.get(id=major_selected)['major_name'])))
             if not proj_of_teacher.empty:
                 rand_index = randint(0,len(proj_of_teacher)-1)
