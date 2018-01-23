@@ -1,7 +1,7 @@
 TABLE_JOIN_SCOREPROJ = "(SELECT proj_id_id,teacher_id,presentation,question,report,presentation_media,discover,analysis,quantity,levels,quality\
             FROM database_management_scoreproj\
             INNER JOIN database_management_teacher_score_projs\
-            ON database_management_scoreproj.ID = database_management_teacher_score_projs.ID\
+            ON database_management_scoreproj.ID = database_management_teacher_score_projs.scoreproj_id\
             INNER JOIN database_management_teacher\
             ON database_management_teacher_score_projs.teacher_id = database_management_teacher.ID\
             ) join_data_score_proj"
@@ -9,7 +9,7 @@ TABLE_JOIN_SCOREPROJ = "(SELECT proj_id_id,teacher_id,presentation,question,repo
 TABLE_JOIN_SCOREPOST = "(SELECT proj_id_id,teacher_id,time_spo,character_spo,presentation_spo,question_spo,media_spo,quality_spo \
             FROM database_management_scoreposter\
 			INNER JOIN database_management_teacher_score_posters\
-            ON database_management_scoreposter.ID = database_management_teacher_score_posters.ID\
+            ON database_management_scoreposter.ID = database_management_teacher_score_posters.scoreposter_id\
             INNER JOIN database_management_teacher\
             ON database_management_teacher_score_posters.teacher_id = database_management_teacher.ID) join_data_score_poster "
 

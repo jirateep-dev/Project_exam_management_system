@@ -226,7 +226,7 @@ def manage_room(request):
     dataframe_period = pd.DataFrame(list(DateExam.objects.values('time_period')))
     dataframe_room = pd.DataFrame(list(DateExam.objects.values('room_id_id')))
 
-    id_dateexam = int((date_selected+period_selected+room_selected).replace('/',''))
+    id_dateexam = str((date_selected+period_selected+room_selected).replace('/',''))
 
     if not DateExam.objects.filter(id=id_dateexam).exists() and not (list_teachers == [] or len(list_teachers) < 4):
         create_schedule = True

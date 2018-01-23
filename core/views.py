@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from database_management.models import Project
+from database_management.models import Project, ScoreProj, Teacher
 from django.db.models import Max
 import logging
 
@@ -29,10 +29,26 @@ def scoreposter(request):
 @login_required(login_url="login/")
 def update_scoreproj(request):
     if request.method == 'POST':
+        # get data from html
         proj_selected = request.POST.get("data_proj", None)
         lis_selected = []
         for i in range(len(list_column)-1):
             selected_option = request.POST.get("select_option"+str(i), None)
             lis_selected.append(int(selected_option))
-        
+        user_id = None
+        if request.user.is_authenticated():
+            user_id = request.user.id
+            teacher_sp = Teacher.objects.get(login_user_id=user_id)
+            proj = Project.objects.get(proj_name_th=proj_selected)
+            if not teacher_sp.score_projs.filter(proj_id_id=proj.id).exists():
+                score_proj = ScoreProj(proj_id_id=proj.id, presentation=lis_selected[0], question=lis_selected[1], report=lis_selected[2],\
+                                presentation_media=lis_selected[3], discover=lis_selected[4], analysis=lis_selected[5], \
+                                quantity=lis_selected[6], levels=lis_selected[7])
+                score_proj.save()
+                teacher_sp.score_projs.add(score_proj)
+                teacher_sp.save()
+            else:
+                score_proj = ScoreProj.objects.get(proj_id_id=proj.id)
+                score_proj.delete()
+
     return render(request,"update_scoreproj.html")
