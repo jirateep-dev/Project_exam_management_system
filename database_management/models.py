@@ -2,6 +2,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 import datetime
 
 class Major(models.Model):
@@ -117,7 +120,8 @@ class ScoreAdvisor(models.Model):
         verbose_name_plural = 'ตาราง คะแนนที่ปรึกษา'
 
 class Teacher(models.Model):
-    login_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # user = models.OneToOneField(User, on_delete=models.CASCADE)
+    login_user = models.ForeignKey(User, on_delete=models.CASCADE, unique=True)
     teacher_name = models.CharField(max_length=1024)
     # proj_group_exam = models.IntegerField(default=0)
     proj_group_poster = models.IntegerField(default=0)
@@ -135,3 +139,12 @@ class Teacher(models.Model):
 
     def __str__(self):
         return self.teacher_name
+
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        teacher = Teacher.objects.create(login_user=instance)
+        teacher.save()
+    else:
+        Teacher.objects.filter(login_user=instance).update(teacher_name=instance.first_name+' '+instance.last_name)
+    

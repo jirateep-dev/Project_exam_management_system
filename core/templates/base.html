@@ -18,12 +18,14 @@
     <div class="container-fluid">
         <h4>
             <ul class="nav nav-tabs" id="actived">
-                <li><a href="/">หน้าหลัก</a></li>
-                <li><a href="#">ตารางงาน</a></li>
+                <!-- <li><a href="/">หน้าหลัก</a></li>
+                <li><a href="#">ตารางงาน</a></li> -->
                 <li><a href="/scoreproj">คะแนนโปรเจค</a></li>
                 <li><a href="/scoreposter">คะแนนโปสเตอร์</a></li>
+                {% if user.is_superuser %}
                 <li><a href="/manage">จัดห้องสอบ</a></li>
                 <li><a href="/manage/table_room">ตารางการจัดห้องสอบ</a></li>
+                {% endif %}
                 <ul class="nav nav-tabs navbar-right">
                     <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> ออกจากระบบ</a></li>
                 </ul>

@@ -27,6 +27,10 @@ def scoreposter(request):
     return render(request,"scoreposter.html")
 
 @login_required(login_url="login/")
+def calculate_score(request):
+    return 1
+
+@login_required(login_url="login/")
 def update_scoreproj(request):
     if request.method == 'POST':
         # get data from html
@@ -48,7 +52,9 @@ def update_scoreproj(request):
                 teacher_sp.score_projs.add(score_proj)
                 teacher_sp.save()
             else:
-                score_proj = ScoreProj.objects.get(proj_id_id=proj.id)
-                score_proj.delete()
+                id_sc = teacher_sp.score_projs.filter(proj_id_id=proj.id)[0].id
+                ScoreProj.objects.filter(id=id_sc).update(presentation=lis_selected[0], question=lis_selected[1], report=lis_selected[2],\
+                            presentation_media=lis_selected[3], discover=lis_selected[4], analysis=lis_selected[5], \
+                            quantity=lis_selected[6], levels=lis_selected[7])
 
     return render(request,"update_scoreproj.html")
