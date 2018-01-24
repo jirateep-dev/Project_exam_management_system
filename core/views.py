@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, user_passes_test
-from database_management.models import Project, ScoreProj, Teacher, Settings
+from database_management.models import *
+from django.shortcuts import redirect
 from django.db.models import Max
 import logging
 
@@ -29,6 +30,7 @@ def settings(request):
             proj_int = 2
 
         Settings.objects.filter(id=1).update(activate=num_on_off, forms=proj_int)
+        User.objects.filter(is_staff=0).update(is_active=num_on_off)
     info_setting = Settings.objects.get(id=1)
 
     return render(request,"settings.html", {'activated':info_setting.activate, 'proj_act':info_setting.forms})
@@ -43,9 +45,12 @@ def scoreproj(request):
         projs = teacher_sp.schedule_teacher.all()
         for i in range(len(projs)):
             projid_teacher.append(projs[i].proj_id)
+    # if request.user.id in [1,4]:
+    #     return redirect('/admin/')
     queryset = []
+    form_setting = Settings.objects.get(id=1).forms
     for i in range(len(projid_teacher)):
-        if Project.objects.filter(proj_years=this_year, id=projid_teacher[i]).exists():
+        if Project.objects.filter(proj_years=this_year, proj_semester=form_setting, id=projid_teacher[i]).exists():
             queryset.append(Project.objects.get(id=projid_teacher[i]))
     lis_select = []
     for i in range(len(list_column)-1):
@@ -53,8 +58,14 @@ def scoreproj(request):
 
     if request.method == 'POST':
         proj_selected = request.POST.get("data_proj", None)
-        proj = Project.objects.get(proj_name_th=proj_selected)
-        return render(request, "add_scoreproj1.html", {'Projectset':proj, 'column_name':list_column[:len(list_column)-1],'range':range(1,11), 'len_col':lis_select})
+        if type(proj_selected) is None:
+            proj = Project.objects.get(proj_name_th=proj_selected)
+            if form_setting == 1:
+                return render(request, "add_scoreproj1.html", {'Projectset':proj, 'column_name':list_column[:len(list_column)-1],'range':range(1,11), 'len_col':lis_select})
+            if form_setting == 2:
+                return render(request, "add_scoreproj2.html", {'Projectset':proj, 'column_name':list_column[:len(list_column)],'range':range(1,11), 'len_col':lis_select})
+        else:
+            return render(request,"scoreproj.html",{'Projectset':queryset})
     else:
         return render(request,"scoreproj.html",{'Projectset':queryset})
 
