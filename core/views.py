@@ -8,8 +8,9 @@ import logging
 log = logging.getLogger('django.db.backends')
 log.setLevel(logging.DEBUG)
 log.addHandler(logging.StreamHandler())
-this_year = Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
-list_column = ['สื่อการนำเสนอ','การนำเสนอ','การตอบคำถาม','รายงาน','การค้นคว้า','การวิเคราะห์และออกแบบ','ปริมาณงาน','ความยากง่าย','คุณภาพของงาน']
+THIS_YEARS = Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
+LIST_COL = ['สื่อการนำเสนอ','การนำเสนอ','การตอบคำถาม','รายงาน','การค้นคว้า','การวิเคราะห์และออกแบบ','ปริมาณงาน','ความยากง่าย','คุณภาพของงาน']
+
 
 def admin_required(login_url=None):
     return user_passes_test(lambda u: u.is_superuser, login_url=login_url)
@@ -32,12 +33,12 @@ def settings(request):
         Settings.objects.filter(id=1).update(activate=num_on_off, forms=proj_int)
         User.objects.filter(is_staff=0).update(is_active=num_on_off)
     info_setting = Settings.objects.get(id=1)
-
     return render(request,"settings.html", {'activated':info_setting.activate, 'proj_act':info_setting.forms})
 
 
 @login_required(login_url="login/")
 def scoreproj(request):
+    info_setting = Settings.objects.get(id=1)
     projid_teacher = []
     if request.user.is_authenticated():
         user_id = request.user.id
@@ -45,33 +46,35 @@ def scoreproj(request):
         projs = teacher_sp.schedule_teacher.all()
         for i in range(len(projs)):
             projid_teacher.append(projs[i].proj_id)
-    # if request.user.id in [1,4]:
-    #     return redirect('/admin/')
+
     queryset = []
     form_setting = Settings.objects.get(id=1).forms
     for i in range(len(projid_teacher)):
-        if Project.objects.filter(proj_years=this_year, proj_semester=form_setting, id=projid_teacher[i]).exists():
+        if Project.objects.filter(proj_years=THIS_YEARS, proj_semester=form_setting, id=projid_teacher[i]).exists():
             queryset.append(Project.objects.get(id=projid_teacher[i]))
     lis_select = []
-    for i in range(len(list_column)-1):
+    for i in range(len(LIST_COL)-1):
         lis_select.append('select_option'+str(i))
 
     if request.method == 'POST':
         proj_selected = request.POST.get("data_proj", None)
-        if type(proj_selected) is None:
+        if type(proj_selected) is not None:
             proj = Project.objects.get(proj_name_th=proj_selected)
             if form_setting == 1:
-                return render(request, "add_scoreproj1.html", {'Projectset':proj, 'column_name':list_column[:len(list_column)-1],'range':range(1,11), 'len_col':lis_select})
+                return render(request, "add_scoreproj1.html", {'Projectset':proj, 'column_name':LIST_COL[:len(LIST_COL)-1],\
+            'range':range(1,11), 'len_col':lis_select, 'proj_act':info_setting.forms})
             if form_setting == 2:
-                return render(request, "add_scoreproj2.html", {'Projectset':proj, 'column_name':list_column[:len(list_column)],'range':range(1,11), 'len_col':lis_select})
+                return render(request, "add_scoreproj2.html", {'Projectset':proj, 'column_name':LIST_COL[:len(LIST_COL)],\
+            'range':range(1,11), 'len_col':lis_select, 'proj_act':info_setting.forms})
         else:
-            return render(request,"scoreproj.html",{'Projectset':queryset})
+            return render(request,"scoreproj.html",{'Projectset':queryset, 'proj_act':info_setting.forms})
     else:
-        return render(request,"scoreproj.html",{'Projectset':queryset})
+        return render(request,"scoreproj.html",{'Projectset':queryset, 'proj_act':info_setting.forms})
 
 
 @login_required(login_url="login/")
 def scoreposter(request):
+    info_setting = Settings.objects.get(id=1)
     return render(request,"scoreposter.html")
 
 @login_required(login_url="login/")
@@ -80,12 +83,13 @@ def calculate_score(request):
 
 @login_required(login_url="login/")
 def update_scoreproj(request):
+    info_setting = Settings.objects.get(id=1)
     message = ''
     if request.method == 'POST':
         # get data from html
         proj_selected = request.POST.get("data_proj", None)
         lis_selected = []
-        for i in range(len(list_column)-1):
+        for i in range(len(LIST_COL)-1):
             selected_option = request.POST.get("select_option"+str(i), None)
             lis_selected.append(int(selected_option))
         user_id = None
@@ -107,4 +111,4 @@ def update_scoreproj(request):
             #                 presentation_media=lis_selected[3], discover=lis_selected[4], analysis=lis_selected[5], \
             #                 quantity=lis_selected[6], levels=lis_selected[7])
 
-    return render(request,"update_scoreproj.html", {'message':message})
+    return render(request,"update_scoreproj.html", {'message':message, 'proj_act':info_setting.forms})

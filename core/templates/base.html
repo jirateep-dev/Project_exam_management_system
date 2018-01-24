@@ -20,7 +20,9 @@
         <h4>
             <ul class="nav nav-tabs" id="actived">
                 <li><a href="/scoreproj">คะแนนโปรเจค</a></li>
+                {% if proj_act == 2 %}
                 <li><a href="/scoreposter">คะแนนโปสเตอร์</a></li>
+                {% endif %}
                 {% if user.is_superuser %}
                 <li><a href="/manage">จัดห้องสอบ</a></li>
                 <li><a href="/manage/table_room">ตารางการจัดห้องสอบ</a></li>

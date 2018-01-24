@@ -142,7 +142,7 @@ class Teacher(models.Model):
 
 class Settings(models.Model):
     load = models.IntegerField(default=0)
-    activate = models.BooleanField(default=True)
+    activate = models.IntegerField(default=1)
     forms = models.IntegerField(default=1)
     objects = models.Manager()
     

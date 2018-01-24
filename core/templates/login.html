@@ -1,12 +1,4 @@
- {% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %} {% if next %} {% if user.is_authenticated %}
-
-<p>Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
-{% else %}
-
-<p>Please login to see this page.</p>
-{% endif %} {% endif %} {% load staticfiles %}
+{% load staticfiles %}
 
 <!DOCTYPE html>
 <html>
@@ -22,6 +14,8 @@
 
 <body>
 	<div class="wrapper">
+		<!-- Modal -->
+        
 		<div class="container">
 			<h1>Welcome</h1>
 			<h3>ระบบจัดตารางสอบวิชาโครงงาน</h3>
@@ -33,11 +27,16 @@
 				<div class="fieldWrapper" id="password">
 					{{ form.password }}
 				</div>
-				<button type="submit" value="login">Login</button>
+				<button type="submit" value="login" >Login</button>
 				<input type="hidden" name="next" value="{{ next }}" />
 			</form>
 		</div>
-
+		{% if form.errors %}
+		{% if not user.is_active %}
+			<h4 style="color:darkred;text-align: center">ท่านไม่ได้รับอนุญาติให้เข้าสู่ระบบในช่วงเวลานี้</h4>
+		{% endif %}
+		{% endif %}
+		
 		<ul class="bg-bubbles">
 			<li></li>
 			<li></li>
@@ -51,6 +50,7 @@
 			<li></li>
 		</ul>
 	</div>
+	
 
 	{% block javascript %} 
 		{% if not user.is_authenticated %}
