@@ -140,6 +140,18 @@ class Teacher(models.Model):
     def __str__(self):
         return self.teacher_name
 
+class Student(models.Model):
+    proj_id = models.ForeignKey(Project, on_delete=models.CASCADE)
+    student_id = models.IntegerField(default=0)
+    student_name = models.CharField(max_length=1024)
+    objects = models.Manager()
+
+    class Meta:
+        verbose_name_plural = 'ตาราง นักศึกษา'
+
+    def __str__(self):
+        return self.student_id
+
 class Settings(models.Model):
     load = models.IntegerField(default=0)
     activate = models.IntegerField(default=1)

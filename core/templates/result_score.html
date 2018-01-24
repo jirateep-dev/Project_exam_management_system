@@ -1,0 +1,31 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="jumbotron">
+            <h2>ผลคะแนน ภาคเรียนที่ 1 ปรการศึกษา {{this_year}}</h2>
+            <table class="table table-hover" style="margin-top: 50px;">
+                <thead>
+                <tr class="warning">
+                    {% for col_name in col_result%}
+                    <th><h4>{{col_name}}</h4></th>
+                    {% endfor %}
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for data in list_student%}
+                <tr>
+                    {% for i in data%}
+                    <td>{{i}}</td>
+                    {% endfor %}
+                </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+            
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, user_passes_test
 from database_management.models import *
-from django.shortcuts import redirect
 from django.db.models import Max
+from django.db.models import Avg
+from django.shortcuts import redirect
 import logging
 
 log = logging.getLogger('django.db.backends')
@@ -13,6 +14,7 @@ LIST_COL = ['สื่อการนำเสนอ','การนำเสน�
 LIST_COL_AD = ['การพัฒนาโครงงานตามวัตถุประสงค์','การปฏิบัติได้ตรงตามแผนที่วางไว้','การเลือกทฤษฏีและเครื่องมือ','การเข้าพบอาจารย์ที่ปรึกษา',\
             'การปรับปรุงแก้ไขรายงาน','คุณภาพของรายงาน','คุณภาพของโครงงาน']
 LIST_COL_PO = ['การตรงต่อเวลา','บุคลิกภาพและการแต่งกาย','ความชัดเจนในการอธิบาย','ความชัดเจนในการตอบคำถาม','ความชัดเจนของสื่อ','คุณภาพของโครงงาน']
+LIST_COL_RE = ['รหัสนักศึกษา','ชื่อ-นามสกุล','ชื่อโปรเจค','คะแนนโปรเจค (60%)','คะแนนอาจารย์ที่ปรึกษา (40%)']
 
 def admin_required(login_url=None):
     return user_passes_test(lambda u: u.is_superuser, login_url=login_url)
@@ -93,8 +95,19 @@ def scoreposter(request):
     return render(request,"scoreposter.html", {'proj_act':info_setting.forms})
 
 @login_required(login_url="login/")
-def calculate_score(request):
-    return 1
+def result_sem1(request):
+    info_setting = Settings.objects.get(id=1)
+    project = Project.objects.filter(proj_years=THIS_YEARS)
+    lis_stu = []
+
+    for obj in project:
+        stu = Student.objects.filter(proj_id_id=obj.id)
+        for i in stu:
+            lis_stu.append([i.student_id, i.student_name, obj.proj_name_th])
+
+
+    return render(request,"result_score.html", {'proj_act':info_setting.forms, 'this_year':THIS_YEARS, \
+            'col_result':LIST_COL_RE, 'list_student':lis_stu})
 
 @login_required(login_url="login/")
 def update_scoreproj(request):

@@ -8,4 +8,5 @@ urlpatterns = [
      url(r'^scoreposter/', views.scoreposter, name='scoreposter'),
      url(r'^update_scoreproj/', views.update_scoreproj, name='update_scoreproj'),
      url(r'^settings/', views.settings, name='settings'),
+     url(r'^result_sem1/', views.result_sem1, name='settings'),
 ]
