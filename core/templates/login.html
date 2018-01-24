@@ -27,23 +27,12 @@
 			<h3>ระบบจัดตารางสอบวิชาโครงงาน</h3>
 			<form method="post" action="{% url 'login' %}">
 				{% csrf_token %}
-				<!-- <input type="text" placeholder="Username">
-				<input type="password" placeholder="Password"> -->
 				<div class="fieldWrapper" id="username">
 					{{ form.username }}
 				</div>
 				<div class="fieldWrapper" id="password">
 					{{ form.password }}
 				</div>
-				
-				<!-- <table>
-						<tr>
-							<td>{{ form.username }}</td>
-						</tr>
-						<tr>
-							<td>{{ form.password }}</td>
-						</tr>
-					</table> -->
 				<button type="submit" value="login">Login</button>
 				<input type="hidden" name="next" value="{{ next }}" />
 			</form>

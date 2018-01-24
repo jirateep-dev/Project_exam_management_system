@@ -1,0 +1,46 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="jumbotron">
+            <h1>คะแนนโปรเจค</h1>
+            <p>ให้คะแนนโปรเจคที่ท่านเลือก</p>
+            <form action="{% url 'update_scoreproj' %}" method="post" id="update_scoreproj">
+                {% csrf_token %} 
+                <div class="form-group">
+                    <label for="sel1">ชื่อโปรเจค:</label>
+                    <select class="form-control" id="data_proj" name="data_proj" >
+                        <option selected="selected" value={{name.proj_name_th}} disabled>{{Projectset.proj_name_th}}</option>
+                    </select>
+                </div>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="warning">
+                            {% for col_name in column_name%}
+                            <th>{{col_name}}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in len_col %}
+                        <td>
+                            <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id={{i}} style="width: 100%" name={{i}}>
+                                <option value=0 selected="selected">0</option>
+                                {% for j in range %}
+                                    <option value={{j}}>{{j}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <button name="submit_scoreproj" type="submit" class="btn btn-success" form="update_scoreproj"><h4>ส่งคะแนน</h4></button>
+        <div class="col-xs-10">
+            <!-- <button name="reset_score" type="submit" class="btn btn-danger"><h4>รีเซ็ตผลคะแนน</h4></button> -->
+        </div>
+    </div>
+</div>
+{% endblock %}

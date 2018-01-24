@@ -140,6 +140,15 @@ class Teacher(models.Model):
     def __str__(self):
         return self.teacher_name
 
+class Settings(models.Model):
+    load = models.IntegerField(default=0)
+    activate = models.BooleanField(default=True)
+    forms = models.IntegerField(default=1)
+    objects = models.Manager()
+    
+    class Meta:
+        verbose_name_plural = 'ตาราง คะแนนที่ปรึกษา'
+
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -147,4 +156,3 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
         teacher.save()
     else:
         Teacher.objects.filter(login_user=instance).update(teacher_name=instance.first_name+' '+instance.last_name)
-    

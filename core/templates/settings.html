@@ -1,0 +1,32 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="jumbotron">
+            <h1>ตั้งค่าระบบ</h1>
+            <h2>เปิด-ปิดระบบ</h2>
+            <form action="{% url 'settings' %}" method="post" id="settings">
+                {% csrf_token %} 
+                {% if activated == 1 %}
+                <input name="on_off_sys" type="checkbox" checked data-toggle="toggle" data-size="large" data-offstyle="danger">
+                {% else %}
+                <input name="on_off_sys" type="checkbox" data-toggle="toggle" data-size="large" data-offstyle="danger">
+                {% endif %}
+                <h2>อนุญาติให้สอบโปรเจคที่</h2>
+                {% if proj_act == 1 %}
+                <input name="proj_num" type="checkbox" checked data-toggle="toggle" data-size="large"\
+                data-on="Project 1" data-off="Project 2" data-onstyle="success" data-offstyle="info">
+                {% else %}
+                <input name="proj_num" type="checkbox"  data-toggle="toggle" data-size="large"\
+                data-on="Project 1" data-off="Project 2" data-onstyle="success" data-offstyle="info">
+                {% endif %}
+            </form>
+        </div>
+
+        <button name="submit_settings" type="submit" class="btn btn-success" form="settings"><h4>บันทึกการตั้งค่า</h4></button>
+        <div class="col-xs-10">
+            <!-- <button name="reset_score" type="submit" class="btn btn-danger"><h4>รีเซ็ตผลคะแนน</h4></button> -->
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -5,54 +5,22 @@
         <div class="jumbotron">
             <h1>คะแนนโปรเจค</h1>
             <p>เลือกโปรเจคที่ต้องการให้คะแนน</p>
-            <form action="{% url 'update_scoreproj' %}" method="post" id="update_scoreproj">
+            <form action="{% url 'scoreproj' %}" method="post" id="scoreproj">
                 {% csrf_token %} 
                 <div class="form-group">
                     <label for="sel1">รายการโปรเจค:</label>
-                    <select class="form-control" id="data_proj" name="data_proj">
-                        <option selected="selected" disabled>เลือกโปรเจค</option>
+                    <select class="form-control" id="data_proj" name="data_proj" size="8">
+                        <option selected="selected" disabled hidden>เลือกโปรเจค</option>
                         {% for name in Projectset %}
                             <option value={{name.proj_name_th}}>{{name.proj_name_th}}</option>
                         {% endfor %}
                     </select>
                 </div>
 
-                <script>
-                    $('#data_proj').change(function () {
-                        var selectedText = $(this).find("option:selected").text();
-                        // $(".test").text(selectedText);
-                    });
-                </script>
-                <!-- <div class="test"></div> -->
-
-                <table class="table table-bordered">
-                    <thead>
-                        <tr class="warning">
-                            {% for col_name in column_name%}
-                            <th>{{col_name}}</th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                        {% for i in len_col %}
-                        <td>
-                            <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id={{i}} style="width: 100%" name={{i}}>
-                                <option value=0 selected="selected">0</option>
-                                {% for j in range %}
-                                    <option value={{j}}>{{j}}</option>
-                                {% endfor %}
-                            </select>
-                        </td>
-                        {% endfor %}
-                        
-                    </tbody>
-                </table>
             </form>
         </div>
-        <button name="submit_score" type="submit" class="btn btn-success" form="update_scoreproj"><h4>ส่งผลคะแนน</h4></button>
+        <button name="submit_proj" type="submit" class="btn btn-success" form="scoreproj"><h4>เลือกโปรเจค</h4></button>
         <div class="col-xs-10">
-            <!-- <button name="reset_score" type="submit" class="btn btn-danger"><h4>รีเซ็ตผลคะแนน</h4></button> -->
         </div>
     </div>
 </div>
