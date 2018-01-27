@@ -3,7 +3,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from database_management.models import *
 from django.db.models import Max
 from django.db.models import Avg
+from django.db.models import F
 from django.shortcuts import redirect
+from django.utils.html import format_html
 import logging
 
 log = logging.getLogger('django.db.backends')
@@ -14,7 +16,8 @@ LIST_COL = ['สื่อการนำเสนอ','การนำเสน�
 LIST_COL_AD = ['การพัฒนาโครงงานตามวัตถุประสงค์','การปฏิบัติได้ตรงตามแผนที่วางไว้','การเลือกทฤษฏีและเครื่องมือ','การเข้าพบอาจารย์ที่ปรึกษา',\
             'การปรับปรุงแก้ไขรายงาน','คุณภาพของรายงาน','คุณภาพของโครงงาน']
 LIST_COL_PO = ['การตรงต่อเวลา','บุคลิกภาพและการแต่งกาย','ความชัดเจนในการอธิบาย','ความชัดเจนในการตอบคำถาม','ความชัดเจนของสื่อ','คุณภาพของโครงงาน']
-LIST_COL_RE = ['รหัสนักศึกษา','ชื่อ-นามสกุล','ชื่อโปรเจค','คะแนนโปรเจค (60%)','คะแนนอาจารย์ที่ปรึกษา (40%)']
+LIST_COL_RE = ['รหัสนักศึกษา','ชื่อ-นามสกุล','ชื่อโปรเจค','คะแนนโปรเจค (60%)','คะแนนอาจารย์ที่ปรึกษา (40%)', 'รายละอียด']
+LIST_COL_DE = [['รายชื่ออาจารย์']+LIST_COL, ['อาจารย์ที่ปรึกษา']+LIST_COL_AD]
 
 def admin_required(login_url=None):
     return user_passes_test(lambda u: u.is_superuser, login_url=login_url)
@@ -97,17 +100,61 @@ def scoreposter(request):
 @login_required(login_url="login/")
 def result_sem1(request):
     info_setting = Settings.objects.get(id=1)
-    project = Project.objects.filter(proj_years=THIS_YEARS)
+    project = Project.objects.filter(proj_years=THIS_YEARS, proj_semester=1)
     lis_stu = []
 
-    for obj in project:
-        stu = Student.objects.filter(proj_id_id=obj.id)
-        for i in stu:
-            lis_stu.append([i.student_id, i.student_name, obj.proj_name_th])
+    for num in range(len(project)):
+        stu = Student.objects.filter(proj_id_id=project[num].id)
 
+        # calculate score project 60%
+        test = ScoreProj.objects.annotate(result_scoreproj = ((F('presentation')+F('presentation_media')+F('question'))*90/100) + \
+            (F('report')*90/100) + ((F('discover')+F('analysis'))*70/100) + ((F('quantity')+F('levels'))*90/100)).filter(proj_id_id=project[num].id)
+        avg_scorep = 0
+        for i in test:
+            avg_scorep += i.result_scoreproj
+        if len(test) != 0:
+            avg_scorep = avg_scorep / len(test)
+
+        # calculate score advisor 40%
+        test = ScoreAdvisor.objects.annotate(result_scoreproj = (F('propose')*90/100+F('planning')*90/100+F('tool')*90/100+\
+            F('advice')*90/100+F('improve')*90/100+F('quality_report')*90/100+F('quality_project')*90/100)).filter(proj_id_id=project[num].id)
+        avg_scoread = 0
+        for i in test:
+            avg_scoread += i.result_scoreproj
+        if len(test) != 0:
+            avg_scoread = avg_scoread / len(test)
+
+        for i in stu:
+            lis_stu.append([i.student_id, i.student_name, project[num].proj_name_th, "%.2f" %avg_scorep, "%.2f" %avg_scoread, \
+            format_html("<button name="'"detail"'" type="'"submit"'" class="'"btn btn-success"'" \
+            form="'"detail_score"'" value="+project[num].proj_name_th+"><h4>ดูรายละเอียด</h4></button>")])
 
     return render(request,"result_score.html", {'proj_act':info_setting.forms, 'this_year':THIS_YEARS, \
             'col_result':LIST_COL_RE, 'list_student':lis_stu})
+
+@login_required(login_url="login/")
+def detail_score(request):
+    if request.method == 'POST':
+        proj_name = request.POST.get("detail", None)
+        proj = Project.objects.get(proj_name_th=proj_name)
+        teacher = Teacher.objects.all()
+        lis_result = []
+        lis_result2 = []
+        for i in teacher:
+            if i.score_projs.filter(proj_id_id=proj.id).exists():
+                t_name = i.teacher_name
+                sc_de =  i.score_projs.get(proj_id_id=proj.id)
+                lis_result.append([t_name, sc_de.presentation_media, sc_de.presentation, sc_de.question, sc_de.report,\
+                            sc_de.discover, sc_de.analysis, sc_de.quantity, sc_de.levels, sc_de.quality])
+            if i.score_advisor.filter(proj_id_id=proj.id).exists():
+                sc_ad = i.score_advisor.get(proj_id_id=proj.id)
+                t_ad_name = i.teacher_name
+                lis_result2.append([t_ad_name, sc_ad.propose, sc_ad.planning, sc_ad.tool, sc_ad.advice, sc_ad.improve,\
+                 sc_ad.quality_report, sc_ad.quality_project])
+
+            
+    return render(request, "detail_score.html", {'this_year':THIS_YEARS, 'proj_name':proj_name, 'col_de':LIST_COL_DE[0],\
+         'result':lis_result,'col_de2':LIST_COL_DE[1], 'result2':lis_result2})
 
 @login_required(login_url="login/")
 def update_scoreproj(request):

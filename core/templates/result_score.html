@@ -4,28 +4,28 @@
     <div class="row">
         <div class="jumbotron">
             <h2>ผลคะแนน ภาคเรียนที่ 1 ปรการศึกษา {{this_year}}</h2>
-            <table class="table table-hover" style="margin-top: 50px;">
-                <thead>
-                <tr class="warning">
-                    {% for col_name in col_result%}
-                    <th><h4>{{col_name}}</h4></th>
-                    {% endfor %}
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for data in list_student%}
-                <tr>
-                    {% for i in data%}
-                    <td>{{i}}</td>
-                    {% endfor %}
-                </tr>
-                </tbody>
-                {% endfor %}
-            </table>
-            
+            <form action="{% url 'detail_score' %}" method="post" id="detail_score">
+                {% csrf_token %} 
+                <table class="table table-hover" style="margin-top: 50px;background-color:cornsilk">
+                    <thead>
+                    <tr style="background-color: slategray;color: aliceblue">
+                        {% for col_name in col_result%}
+                        <th style="text-align: center"><h4>{{col_name}}</h4></t>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in list_student%}
+                        <tr>
+                            {% for i in data%}
+                            <td>{{i}}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </form>
         </div>
-
     </div>
 </div>
 {% endblock %}
