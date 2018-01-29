@@ -116,8 +116,8 @@ def result_sem1(request):
             avg_scorep = avg_scorep / len(test)
 
         # calculate score advisor 40%
-        test = ScoreAdvisor.objects.annotate(result_scoreproj = (F('propose')*90/100+F('planning')*90/100+F('tool')*90/100+\
-            F('advice')*90/100+F('improve')*90/100+F('quality_report')*90/100+F('quality_project')*90/100)).filter(proj_id_id=project[num].id)
+        test = ScoreAdvisor.objects.annotate(result_scoreproj = (F('propose')+F('planning')+F('tool')+\
+            F('advice')+F('improve')+F('quality_report')+F('quality_project'))*60/100).filter(proj_id_id=project[num].id)
         avg_scoread = 0
         for i in test:
             avg_scoread += i.result_scoreproj
