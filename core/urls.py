@@ -10,4 +10,5 @@ urlpatterns = [
      url(r'^settings/', views.settings, name='settings'),
      url(r'^result_sem1/', views.result_sem1, name='result_sem1'),
      url(r'^detail_score/', views.detail_score, name='detail_score'),
+     url(r'^manage_proj/', views.manage_proj, name='manage_proj'),
 ]

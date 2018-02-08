@@ -43,6 +43,24 @@ def settings(request):
     info_setting = Settings.objects.get(id=1)
     return render(request,"settings.html", {'activated':info_setting.activate, 'proj_act':info_setting.forms})
 
+@login_required(login_url="login/")
+def manage_proj(request):
+
+    if request.method == 'POST':
+        mproj = request.POST.get("mproj", None)
+        if mproj == "mproj_add":
+            return render(request, "mproj_add.html")
+        if mproj == "mproj_edit":
+            return render(request, "mproj_edit.html")
+        if mproj == "mproj_del":
+            return render(request, "mproj_del.html")
+
+    return render(request, "manage_proj.html")
+
+@login_required(login_url="login/")
+def add_proj(request):
+
+    return 1
 
 @login_required(login_url="login/")
 def scoreproj(request):

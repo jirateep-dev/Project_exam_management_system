@@ -1,0 +1,7 @@
+h1,h2,h3,p{
+	font-family: "Fontcraft";
+}
+@font-face{
+	font-family: "Fontcraft";
+	src: url('../font/Fontcraft ver 2.03.otf') format('opentype');
+}

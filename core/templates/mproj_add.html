@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="jumbotron">
+            <h1 style="text-align: center">เพิ่มโครงงาน</h1>
+            <form action="{% url 'manage_proj' %}" method="post" id="manage_proj">
+                    {% csrf_token %} 
+                <div class="container" style="background-color: whitesmoke;margin-top: 50px;">
+                    <label>ชื่อโครงงานภาษาไทย</label><input type="text" class="form-control" \
+                    name="proj_name_th" id="th" placeholder="เฉพาะตัวอักษรภาษาไทย" required>
+                    <label>ชื่อโครงงานภาษาอังกฤษ</label><input type="text" class="form-control" \
+                    name="proj_name_en" id="eng" placeholder="เฉพาะตัวอักษรภาษาอังกฤษ" required>
+                    <div class="container">
+                        <div class='col-md-6'>
+                            <label>ปีการศึกษา : </label><input type="number" class="form-control" name="proj_year" min="0" max="9999"/ required>
+                        </div>
+                        <div class='col-md-6'>
+                            <label>เทอมที่ : </label><br>
+                            <select style="width: 100%;height: 33PX;">
+                                <option name="semester" value="1" selected="selected">1</option>
+                                <option name="semester" value="2">2</option>
+                            </select>
+                        </div>
+                    </div>
+                    <label>อาจารย์ที่ปรึกษา</label>
+                    <div class="container">
+                        <div class='col-md-6'>
+                            <label>ชื่อ :</label><input type="text" class="form-control" id="teacher" name="t_fname" required>
+                        </div>
+                        <div class='col-md-6'>
+                            <label>นามสกุล :</label><input type="text" class="form-control" id="teacher" name="t_lname" required>
+                        </div>
+                    </div>
+                    <label>อาจารย์ที่ปรึกษา(ร่วม)</label>
+                    <div class="container">
+                        <div class='col-md-6'>
+                            <label>ชื่อ :</label><input type="text" class="form-control" id="teacher" name="cot_fname" >
+                        </div>
+                        <div class='col-md-6'>
+                            <label>นามสกุล :</label><input type="text" class="form-control" id="teacher" name="cot_lname" >
+                        </div>
+                    </div>
+                    {% block javascript %} 
+                        <script type="text/javascript">
+                            $(document).ready(function(){
+                                $("#eng").on("keypress", function(event) {
+                                    var englishAlphabetAndWhiteSpace = /[A-Za-z ]/g;
+                                    var key = String.fromCharCode(event.which);
+                                    
+                                    if (event.keyCode == 8 || event.keyCode == 37 || event.keyCode == 39 || englishAlphabetAndWhiteSpace.test(key)) {
+                                        return true;
+                                    }
+                                
+                                    return false;
+                                });
+                                
+                                $('#eng').on("paste",function(e)
+                                {
+                                    e.preventDefault();
+                                });
+
+
+                                $("#th").on("keypress", function(event) {
+                                    var thaiAlphabetAndWhiteSpace = /[ก-๙ ]/g;
+                                    var key = String.fromCharCode(event.which);
+                                    
+                                    if (event.keyCode == 8 || event.keyCode == 37 || event.keyCode == 39 || thaiAlphabetAndWhiteSpace.test(key)) {
+                                        return true;
+                                    }
+                                
+                                    return false;
+                                });
+                                
+                                $('#th').on("paste",function(e)
+                                {
+                                    e.preventDefault();
+                                });
+
+
+                                $("#teacher").on("keypress", function(event) {
+                                    var englishAlphabetAndWhiteSpace = /[A-Za-zก-๙ ]/g;
+                                    var key = String.fromCharCode(event.which);
+                                    
+                                    if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 37 || event.keyCode == 39 || englishAlphabetAndWhiteSpace.test(key)) {
+                                        return true;
+                                    }
+                                
+                                    return false;
+                                });
+                                
+                                $('#teacher').on("paste",function(e)
+                                {
+                                    e.preventDefault();
+                                });
+                            });
+                        </script>
+                    {% endblock %}
+
+                    <div class='col-md-6'>
+                        <label>แขนงวิชา : </label><input type="text" class="form-control" name="major" id="eng" placeholder="เฉพาะตัวอักษรภาษาอังกฤษ" required>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <button name="submit_scoreproj" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal"><h4>เพิ่มโปรเจค</h4></button>
+        <div class="col-xs-10">
+            
+        </div>
+        <div class="container" style="padding: 5%;">
+
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" style="font-size: 2em !important;">ยืนยันการเพิ่มโปรเจค</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p style="font-size: 1.8em !important;">ท่านแน่ใจหรือไม่ที่จะเพิ่มโปรเจค.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button name="submit_scoreproj" type="submit" class="btn btn-success" form="manage_proj">ยืนยัน</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">ยกเลิก</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

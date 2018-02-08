@@ -5,19 +5,20 @@
         <div class="jumbotron">
             <h1>จัดการสอบ</h1>
             <p>การสอบโปรเจคภาคเรียนที่ 1 ปีการศึกษา 2560</p>
-            <div class='col-sm-8' style="margin-left: 15%;background-color: #F5F5F5;text-align: center;">
-                <h4>
-                    <label for="sel1">จำนวนโปรเจคที่เหลือ :</label>
-                    {% for pc in proj_count %}
-                        <span>BI : {{pc.bi}}  | </span>
-                        <span>DS : {{pc.ds}}  | </span>
-                        <span>ES : {{pc.es}}  | </span>
-                        <span>MU : {{pc.mu}}  | </span>
-                        <span>NW : {{pc.nw}}  | </span>
-                        <span>SE : {{pc.se}} </span>
-                    {% endfor %}
-                </h4>
-            </div>
+            
+        </div>
+        <div class='container' style="background-color: #F5F5F5;text-align: center;">
+            <h4>
+                <label for="sel1">จำนวนโปรเจคที่เหลือ :</label>
+                {% for pc in proj_count %}
+                    <span>BI : {{pc.bi}}  | </span>
+                    <span>DS : {{pc.ds}}  | </span>
+                    <span>ES : {{pc.es}}  | </span>
+                    <span>MU : {{pc.mu}}  | </span>
+                    <span>NW : {{pc.nw}}  | </span>
+                    <span>SE : {{pc.se}} </span>
+                {% endfor %}
+            </h4>
         </div>
         
         <table class='table table-bordered table-striped col-md-8' style="text-align: center">

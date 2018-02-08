@@ -11,6 +11,7 @@
     <link href="{% static 'css/bootstrap-toggle.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'datepicker-1.6.4/css/bootstrap-datepicker.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/fonts-family.css' %}" rel="stylesheet">
     <!-- <link href="{% static 'css/style.css' %}" rel="stylesheet"> -->
 </head>
 
@@ -28,6 +29,7 @@
                 <li><a href="/manage/table_room">ตารางการจัดห้องสอบ</a></li>
                 <li><a href="/result_sem1">ผลคะแนนภาคเรียนที่ 1</a></li>
                 <!-- <li><a href="/result_sem1">ผลคะแนนภาคเรือนที่ 2</a></li> -->
+                <li><a href="/manage_proj">จัดการโปรเจค</a></li>
                 {% endif %}
                 <ul class="nav nav-tabs navbar-right">
                     {% if user.is_superuser %}
