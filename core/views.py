@@ -53,14 +53,46 @@ def manage_proj(request):
         if mproj == "mproj_edit":
             return render(request, "mproj_edit.html")
         if mproj == "mproj_del":
-            return render(request, "mproj_del.html")
+            proj = Project.objects.filter(proj_years=THIS_YEARS)
+            return render(request, "mproj_del.html", {'proj':proj})
+
+        np_th = request.POST.get("proj_name_th", None)
+        np_en = request.POST.get("proj_name_en", None)
+        p_year = request.POST.get("proj_year", None)
+        p_semester = request.POST.get("semester", None)
+        p_major = request.POST.get("major", None)
+        fn_t = request.POST.get("t_fname", None)
+        ln_t = request.POST.get("t_lname", None)
+        fn_cot = request.POST.get("cot_fname", None)
+        ln_cot = request.POST.get("cot_lname", None)
+
+        proj_s = request.POST.get("project_selected", None)
+        
+
+        proj = Project.objects.filter(proj_years=THIS_YEARS, proj_semester=p_semester)
+        chk = True
+
+        for proj_obj in proj:
+            if proj_obj.proj_name_th == np_th and proj_obj.proj_name_en == np_en:
+                chk = False
+
+        if type(np_th) is not None or type(np_en) is not None or type(p_year) is not None or type(p_semester) is not None\
+            or type(p_major) is not None or type(fn_t) is not None or type(ln_t) is not None:
+            chk = False
+
+        if chk:
+            new_proj = Project(proj_years=p_year, proj_semester=p_semester, proj_name_th=np_th, proj_name_en=np_en,\
+                            proj_major=p_major, proj_advisor=fn_t+" "+ln_t, proj_co_advisor=fn_cot+" "+ln_cot)
+            new_proj.save()
+        
+        if type(proj_s) is not None:
+            Project.objects.filter(proj_name_th=proj_s).delete()
+        
+
+
+
 
     return render(request, "manage_proj.html")
-
-@login_required(login_url="login/")
-def add_proj(request):
-
-    return 1
 
 @login_required(login_url="login/")
 def scoreproj(request):
