@@ -51,7 +51,8 @@ def manage_proj(request):
         if mproj == "mproj_add":
             return render(request, "mproj_add.html")
         if mproj == "mproj_edit":
-            return render(request, "mproj_edit.html")
+            proj = Project.objects.filter(proj_years=THIS_YEARS)
+            return render(request, "mproj_edit.html", {'proj':proj})
         if mproj == "mproj_del":
             proj = Project.objects.filter(proj_years=THIS_YEARS)
             return render(request, "mproj_del.html", {'proj':proj})
@@ -61,36 +62,35 @@ def manage_proj(request):
         p_year = request.POST.get("proj_year", None)
         p_semester = request.POST.get("semester", None)
         p_major = request.POST.get("major", None)
-        fn_t = request.POST.get("t_fname", None)
-        ln_t = request.POST.get("t_lname", None)
-        fn_cot = request.POST.get("cot_fname", None)
-        ln_cot = request.POST.get("cot_lname", None)
+        n_t = request.POST.get("t_name", None)
+        n_cot = request.POST.get("cot_name", None)
 
-        proj_s = request.POST.get("project_selected", None)
-        
+        proj_d = request.POST.get("project_del", None)
+        proj_e = request.POST.get("project_edit", None)
 
         proj = Project.objects.filter(proj_years=THIS_YEARS, proj_semester=p_semester)
         chk = True
 
-        for proj_obj in proj:
-            if proj_obj.proj_name_th == np_th and proj_obj.proj_name_en == np_en:
-                chk = False
-
-        if type(np_th) is not None or type(np_en) is not None or type(p_year) is not None or type(p_semester) is not None\
-            or type(p_major) is not None or type(fn_t) is not None or type(ln_t) is not None:
+        if type(np_th) is type(None) or type(np_en) is type(None) or type(p_year) is type(None) or type(p_semester) is type(None)\
+            or type(p_major) is type(None) or type(n_t) is type(None):
             chk = False
 
         if chk:
-            new_proj = Project(proj_years=p_year, proj_semester=p_semester, proj_name_th=np_th, proj_name_en=np_en,\
-                            proj_major=p_major, proj_advisor=fn_t+" "+ln_t, proj_co_advisor=fn_cot+" "+ln_cot)
-            new_proj.save()
+            if Project.objects.filter(proj_name_th=np_th).exists():
+                Project.objects.filter(proj_name_th=np_th).update(proj_years=p_year, proj_semester=p_semester,\
+                 proj_name_th=np_th, proj_name_en=np_en, proj_major=p_major, proj_advisor=n_t, proj_co_advisor=n_cot)
+            else:
+                new_proj = Project(proj_years=p_year, proj_semester=p_semester, proj_name_th=np_th, proj_name_en=np_en,\
+                                proj_major=p_major, proj_advisor=n_t, proj_co_advisor=n_cot)
+                new_proj.save()
         
-        if type(proj_s) is not None:
-            Project.objects.filter(proj_name_th=proj_s).delete()
+        if type(proj_d) is not type(None):
+            Project.objects.filter(proj_name_th=proj_d).delete()
         
-
-
-
+        if type(proj_e) is not type(None):
+            pedit_selected = Project.objects.get(proj_name_th=proj_e)
+            return render(request, "mproj_edit2.html", {'proj':pedit_selected})
+        
 
     return render(request, "manage_proj.html")
 
@@ -116,7 +116,7 @@ def scoreproj(request):
         user_id = request.user.id
         teacher_sp = Teacher.objects.get(login_user_id=user_id)
         proj_selected = request.POST.get("data_proj", None)
-        if type(proj_selected) is not None:
+        if type(proj_selected) is not type(None):
             proj = Project.objects.get(proj_name_th=proj_selected)
 
             if teacher_sp.teacher_name == proj.proj_advisor:
