@@ -36,6 +36,7 @@ class TimeExam(models.Model):
         verbose_name_plural = 'ตารางเวลา'
 
 class DateExam(models.Model):
+    id = models.CharField(max_length=255, primary_key=True)
     date_exam = models.CharField(max_length=256)
     time_period = models.IntegerField(default=0)
     room_id = models.ForeignKey(Room, on_delete=models.CASCADE, null=True)
@@ -123,7 +124,7 @@ class Teacher(models.Model):
     # user = models.OneToOneField(User, on_delete=models.CASCADE)
     login_user = models.ForeignKey(User, on_delete=models.CASCADE, unique=True)
     teacher_name = models.CharField(max_length=1024)
-    # proj_group_exam = models.IntegerField(default=0)
+    proj_group_exam = models.IntegerField(default=0)
     proj_group_poster = models.IntegerField(default=0)
     levels_teacher = models.IntegerField(default=1)
     score_projs = models.ManyToManyField(ScoreProj)

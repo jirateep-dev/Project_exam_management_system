@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http import HttpResponse
+from django.http import HttpResponse,  HttpResponseRedirect
+from django.urls import reverse
+from django.contrib import messages
+from .forms import *
 import datetime
 import numpy as np
 import pandas as pd
@@ -13,6 +16,7 @@ from django.db.models import Q
 from random import randint
 from collections import Counter
 from django.db.models import Max
+import logging
 
 this_year = Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
 
@@ -30,6 +34,73 @@ def calkmean():
     result_kmean = change_positionlevels(1,0,result_kmean)
     # result type array([x,x,x,x,...]) link to Teacher_id of join_data_score_proj
     return result_kmean
+
+def upload_csv(request):
+    # if not GET, then proceed
+    try:
+        csv_file = request.FILES["csv_file"]
+        if not csv_file.name.endswith('.csv'):
+            messages.error(request,'File is not CSV type')
+            return HttpResponseRedirect(reverse("manage"))
+        #if file is too large, return
+        if csv_file.multiple_chunks():
+            messages.error(request,"Uploaded file is too big (%.2f MB)." % (csv_file.size/(1000*1000),))
+            return HttpResponseRedirect(reverse("manage"))
+ 
+        file_data = csv_file.read().decode("utf-8")    
+ 
+        lines = file_data.splitlines()
+        #loop over the lines and save them in db. If error , store as string and then display
+        for line in lines:                        
+            fields = line.split(",")
+
+            data_dict = {}
+            data_dict["date_id"] = fields[0]
+            data_dict["room_id"] = fields[1]
+            data_dict["time_id"] = fields[2]
+            data_dict["proj_id"] = fields[3]
+            data_dict["teacher_group"] = fields[4]
+            
+            lis_id_teacher = fields[5].split("/")
+
+            if not DateExam.objects.filter(id=fields[0]).exists() and fields[1] != "room_id":
+                dict_date = {}
+                dict_date["id"] = fields[0]
+                dict_date["date_exam"] = fields[0][:2]+"/"+fields[0][2:4]+"/"+fields[0][4:8]
+                dict_date["time_period"] = fields[0][8]
+                dict_date["room_id"] = fields[0][9]
+                try:
+                    form_date = DateExamForm(dict_date)
+                    if form_date.is_valid():
+                        form_date.save()
+                    else:
+                        logging.getLogger("error_logger").error(form_date.errors.as_json())
+                except Exception as e:
+                    logging.getLogger("error_logger").error(form_date.errors.as_json())                    
+                    pass
+            try:
+                form = ScheduleRoomForm(data_dict)
+                if form.is_valid():
+                    sche = form.save()
+                    form.save()
+                    for id_t in lis_id_teacher:
+                        teacher = Teacher.objects.get(id=id_t)
+                        teacher.schedule_teacher.add(sche)
+                        teacher.save()
+                    Project.objects.filter(id=fields[3]).update(schedule_id_id=sche.id)
+                else:
+                    logging.getLogger("error_logger").error(form.errors.as_json())                                                
+            except Exception as e:
+                logging.getLogger("error_logger").error(form.errors.as_json())                    
+                pass
+ 
+    except Exception as e:
+        logging.getLogger("error_logger").error("Unable to upload file. "+repr(e))
+        messages.error(request,"Unable to upload file. "+repr(e))
+        return HttpResponseRedirect(reverse("manage"))
+ 
+    return HttpResponseRedirect(reverse("upload_csv"))
+
 
 def approve_teacher(tch_name, date_selected, period_selected):
     approve_tch = False
@@ -175,6 +246,7 @@ def manageTeacher(major_id, date_input, period_input):
     return list_teachers
 
 def count_proj(major):
+    # form_setting = Settings.objects.get(id=1).forms
     return len(Project.objects.filter(proj_years=this_year, schedule_id_id=None, proj_major=major))
 
 def prepare_render():
@@ -271,6 +343,7 @@ def manage_room(request):
                     teacher_r = Teacher.objects.get(teacher_name=name)
                     teacher_r.schedule_teacher.add(schedule)
                     teacher_r.save()
+                    teacher_r = Teacher.objects.filter(teacher_name=name).update(proj_group_exam=max_count+1)
                 Project.objects.filter(id=list_proj_id[i]).update(schedule_id_id=schedule.id)
 
     pre = prepare_render()

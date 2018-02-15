@@ -6,4 +6,5 @@ urlpatterns = [
     url(r'^$', views.manage, name='manage'),
     url(r'^manage_room/$', views.manage_room, name='manage_room'),
     url(r'^table_room/$', views.table_room, name='table_room'),
+    url(r'^upload_csv/$', views.upload_csv, name='upload_csv'),
 ]
