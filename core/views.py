@@ -177,7 +177,7 @@ def result_sem1(request):
         for i in stu:
             lis_stu.append([i.student_id, i.student_name, project[num].proj_name_th, "%.2f" %avg_scorep, "%.2f" %avg_scoread, \
             format_html("<button name="'"detail"'" type="'"submit"'" class="'"btn btn-success"'" \
-            form="'"detail_score"'" value="+project[num].proj_name_th+"><h4>ดูรายละเอียด</h4></button>")])
+            form="'"detail_score"'" value="+project[num].proj_name_th+"><h4 style="'"font-size: 1.7em;"'">ดูรายละเอียด</h4></button>")])
 
     return render(request,"result_score.html", {'proj_act':info_setting.forms, 'this_year':THIS_YEARS, \
             'col_result':LIST_COL_RE, 'list_student':lis_stu})
