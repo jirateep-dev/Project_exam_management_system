@@ -4,6 +4,7 @@ from django.http import HttpResponse,  HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 from .forms import *
+import csv
 import datetime
 import numpy as np
 import pandas as pd
@@ -34,6 +35,35 @@ def calkmean():
     result_kmean = change_positionlevels(1,0,result_kmean)
     # result type array([x,x,x,x,...]) link to Teacher_id of join_data_score_proj
     return result_kmean
+
+def export_csv(request):
+
+    tchs = Teacher.objects.all()
+    sc = ScheduleRoom.objects.all()
+    lis_ex = []
+
+    for objs in sc:
+        lis_tch = []
+        for tch in tchs:
+            rel_tch = tch.schedule_teacher.all()
+            for i in rel_tch:
+                if objs.id == i.id:
+                    lis_tch.append(tch.id)
+        lis_sub = []
+        lis_sub.append(str(objs.date_id_id))
+        lis_sub.append(str(objs.room_id_id))
+        lis_sub.append(str(objs.time_id_id))
+        lis_sub.append(str(objs.proj_id))
+        lis_sub.append(str(objs.teacher_group))
+        lis_sub.append(str(lis_tch[0])+"/"+str(lis_tch[1])+"/"+str(lis_tch[2])+"/"+str(lis_tch[3]))
+        lis_ex.append(lis_sub)
+
+    with open('schedule_room.csv','w', newline='') as new_file:
+        csv_writer = csv.writer(new_file, delimiter=',')
+        for line in lis_ex:
+            csv_writer.writerow(line)
+    # render(request,"manage.html")
+    return HttpResponseRedirect(reverse("manage"))
 
 def upload_csv(request):
     # if not GET, then proceed
@@ -99,7 +129,7 @@ def upload_csv(request):
         messages.error(request,"Unable to upload file. "+repr(e))
         return HttpResponseRedirect(reverse("manage"))
  
-    return HttpResponseRedirect(reverse("upload_csv"))
+    return render(request,"upload_csv.html")
 
 
 def approve_teacher(tch_name, date_selected, period_selected):
