@@ -20,22 +20,22 @@
     <div class="container-fluid" style="padding: 0">
         <h3>
             <ul class="nav nav-tabs" id="actived" style="background: #2d3436;">
-                <li><a href="/scoreproj" style="color: #00cec9">คะแนนโปรเจค</a></li>
+                <li><a href="/scoreproj" style="color: #00cec9;">คะแนนโปรเจค</a></li>
                 {% if proj_act == 2 %}
-                <li><a href="/scoreposter" style="color: #00cec9">คะแนนโปสเตอร์</a></li>
+                <li><a href="/scoreposter" style="color: #00cec9;">คะแนนโปสเตอร์</a></li>
                 {% endif %}
                 {% if user.is_superuser %}
-                <li><a href="/manage" style="color: #00cec9">จัดห้องสอบ</a></li>
-                <li><a href="/manage/table_room" style="color: #00cec9">ตารางการจัดห้องสอบ</a></li>
-                <li><a href="/result_sem1" style="color: #00cec9">ผลคะแนนภาคเรียนที่ 1</a></li>
+                <li><a href="/manage" style="color: #00cec9;">จัดห้องสอบ</a></li>
+                <li><a href="/manage/table_room" style="color: #00cec9;">ตารางการจัดห้องสอบ</a></li>
+                <li><a href="/result_sem1" style="color: #00cec9;">ผลคะแนนภาคเรียนที่ 1</a></li>
                 <!-- <li><a href="/result_sem1">ผลคะแนนภาคเรือนที่ 2</a></li> -->
-                <li><a href="/manage_proj" style="color: #00cec9">จัดการโครงงาน</a></li>
+                <li><a href="/manage_proj" style="color: #00cec9;">จัดการโครงงาน</a></li>
                 {% endif %}
                 <div class="nav nav-tabs navbar-right pull-right" style="padding-right: 30px;border: 0">
                     {% if user.is_superuser %}
-                    <li><a href="/settings" style="color: #00cec9"><span class="glyphicon glyphicon-wrench " style="font-size: .6em;"></span> ตั้งค่าระบบ</a></li>
+                    <li><a href="/settings" style="color: #00cec9;"><span class="glyphicon glyphicon-wrench " style="font-size: .6em;"></span> ตั้งค่าระบบ</a></li>
                     {% endif %}
-                    <li><a href="/logout" style="color: #00cec9"><span class="glyphicon glyphicon-log-out" style="font-size: .6em;"></span> ออกจากระบบ</a></li>
+                    <li><a href="/logout" style="color: #00cec9;"><span class="glyphicon glyphicon-log-out" style="font-size: .6em;"></span> ออกจากระบบ</a></li>
                 </div>
             </ul>
         </h3>
