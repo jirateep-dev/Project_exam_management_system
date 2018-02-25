@@ -48,8 +48,9 @@ def manage_proj(request):
 
     if request.method == 'POST':
         mproj = request.POST.get("mproj", None)
+        teacher = Teacher.objects.all()
         if mproj == "mproj_add":
-            return render(request, "mproj_add.html")
+            return render(request, "mproj_add.html", {'teachers':teacher})
         if mproj == "mproj_edit":
             proj = Project.objects.filter(proj_years=THIS_YEARS)
             return render(request, "mproj_edit.html", {'proj':proj})

@@ -25,7 +25,7 @@ def export_csv(request):
 
     tchs = Teacher.objects.all()
     sc = ScheduleRoom.objects.all()
-    lis_ex = []
+    lis_ex = [["date_id", "room_id", "time_id", "project_id", "teacher_group", "teacher_id"]]
 
     for objs in sc:
         lis_tch = []
