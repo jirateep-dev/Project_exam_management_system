@@ -12,7 +12,7 @@
                 <select class="select" style="width: 100%;height: 35px;" name="project_edit">
                     <option selected="selected" disabled hidden>เลือกโครงงาน</option>
                     {% for j in proj %}
-                        <option value={{j.proj_name_th}}>{{j.proj_name_th}}</option>
+                        <option value="{{j.proj_name_th}}">{{j.proj_name_th}}</option>
                     {% endfor %}
                 </select>
             </form>
