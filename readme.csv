@@ -1,0 +1,111 @@
+id,proj_year,proj_semester,proj_name_th,proj_name_en,proj_major,proj_advisor,proj_co_advisor
+219,2560,1,ระบบยืนยันความถูกต้องของใบแสดงผลการศึกษา,Transcript Verification System,Software Development,ผศ. ดร. สมเกียรติ วังศิริพิทักษ์,
+220,2560,1,ระบบปรับสีภาพตามผู้ใช้กำหนด,User-Guided Image Colorization,Multimedia,ดร. สิริอร วิทยากร,
+221,2560,1,การพัฒนาเออาร์เพื่อประยุกต์ใช้ในการออกแบบจัดวางเครื่องเรือนภายในห้อง,AR development for room design,Multimedia,ดร. สิริอร วิทยากร,
+222,2560,1,การรู้จำป้ายจราจรเพื่อช่วยในการขับขี่,Traffic Sign Recognition for Driving Assistance,Software Development,ผศ. ดร. กันต์พงษ์ วรรัตน์ปัญญา,
+223,2560,1,แอปพลิเคชันเครือข่ายสังคมออนไลน์เพื่อการแบ่งปันข้อมูลการท่องเที่ยว,Social Network Application for Sharing Travel Experiences,Software Development,ผศ. ดร. สมเกียรติ วังศิริพิทักษ์,
+224,2560,1,แอปพลิเคชันเว็บและมือถือสำหรับติดตามและแจ้งเตือนเด็กที่ถูกลืมในรถตู้โรงเรียนอนุบาลโดยใช้เซ็นเซอร์ไอโอที,Web and Mobile Applications for Tracking and Notification of Forgotten Children in a Kindergarten Van Using Multiple IoT-Based Sensors,Software Development,ผศ. ดร. ธีรพงศ์ ลีลานุภาพ,อาจารย์อนันตพัฒน์ อนันตชัย
+225,2560,1,อุปกรณ์ไอโอทีสำหรับการติดตามและตรวจตราทางไกลเด็กที่ถูกลืมในรถตู้โรงเรียนอนุบาลโดยใช้คลาวด์เซอร์วิส,The IoT Devices for Remote Tracking and Monitoring of Forgotten Children in a Kindergarten Van Using Cloud Services,Embedded Systems,ผศ. ดร. ธีรพงศ์ ลีลานุภาพ,อาจารย์อนันตพัฒน์ อนันตชัย
+226,2560,1,การปรับปรุงระบบค้นหาเส้นทางบนเครือข่ายIOTเพื่อการตรวจสอบการทำงานของระบบปรับอากาศ,Improving routing process in IOT networks for maintaining Air Condition System,Network and Communication,ดร. ลภัส ประดิษฐ์ทัศนีย์,
+227,2560,1,ระบบจัดการเครือข่ายและควบคุมการจราจรบนเครือข่ายโดยใช้สถาปัตยกรรมแบบเอสดีเอ็น ,Network Management and Traffic Control System using SDN Architecture,Network and Communication,ผศ. ดร. สุเมธ ประภาวัต,
+228,2560,1,การจัดเตรียมระบบสนับสนุนการทดลองด้านการประมวลผลแบบกลุ่มเมฆบนโอเพ่นสแต็ก,Cloud Computing Laboratory Environment on OpenStack,Network and Communication,ดร. ลภัส ประดิษฐ์ทัศนีย์,
+229,2560,1,เว็บแอพพลิเคชั่นเพื่อสมาคมกีฬาหมากล้อมแห่งประเทศไทย,Web Application for Go Association of Thailand,Software Development,รศ. ดร. โชติพัชร์ ภรณวลัย,
+230,2560,1,โมบายแอปพลิเคชันพร้อมการเพิ่มคำนิยามจากบริบทสำหรับเขียนเล่าประสบการณ์การท่องเที่ยวแบบร่วมกัน,A Mobile Application with Contextual Labeling for Co-Authoring Travel Experiences,Software Development,ผศ. ดร. ธีรพงศ์ ลีลานุภาพ,
+231,2560,1,สิ่งแวดล้อมเพื่อการพัฒนาซอฟต์แวร์แบบทางไกลสำหรับการเขียนโปรแกรมแบบจับคู่ พร้อมด้วยการวิเคราะห์คุณภาพและการตรวจทานรหัสคำสั่ง,An Enhanced Remote Software Development Environment for Pair-Programming with Code Review and Quality Analysis ,Software Development,ผศ. ดร. ธีรพงศ์ ลีลานุภาพ,
+232,2560,1,การศึกษาเปรียบเทียบเชิงประสิทธิภาพระหว่าง Bare-metal network และ Virtualization network,The performance comparison between bare-metal network and virtualization network,Network and Communication,ผศ. อัครินทร์ คุณกิตติ,
+233,2560,1,ระบบนำทางภายในอาคารด้วยความเป็นจริงเสริม,Augmented Reality Indoor Navigation System,Software Development,ผศ. ดร. สมเกียรติ วังศิริพิทักษ์,
+234,2560,1,เกมส์โต้ตอบแบบปฏิสัมพันธ์บนกำแพงด้วยคิเนคต์,Interactive Wall Games Using Kinect,Multimedia,ดร. สุภวรรณ ทัศนประเสริฐ,
+235,2560,1,แอปพลิเคชันบนมือถือเพื่อการปรับท่าทางการเคลื่อนไหวที่เหมาะสมสำหรับนักวิ่ง,Mobile Application for Adjusting Suitable Runner’s Motion,Embedded Systems,อาจารย์อนันตพัฒน์ อนันตชัย,
+236,2560,1,การวิเคราะห์ข้อมูลแบบเรียนรู้เพิ่มพูนสำหรับการจำแนกหมวดหมู่หนังสือ,Analytical Incremental Learning for Book Classification,Data Science,ผศ. ดร. กันต์พงษ์ วรรัตน์ปัญญา,
+237,2560,1,ระบบวิเคราะห์วงสวิงกอล์ฟ,Golf Swing Analysis System,Multimedia,ดร. สุภวรรณ ทัศนประเสริฐ,
+238,2560,1,การศึกษาแนวทางการกระจายภาระงานสำหรับเกตเวย์ในเครือข่ายเฉพาะกิจเคลื่อนที่,A Study on Gateway Load Balancing in Mobile Ad-hoc Network,Network and Communication,ผศ. ดร. สุเมธ ประภาวัต,
+239,2560,1,ระบบจำลองฟิสิกส์เพื่อการศึกษา,Physic simulation for study,Multimedia,ผศ. ดร. บุญประเสริฐ สุรักษ์รัตนสกุล,
+240,2560,1,ระบบปฏิสัมพันธ์กับหน้าจอขนาดใหญ่ในที่สาธารณะด้วยวิธีการจำแนกการมอง,An Interactive Large Public Display System using Gaze Recognition Technique,Software Development,รศ. ดร. นพพร โชติกกำธร,
+241,2560,1,บีโร่ : แอปพลิเคชันเพื่อการช่วยเหลือซึ่งกันและกันในสังคม,BERO (BE a heRO) : Social-based assistance application,Software Development,อาจารย์สุพัณณดา โชติพันธ์,
+242,2560,1,เว็ปแอพพลิเคชั่นสำหรับการค้นหาผู้ร่วมเล่นกอล์ฟ,Web Application for Golf playing Partner Finder,Multimedia,ดร. สุภวรรณ ทัศนประเสริฐ,
+243,2560,1,ระบบสื่อประสมเพื่อการเรียนรู้และวิเคราะห์ผู้เรียน,MEDIA ONLINE LEARNING SYSTEM AND LEARNER DATA ANALYTICS,Software Development,รศ. ดร. นพพร โชติกกำธร,ผศ. ดร. ปานวิทย์ ธุวะนุติ
+244,2560,1,ออดิไซส์ เกมดนตรีโต้ตอบแนวใหม่,Audicise – The new generation of interactive Music Games,Multimedia,ดร. สามารถ หมุดและ,รศ. ดร. นพพร โชติกกำธร
+245,2560,1,ระบบตรวจสอบการทำงานเครื่องกรองน้ำ และส่งข้อมูลผ่านเครือข่ายโทรศัพท์มือถือ,Water purifier inspection system and indication via mobile network,Embedded Systems,ผศ. ดร. สุภกิจ นุตยะสกุล,ผศ. ดร. กนกวรรณ อัจฉริยะชาญวณิช
+246,2560,1,ระบบเพื่อการพัฒนาและจัดการแอพลิเคชั่นกระแสงานอัตโนมัติ,A System for Development and Management of Automated Workflow Applications,Software Development,รศ. ดร. นพพร โชติกกำธร,
+247,2560,1,การศึกษาแนวทางการพัฒนาระบบควบคุมขบวนโรบอทคาร์แบบทำงานอิสระ,A Study on Autonomous Robot-Car Platoons System,Network and Communication,ผศ. ดร. สุเมธ ประภาวัต,
+248,2560,1,การตรวจจับและรู้จำข้อความ,Text Detection and Recognition ,Software Development,ผศ. ดร. กันต์พงษ์ วรรัตน์ปัญญา,
+249,2560,1,ระบบตัวแทนจำหน่ายสินค้าออนไลน์,Online Drop Shipping System,Software Development,อาจารย์สุพัณณดา โชติพันธ์,อาจารย์ศรีนวล นลินทิพยวงศ์
+250,2560,1,การศึกษาพฤติกรรมการซื้อขายสินค้าบนโซเชียลเน็ตเวิร์คเพื่อสร้างระบบป้องกันการโกง,A study of behavior to buy on social network: to create a prevent of cheating system,Business Intelligence,อาจารย์อนันตพัฒน์ อนันตชัย,
+251,2560,1,ระบบการลงคะแนนเสียงแบบอิเลคทรอนิกส์โดยใช้บล็อคเชนแบบส่วนตัว,Electronic Vote By Private Blockchain,Software Development,ผศ. ดร. ปานวิทย์ ธุวะนุติ,
+252,2560,1,ออกแบบและพัฒนาระบบประกันการเดินทางโดยเครื่องบินโดยสาร ในรูปแบบของสัญญาอัจฉริยะ โดยใช้เทคโนโลยีบล๊อคเชนส่วนบุคคล,Design and Development Airplane traveling insurance system in the form of Smart Contract by using Private Blockchain,Software Development,ผศ. ดร. ปานวิทย์ ธุวะนุติ,
+253,2560,1,เว็บแอพพลิเคชั่นสนับสนุนการปรับแต่งสีภาพ,Web application for editing color,Multimedia,ดร. สุภวรรณ ทัศนประเสริฐ,
+254,2560,1,การวิเคราะห์เนื้อเพลงเพื่อหารูปแบบของเพลงที่ประสบความสำเร็จโดยใช้เทคนิคเหมืองข้อความ ,Analysis of lyrics to determine the pattern of successful songs by using text mining technique.,Business Intelligence,รศ. ดร. พรฤดี เนติโสภากุล,ดร. บัณฑิต ฐานะโสภณ
+255,2560,1,แอปพลิเคชันมือถือร่วมสร้างสรรค์ของกลุ่มคนสำหรับร้องขอความช่วยเหลือฉุกเฉิน,A Crowd-Based Mobile Application for Requesting Emergency Assistance,Software Development,ผศ. ดร. ธีรพงศ์ ลีลานุภาพ,
+256,2560,1,การทำนายการสำเร็จการศึกษาจากข้อมูลการลงทะเบียนนักศึกษา,Prediction of Graduation Success from Student Registration Data,Business Intelligence,ผศ. ดร. กนกวรรณ อัจฉริยะชาญวณิช,
+257,2560,1,ออกแบบและพัฒนาสถาปัตยกรรมแบบกระจายศูนย์เพื่อจัดการควบคุมการเข้าถึงข้อมูลสุขภาพสำหรับเครือโรงพยาบาลโดยใช้บล็อคเชนส่วนบุคคล,Design and Implement a Decentralized Architecture of Access Control Manager to Health Records for a Hospital Group Using Private Blockchain,Software Development,ผศ. ดร. ธีรพงศ์ ลีลานุภาพ,
+258,2560,1,ผู้ช่วยส่วนตัวอิจฉริยะในการจัดการกิจกรรมของอาจารย์,Chatbot for Professor Activity Management,Software Development,ดร. บัณฑิต ฐานะโสภณ,รศ. ดร. พรฤดี เนติโสภากุล
+259,2560,1,ระบบจัดตารางสอบวิชาโครงงาน,Project 1 and 2 exam schedule management system,Data Science,ดร. บัณฑิต ฐานะโสภณ,
+260,2560,1,ระบบสั่งอาหารแบบออนไลน์สำหรับร้านอาหาร,Online Food Ordering System for Restanrants,Data Science,ผศ. ดร. ธนิศา นุ่มนนท์,
+261,2560,1,โปรแกรมตรวจจับวัตถุและข้อความบนป้านโฆษณา,Text and Objects Detection on Billboards,Software Development,ดร. สิริอร วิทยากร,ผศ. ดร. กันต์พงษ์ วรรัตน์ปัญญา
+262,2560,1,ระบบการสร้างสรรค์เพลงร่วมกันสำหรับผู้เริ่มต้น,Collaborative Music Creation System for Beginners,Software Development,ผศ. ดร. ธนิศา นุ่มนนท์,
+263,2560,1,ระบบจัดการค่ายและการจัดการงานต่างๆ ,Camp and Event Management System,Data Science,ผศ. ดร. ธนิศา นุ่มนนท์,
+264,2560,1,การออกแบบและพัฒนาเกมสามมิติประเภทจำลองการสร้างเมืองในอวกาศ,Design and Development of a 3D Game on Simulating City Building in Space,Multimedia,รศ. ดร. นพพร โชติกกำธร,
+265,2560,1,ระบบบันทึกการเข้าเรียนและการประเมินการสอน,Student Attendance Record and Teaching Evaluation System,Software Development,ผศ. ดร. ธนิศา นุ่มนนท์,อาจารย์ศรีนวล นลินทิพยวงศ์
+266,2560,1,ระบบซื้อขายลิขสิทธิ์ผลงานการออกแบบตัวละคร,Trading System Copyright Character Design Works,Multimedia,ผศ. ดร. บุญประเสริฐ สุรักษ์รัตนสกุล,
+267,2560,1,ระบบจัดการศูนย์ข้อมูลข่าวสารทางราชการตาม พรบ.ข้อมูลข่าวสาร พ.ศ.2540,Government's Data Center Managing System Followed the information Statue B.E.2540,Multimedia,ผศ. ดร. สุภกิจ นุตยะสกุล,
+268,2560,1,ระบบสกัดข้อมูลจากเอกสารแบบอัตโนมัติ,Automated Document Extraction System,Data Science,ผศ. ดร. กิติ์สุชาต พสุภา,
+269,2560,1,การสอดส่องผู้ใช้สื่อสังคมออนไลน์และการวิเคราะห์อารมณ์ของผู้ให้บริโภคที่มีต่อผู้ให้บริการเครือข่ายโทรศัพท์บนทวิตเตอร์,Social Monitoring and Sentiment Analysis of Telecommunication Service Provider on Twitter,Data Science,ดร. บัณฑิต ฐานะโสภณ,
+270,2560,1,เว๊ปไซค์ประมูลสินค้าออนไลน์ ภายใน สจล.,Online Auction website for KMITL Commanity,Business Intelligence,อาจารย์สุพัณณดา โชติพันธ์,
+271,2560,1,การสร้างแบบจำลองและการประเมินศักยภาพของสตาร์ทอัพในประเทศไทยใช้เครือข่ายประสาทเทียมและสมการโครงสร้าง,Modelling and Evaluating the Potential of Startup in Thailand Using Struotural Equation Model and Artificial Nerual Network,Business Intelligence,อาจารย์ศรีนวล นลินทิพยวงศ์,อาจารย์สุพัณณดา โชติพันธ์
+272,2560,1,การวิเคราะห์พฤติกรรมการมองของมนุษย์บนเว็บเบราว์เซอร์ในสมาร์ตโฟน,Human gaze behavior analysis on web browser in smartphone,Data Science,ผศ. ดร. กิติ์สุชาต พสุภา,
+----------,----------,----------,----------,----------,----------
+----------,----------,----------,----------,----------,----------
+id,teacher_name
+1,ผศ. ดร. กนกวรรณ อัจฉริยะชาญวณิช
+2,ดร. นล เปรมัษเฐียร
+3,ดร. บัณฑิต ฐานะโสภณ
+4,ดร. พรสุรีย์ แจ่มศรี
+5,ดร. ลภัส ประดิษฐ์ทัศนีย์
+6,ดร. สามารถ หมุดและ
+7,ดร. สิริอร วิทยากร
+8,ดร. สุภวรรณ ทัศนประเสริฐ
+9,ผศ. ดร. กันต์พงษ์ วรรัตน์ปัญญา
+10,ผศ. ดร. กิติ์สุชาต พสุภา
+11,ผศ. ดร. ธนิศา นุ่มนนท์
+12,ผศ. ดร. ธีรพงศ์ ลีลานุภาพ
+13,ผศ. ดร. บุญประเสริฐ สุรักษ์รัต
+14,ผศ. ดร. ปานวิทย์ ธุวะนุติ
+15,ผศ. ดร. ภัทรชัย ลลิตโรจน์วงศ์
+16,ผศ. ดร. มานพ พันธ์โคกกรวด
+17,ผศ. ดร. สมเกียรติ วังศิริพิทักษ์
+18,ผศ. ดร. สุภกิจ นุตยะสกุล
+19,ผศ. ดร. สุเมธ ประภาวัต
+20,ผศ. ดร. โอฬาร วงศ์วิรัตน์
+21,ผศ. อัครินทร์ คุณกิตติ
+22,รศ. ดร. จันทร์บูรณ์ สถิตวิริยวงศ์
+23,รศ. ดร. โชติพัชร์ ภรณวลัย
+24,รศ. ดร. นพพร โชติกกำธร
+25,รศ. ดร. พรฤดี เนติโสภากุล
+26,รศ. ดร. วรพจน์ กรีสุระเดช
+27,รศ. ดร. สุขสันต์ พาณิชพาพิบูล
+28,รศ. ดร. อาริต ธรรมโน
+29,อาจารย์ศรีนวล นลินทิพยวงศ์
+30,อาจารย์สุพัณณดา โชติพันธ์
+31,อาจารย์อนันตพัฒน์ อนันตชัย
+32,อาจารย์วารุณี บัววิรัตน์
+----------,----------,----------,----------,----------,----------
+----------,----------,----------,----------,----------,----------
+id,room_name
+1,M03
+2,M04
+3,M21
+4,M22
+5,M23
+----------,----------,----------,----------,----------,----------
+----------,----------,----------,----------,----------,----------
+id,time
+1, 09.00-09.40
+2,09.40-10.20
+3,10.20-11.00
+4,11.00-11.40
+5,11.40-12.20
+6,13.30-14.10
+7,14.10-14.50
+8,14.50-15.30
+9,15.30-16.10
+10,16.10-16.50

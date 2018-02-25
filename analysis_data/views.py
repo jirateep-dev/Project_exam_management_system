@@ -22,11 +22,21 @@ import logging
 this_year = Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
 
 def export_csv(request):
-
+    setting = Settings.objects.get(id=1)
     tchs = Teacher.objects.all()
     sc = ScheduleRoom.objects.all()
+    proj = Project.objects.filter(proj_years=this_year, proj_semester=setting.forms)
+    teachers = Teacher.objects.all()
+    room = Room.objects.all()
+    time = TimeExam.objects.all()
     lis_ex = [["date_id", "room_id", "time_id", "project_id", "teacher_group", "teacher_id"]]
-
+    lis_readme = []
+    lis_line = ['----------','----------','----------','----------','----------','----------']
+    lis_pro = [["id", "proj_year", "proj_semester", "proj_name_th", "proj_name_en", "proj_major", "proj_advisor", "proj_co_advisor"]]
+    lis_tchs = [["id", "teacher_name"]]
+    lis_room = [["id", "room_name"]]
+    lis_time = [["id", "time"]]
+    checkloop = 1
     for objs in sc:
         lis_tch = []
         for tch in tchs:
@@ -35,17 +45,36 @@ def export_csv(request):
                 if objs.id == i.id:
                     lis_tch.append(tch.id)
         lis_sub = []
-        lis_sub.append(str(objs.date_id_id))
-        lis_sub.append(str(objs.room_id_id))
-        lis_sub.append(str(objs.time_id_id))
-        lis_sub.append(str(objs.proj_id))
-        lis_sub.append(str(objs.teacher_group))
-        lis_sub.append(str(lis_tch[0])+"/"+str(lis_tch[1])+"/"+str(lis_tch[2])+"/"+str(lis_tch[3]))
+        lis_sub.extend([str(objs.date_id_id), str(objs.room_id_id), str(objs.time_id_id), \
+        str(objs.proj_id), str(objs.teacher_group), str(lis_tch[0])+"/"+str(lis_tch[1])+"/"+str(lis_tch[2])+"/"+str(lis_tch[3])])
+        
+        if checkloop != objs.teacher_group:
+            checkloop = objs.teacher_group
+            lis_ex.append(lis_line)
+
         lis_ex.append(lis_sub)
+    
+    for objs in proj:
+        lis_pro.append([str(objs.id), str(objs.proj_years), str(objs.proj_semester), str(objs.proj_name_th), \
+        str(objs.proj_name_en), str(objs.proj_major), str(objs.proj_advisor), str(objs.proj_co_advisor)])
+    
+    for objs in teachers:
+        lis_tchs.append([str(objs.id), str(objs.teacher_name)])
+    for objs in room:
+        lis_room.append([str(objs.id), str(objs.room_name)])
+    for objs in time:
+        lis_time.append([str(objs.id), str(objs.time_exam)])
+    
+    lis_readme = lis_pro+[lis_line]+[lis_line]+lis_tchs+[lis_line]+[lis_line]+lis_room+[lis_line]+[lis_line]+lis_time
 
     with open('schedule_room.csv','w', newline='') as new_file:
         csv_writer = csv.writer(new_file, delimiter=',')
         for line in lis_ex:
+            csv_writer.writerow(line)
+    
+    with open('readme.csv','w', newline='') as new_file:
+        csv_writer = csv.writer(new_file, delimiter=',')
+        for line in lis_readme:
             csv_writer.writerow(line)
     # render(request,"manage.html")
     return HttpResponseRedirect(reverse("manage"))
@@ -78,7 +107,7 @@ def upload_csv(request):
             
             lis_id_teacher = fields[5].split("/")
 
-            if not DateExam.objects.filter(id=fields[0]).exists() and fields[1] != "room_id":
+            if not DateExam.objects.filter(id=fields[0]).exists() and fields[1] != "room_id" and fields[1] != "----------":
                 dict_date = {}
                 dict_date["id"] = fields[0]
                 dict_date["date_exam"] = fields[0][:2]+"/"+fields[0][2:4]+"/"+fields[0][4:8]
