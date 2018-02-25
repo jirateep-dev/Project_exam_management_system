@@ -12,7 +12,7 @@
                     <select class="form-control" id="data_proj" name="data_proj" size="8" >
                         <option selected="selected" disabled hidden>เลือกโปรเจค</option>
                         {% for name in Projectset %}
-                            <option value={{name.proj_name_th}}>{{name.proj_name_th}}</option>
+                            <option value="{{name.proj_name_th}}">{{name.proj_name_th}}</option>
                         {% endfor %}
                     </select>
                 </div>

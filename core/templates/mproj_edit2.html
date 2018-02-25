@@ -30,12 +30,26 @@
                     </div>
                     <div class="container">
                         <div class='col-md-6'>
-                            <label>ชื่อ-นามสกุล อาจารย์ที่ปรึกษา :</label><input type="text" \
-                            class="form-control" id="teacher" name="t_name" required value="{{proj.proj_advisor}}">
+                            <label>ชื่อ-นามสกุล อาจารย์ที่ปรึกษา :</label>
+                            <select class="form-control" class="select" style="width: 100%;height: 35px;" name="t_name" required>
+                                <option selected="selected" disabled hidden>{{proj.proj_advisor}}</option>
+                                {% for teacher in teachers %}
+                                    <option value="{{teacher.teacher_name}}">{{teacher.teacher_name}}</option>
+                                {% endfor %}
+                            </select>
+                            <!-- <input type="text" \
+                            class="form-control" id="teacher" name="t_name" required value="{{proj.proj_advisor}}"> -->
                         </div>
                         <div class='col-md-6'>
-                            <label>ชื่อ-นามสกุล อาจารย์ที่ปรึกษา(ร่วม) :</label><input type="text" \
-                            class="form-control" id="teacher" name="cot_name" value="{{proj.proj_co_advisor}}">
+                            <label>ชื่อ-นามสกุล อาจารย์ที่ปรึกษา(ร่วม) :</label>
+                            <select class="form-control" class="select" style="width: 100%;height: 35px;" name="t_name" required>
+                                <option selected="selected" disabled hidden>{{proj.proj_advisor}}</option>
+                                {% for teacher in teachers %}
+                                    <option value="{{teacher.teacher_name}}">{{teacher.teacher_name}}</option>
+                                {% endfor %}
+                            </select>
+                            <!-- <input type="text" \
+                            class="form-control" id="teacher" name="cot_name" value="{{proj.proj_co_advisor}}"> -->
                         </div>
                     </div>
                     {% block javascript %} 
