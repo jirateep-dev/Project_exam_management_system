@@ -1,37 +1,11 @@
 {% extends 'base.html' %} {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="jumbotron">
-            <h1>ตารางการจัดการสอบ</h1>
-            <p>การสอบโปรเจคภาคเรียนที่ 1 ปีการศึกษา 2560</p>
+<div class="container" style="width: 100%;padding: 5%;padding-top: 0">
+    <div class="row" style="width: 100%;">
+        <div class="container" style="text-align: center"><h1 style="font-size: 6.5em;margin-bottom: 30px;">ตารางการจัดการสอบ</h1></div>
+        <div class="jumbotron well well-lg" style="background: #ffffff;">
+            <h4 style="font-size: 3em;color: #353b48">การสอบโปรเจคภาคเรียนที่ 1 ปีการศึกษา 2560</h4>
         </div>
-        <div class="panel panel-default">
-            <div class="panel-heading" data-toggle="collapse" href="#table_teacher">
-                <h4 class="panel-title">
-                    <a>ตารางคณะกรรมการคุมสอบ</a>
-                </h4>
-            </div>
-        </div>
-        <div id="table_teacher" class="panel-collapse collapse in">
-            <table class="table table-hover" >
-                    <thead>
-                        <tr>
-                            <th>กลุ่มอาจารย์</th>
-                            <th>รายชื่ออาจารย์</th>
-                            <th>ระดับความใจดี</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for teacher in list_result_teacher %} 
-                        <tr>
-                            <td class="active">{{teacher.proj_group_exam}}</td>
-                            <td class="warning">{{teacher.teacher_name}}</td>
-                            <td class="info">{{teacher.levels_teacher}}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-            </table>
-        </div>
+        
         <div class="panel panel-default">
             <div class="panel-heading" data-toggle="collapse" href="#table_project">
                 <h4 class="panel-title">
@@ -65,6 +39,33 @@
                     </tr>
                     {% endfor %}
                 </tbody>
+            </table>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" data-toggle="collapse" href="#table_teacher">
+                <h4 class="panel-title">
+                    <a>ตารางคณะกรรมการคุมสอบ</a>
+                </h4>
+            </div>
+        </div>
+        <div id="table_teacher" class="panel-collapse collapse in">
+            <table class="table table-hover" >
+                    <thead>
+                        <tr>
+                            <th>กลุ่มอาจารย์</th>
+                            <th>รายชื่ออาจารย์</th>
+                            <th>ระดับความใจดี</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for teacher in list_result_teacher %} 
+                        <tr>
+                            <td class="active">{{teacher.proj_group_exam}}</td>
+                            <td class="warning">{{teacher.teacher_name}}</td>
+                            <td class="info">{{teacher.levels_teacher}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
             </table>
         </div>
     </div>

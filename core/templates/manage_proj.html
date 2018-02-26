@@ -4,28 +4,27 @@
 
 <div class="container">
     <div class="row">
-        <div class="jumbotron" style="text-align: center">
-            <h1>จัดการโปรเจค</h1>
-        </div>
+        <div class="container" style="text-align: center;padding-bottom: 5%;"><h1 style="font-size: 6.5em;">จัดการโครงงาน</h1></div>
+        
         <div class="jumbotron" style="padding: 0">
             <form action="{% url 'manage_proj' %}" method="post" id="manage_proj">
                 {% csrf_token %}
                 <button type="submit" name="mproj" value="mproj_add"  form="manage_proj"\
-                class="btn btn-success" style="width: 100%;height: 130px;"><h2>เพิ่มโครงงาน</h2></button>
+                class="btn btn-success" style="width: 100%;height: 130px;"><h2 style="font-size: 3.5em">เพิ่มโครงงาน</h2></button>
             </form>
         </div>
         <div class="jumbotron" style="padding: 0;">
             <form action="{% url 'manage_proj' %}" method="post" id="manage_proj">
                 {% csrf_token %}
                 <button type="submit" name="mproj" value="mproj_edit" form="manage_proj"\
-                class="btn btn-warning" style="width: 100%;height: 130px;"><h2>แก้ไขโครงงาน</h2></button>
+                class="btn btn-warning" style="width: 100%;height: 130px;"><h2 style="font-size: 3.5em">แก้ไขโครงงาน</h2></button>
             </form>
         </div>
         <div class="jumbotron" style="padding: 0">
             <form action="{% url 'manage_proj' %}" method="post" id="manage_proj">
                 {% csrf_token %}
                 <button type="submit" name="mproj" value="mproj_del" form="manage_proj"\
-                name="mproj_add" class="btn btn-danger" style="width: 100%;height: 130px;"><h2>ลบโครงงาน</h2></button>
+                name="mproj_add" class="btn btn-danger" style="width: 100%;height: 130px;"><h2 style="font-size: 3.5em">ลบโครงงาน</h2></button>
             </form>
         </div>
     </div>

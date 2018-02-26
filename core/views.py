@@ -45,11 +45,11 @@ def settings(request):
 
 @login_required(login_url="login/")
 def manage_proj(request):
-
+    teacher = Teacher.objects.all()
     if request.method == 'POST':
         mproj = request.POST.get("mproj", None)
         if mproj == "mproj_add":
-            return render(request, "mproj_add.html")
+            return render(request, "mproj_add.html", {'teachers':teacher})
         if mproj == "mproj_edit":
             proj = Project.objects.filter(proj_years=THIS_YEARS)
             return render(request, "mproj_edit.html", {'proj':proj})
@@ -76,6 +76,8 @@ def manage_proj(request):
             chk = False
 
         if chk:
+            if type(n_cot) is type(None):
+                n_cot = ''
             if Project.objects.filter(proj_name_th=np_th).exists():
                 Project.objects.filter(proj_name_th=np_th).update(proj_years=p_year, proj_semester=p_semester,\
                  proj_name_th=np_th, proj_name_en=np_en, proj_major=p_major, proj_advisor=n_t, proj_co_advisor=n_cot)
@@ -89,7 +91,7 @@ def manage_proj(request):
         
         if type(proj_e) is not type(None):
             pedit_selected = Project.objects.get(proj_name_th=proj_e)
-            return render(request, "mproj_edit2.html", {'proj':pedit_selected})
+            return render(request, "mproj_edit2.html", {'proj':pedit_selected, 'teachers':teacher})
         
 
     return render(request, "manage_proj.html")
@@ -177,7 +179,7 @@ def result_sem1(request):
         for i in stu:
             lis_stu.append([i.student_id, i.student_name, project[num].proj_name_th, "%.2f" %avg_scorep, "%.2f" %avg_scoread, \
             format_html("<button name="'"detail"'" type="'"submit"'" class="'"btn btn-success"'" \
-            form="'"detail_score"'" value="+project[num].proj_name_th+"><h4>ดูรายละเอียด</h4></button>")])
+            form="'"detail_score"'" value="+project[num].proj_name_th+"><h4 style="'"font-size: 1.7em;"'">ดูรายละเอียด</h4></button>")])
 
     return render(request,"result_score.html", {'proj_act':info_setting.forms, 'this_year':THIS_YEARS, \
             'col_result':LIST_COL_RE, 'list_student':lis_stu})

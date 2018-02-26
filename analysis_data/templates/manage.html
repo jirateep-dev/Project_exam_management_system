@@ -1,14 +1,18 @@
 {% extends 'base.html' %} {% block content %}
 
-<div class="container">
-    <div class="row">
-        <div class="jumbotron">
-            <h1>จัดการสอบ</h1>
-            <p>การสอบโปรเจคภาคเรียนที่ 1 ปีการศึกษา 2560</p>
+<div class="container" style="width: 100%;padding: 5%;padding-top: 0">
+    <div class="row" style="width: 100%;">
+        <div class="container" style="text-align: center"><h1 style="font-size: 6.5em;margin-bottom: 30px;">จัดการสอบ</h1></div>
+        <div class="jumbotron col-sm-8 well well-lg" style="background: #ffffff;text-align: center;">
+            <h1 style="color: #353b48;font-size: 3em;">การสอบโปรเจคภาคเรียนที่ 1 ปีการศึกษา 2560</h1>
+        </div>
+        <div class="col-sm-4">
             <div class="panel panel-default">
-                <div class="panel-heading" data-toggle="collapse" href="#upload_file">
-                    <h4 class="panel-title">
-                        <a>คลิกที่นี่หากท่านต้องการอัพโหลดไฟล์ตารางสอบ</a>
+                <div class="panel-heading" data-toggle="collapse" href="#upload_file" style="background: #ffffff;text-align: center">
+                    <h4 class="panel-title" style="color: #353b48;font-size: 1.5em">
+                        <label style="font-size: 1.3em">คลิกที่นี่หากท่านต้องการ</label>
+                        <label style="font-size: 1.3em"><u>อัพโหลดไฟล์</u></label>
+                        <label style="font-size: 1.3em">ตารางสอบ</label>
                     </h4>
                 </div>
             </div>
@@ -30,25 +34,28 @@
                 </form>
             </div>
             <div class="panel panel-default">
-                <div class="panel-heading" data-toggle="collapse" href="#export_file">
-                    <h4 class="panel-title">
-                        <a>คลิกที่นี่หากท่านต้องการส่งออกตารางสอบเป็นไฟล์ CSV</a>
+                <div class="panel-heading" data-toggle="collapse" href="#export_file" style="background: #ffffff;text-align: center">
+                    <h4 class="panel-title" style="color: #353b48;font-size: 1.5em">
+                        <label style="font-size: 1.3em">คลิกที่นี่หากท่านต้องการ</label>
+                        <label style="font-size: 1.3em"><u>ส่งออกไฟล์</u></label>
+                        <label style="font-size: 1.3em">ตารางสอบ</label>
                     </h4>
                 </div>
             </div>
             <div id="export_file" class="panel-collapse collapse">
                 <form action="{% url 'export_csv' %}" method="POST" enctype="multipart/form-data" \
-                    class="form-horizontal" >
+                    class="form-horizontal" accept-charset="UTF-8">
                     {% csrf_token %}
                     <div class="form-group">
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
                             <button class="btn btn-primary"> <h3 style="margin: 0"><span class="glyphicon glyphicon-export" style="margin-right:5px;font-size: .5em"></span>ส่งออกไฟล์</h3> </button>
                         </div> 
                     </div>
                 </form>
             </div>
         </div>
-        <div class='container' style="background-color: #F5F5F5;text-align: center;">
+        <div class='container col-sm-12' style="background-color: #dfe6e9;text-align: center;">
             <h4>
                 <label for="sel1">จำนวนโปรเจคที่เหลือ :</label>
                 {% for pc in proj_count %}
@@ -64,24 +71,24 @@
         
         <table class='table table-bordered table-striped col-md-8' style="text-align: center">
             <tr>
-                <th style="text-align: center"><h4>วันที่</h4></th>
+                <th style="text-align: center"><h4 style="font-size: 2.3em">วันที่</h4></th>
                 <th> </th>
                 {% for room in rooms%}
-                    <th style="text-align: center">{{room}}</th>
+                    <th style="text-align: center"><h4 style="font-size: 2em">{{room}}</h4></th>
                 {% endfor %}
             </tr>
             {% for key, values in room_period.items %}
                 <tr>
-                    <td rowspan="2">{{key}}</td>
-                    <td>ช่วงเช้า</td>
+                    <td rowspan="2"><h4 style="font-size: 1.3em">{{key}}</h4></td>
+                    <td><h4 style="font-size: 1.3em">ช่วงเช้า</h4></td>
                     {% for i in values.0%}
-                        <td>{{i}}</td>
+                        <td><h4 style="font-size: 1.3em">{{i}}</h4></td>
                     {% endfor %}
                 </tr>
                 <tr>
-                    <td>ช่วงบ่าย</td>
+                    <td><h4 style="font-size: 1.3em">ช่วงบ่าย</h4></td>
                     {% for i in values.1%}
-                        <td>{{i}}</td>
+                        <td><h4 style="font-size: 1.3em">{{i}}</h4></td>
                     {% endfor %}
                 </tr>
             {% endfor %}
@@ -141,10 +148,10 @@
         {% csrf_token %}
         <div class="row" style="margin-left: 70%;margin-top: 30px">
             <div class='col-md-5'>
-                <button type="submit" class="btn btn-danger" form="reset_form" name="reset_gen" value="1"><h4>RESET</h4></button>
+                <button type="submit" class="btn btn-danger" form="reset_form" name="reset_gen" value="1"><h4 style="font-size: 2em">Reset</h4></button>
             </div>
             <div class='col-md-5'>
-                <button type="submit" class="btn btn-success" form="generate_form"><h4>Generate</h4></button>
+                <button type="submit" class="btn btn-success" form="generate_form"><h4 style="font-size: 2em">Generate</h4></button>
             </div>
         </div>
     </form>

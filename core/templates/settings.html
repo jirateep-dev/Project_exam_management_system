@@ -2,8 +2,8 @@
 
 <div class="container">
     <div class="row">
+        <div class="container" style="text-align: center"><h1 style="font-size: 6.5em;">ตั้งค่าระบบ</h1></div>
         <div class="jumbotron">
-            <h1>ตั้งค่าระบบ</h1>
             <h2>เปิด-ปิดระบบ</h2>
             <form action="{% url 'settings' %}" method="post" id="settings">
                 {% csrf_token %} 
@@ -23,7 +23,7 @@
             </form>
         </div>
 
-        <button name="submit_settings" type="submit" class="btn btn-success" form="settings"><h4>บันทึกการตั้งค่า</h4></button>
+        <button name="submit_settings" type="submit" class="btn btn-success" form="settings"><h3>บันทึกการตั้งค่า</h3></button>
         <div class="col-xs-10">
             <!-- <button name="reset_score" type="submit" class="btn btn-danger"><h4>รีเซ็ตผลคะแนน</h4></button> -->
         </div>

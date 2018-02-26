@@ -1,22 +1,22 @@
 {% extends 'base.html' %} {% block content %}
 
-<div class="container">
-    <div class="row">
+<div class="container" style="width: 100%;padding: 5%;padding-top: 0">
+    <div class="row" style="width: 100%;">
+        <div class="container" style="text-align: center"><h1 style="font-size: 6.5em;">คะแนนโปรเจค</h1></div>
         <div class="jumbotron">
-            <h1>คะแนนโปรเจค</h1>
-            <p>ให้คะแนนโปรเจคที่ท่านเลือก</p>
+            <h4 style="font-size: 3em">ให้คะแนนโปรเจคที่ท่านเลือก</h4>
             <form action="{% url 'update_scoreproj' %}" method="post" id="update_scoreproj">
                 {% csrf_token %} 
                 <div class="form-group">
                     <label for="sel1">ชื่อโปรเจค:</label>
-                    <select class="form-control" id="data_proj" name="data_proj">
+                    <select class="form-control" id="data_proj" name="data_proj" style="font-size: 1.5em;height: 100%;">
                         <option selected="selected" value={{Projectset.proj_name_th}}>{{Projectset.proj_name_th}}</option>
                     </select>
                 </div>
 
                 <table class="table table-bordered">
                     <thead>
-                        <tr class="warning">
+                        <tr class="warning" style="font-size: 1.2em">
                             {% for col_name in column_name%}
                             <th>{{col_name}}</th>
                             {% endfor %}
@@ -37,25 +37,26 @@
                 </table>
             </form>
         </div>
-        <button name="submit_scoreproj" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal"><h4>ส่งคะแนน</h4></button>
-        <div class="col-xs-10">
+        <button name="submit_scoreproj" type="button" class="btn btn-info" \
+        data-toggle="modal" data-target="#myModal"><h4 style="font-size: 2em">ส่งคะแนน</h4></button>
+        <div class="col-xs-11">
             <!-- <button name="reset_score" type="submit" class="btn btn-danger"><h4>รีเซ็ตผลคะแนน</h4></button> -->
         </div>
 
         <!-- Modal -->
         <div class="modal fade" id="myModal" role="dialog">
-            <div class="modal-dialog modal-sm">
+            <div class="modal-dialog modal-md">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">ยืนยันการส่งผลคะแนน</h4>
+                        <h4 class="modal-title" style="font-size: 3em">ยืนยันการส่งผลคะแนน</h4>
                     </div>
                     <div class="modal-body">
-                        <p>ท่านแน่ใจหรือไม่ที่จะส่งผลคะแนน เพราะจะไม่สามารถกลับมาแก้ไขได้อีก.</p>
+                        <h2>ท่านแน่ใจหรือไม่ที่จะส่งผลคะแนน.</h2>
+                        <h2>เนื่องจากจะไม่สามารถกลับมาแก้ไขได้อีก</h2>
                     </div>
                     <div class="modal-footer">
-                        <button name="submit_scoreproj" type="submit" class="btn btn-success" form="update_scoreproj">ยืนยัน</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">ยกเลิก</button>
+                        <button name="submit_scoreproj" type="submit" class="btn btn-success" form="update_scoreproj" style="font-size: 1.7em">ยืนยัน</button>
                     </div>
                 </div>
             </div>
