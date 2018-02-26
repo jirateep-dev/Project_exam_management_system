@@ -4,7 +4,7 @@ from django.http import HttpResponse,  HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 from .forms import *
-import csv
+import csv, codecs
 import datetime
 import numpy as np
 import pandas as pd
@@ -23,30 +23,31 @@ this_year = Project.objects.all().aggregate(Max('proj_years'))['proj_years__max'
 
 def export_csv(request):
     setting = Settings.objects.get(id=1)
-    tchs = Teacher.objects.all()
     sc = ScheduleRoom.objects.all()
     proj = Project.objects.filter(proj_years=this_year, proj_semester=setting.forms)
     teachers = Teacher.objects.all()
     room = Room.objects.all()
     time = TimeExam.objects.all()
-    lis_ex = [["date_id", "room_id", "time_id", "project_id", "teacher_group", "teacher_id"]]
-    lis_readme = []
-    lis_line = ['----------','----------','----------','----------','----------','----------']
-    lis_pro = [["id", "proj_year", "proj_semester", "proj_name_th", "proj_name_en", "proj_major", "proj_advisor", "proj_co_advisor"]]
-    lis_tchs = [["id", "teacher_name"]]
-    lis_room = [["id", "room_name"]]
-    lis_time = [["id", "time"]]
+    date = DateExam.objects.all()
+
+    lis_ex = [["date", "room", "time", "proj_name_th", "proj_name_en", "proj_major", "proj_advisor", "proj_co_advisor", \
+    "teacher_group", "teacher1", "teacher2", "teacher3", "teacher4"]]
+    lis_line = ['----------','----------','----------','----------','----------','----------',\
+    '----------','----------','----------','----------','----------','----------','----------']
+
     checkloop = 1
     for objs in sc:
         lis_tch = []
-        for tch in tchs:
+        for tch in teachers:
             rel_tch = tch.schedule_teacher.all()
             for i in rel_tch:
                 if objs.id == i.id:
-                    lis_tch.append(tch.id)
+                    lis_tch.append(tch.teacher_name)
         lis_sub = []
-        lis_sub.extend([str(objs.date_id_id), str(objs.room_id_id), str(objs.time_id_id), \
-        str(objs.proj_id), str(objs.teacher_group), str(lis_tch[0])+"/"+str(lis_tch[1])+"/"+str(lis_tch[2])+"/"+str(lis_tch[3])])
+        lis_sub.extend([str(date.get(id=objs.date_id_id).date_exam), str(room.get(id=objs.room_id_id).room_name), str(time.get(id=objs.time_id_id).time_exam), \
+        str(proj.get(id=objs.proj_id).proj_name_th), str(proj.get(id=objs.proj_id).proj_name_en), \
+        str(proj.get(id=objs.proj_id).proj_major), str(proj.get(id=objs.proj_id).proj_advisor), \
+        str(proj.get(id=objs.proj_id).proj_co_advisor), str(objs.teacher_group), str(lis_tch[0]), str(lis_tch[1]), str(lis_tch[2]), str(lis_tch[3])])
         
         if checkloop != objs.teacher_group:
             checkloop = objs.teacher_group
@@ -54,34 +55,22 @@ def export_csv(request):
 
         lis_ex.append(lis_sub)
     
-    for objs in proj:
-        lis_pro.append([str(objs.id), str(objs.proj_years), str(objs.proj_semester), str(objs.proj_name_th), \
-        str(objs.proj_name_en), str(objs.proj_major), str(objs.proj_advisor), str(objs.proj_co_advisor)])
-    
-    for objs in teachers:
-        lis_tchs.append([str(objs.id), str(objs.teacher_name)])
-    for objs in room:
-        lis_room.append([str(objs.id), str(objs.room_name)])
-    for objs in time:
-        lis_time.append([str(objs.id), str(objs.time_exam)])
-    
-    lis_readme = lis_pro+[lis_line]+[lis_line]+lis_tchs+[lis_line]+[lis_line]+lis_room+[lis_line]+[lis_line]+lis_time
-
-    with open('schedule_room.csv','w', newline='') as new_file:
+    with open('schedule_room.csv','w', newline='', encoding='utf-8-sig') as new_file:
         csv_writer = csv.writer(new_file, delimiter=',')
-        for line in lis_ex:
-            csv_writer.writerow(line)
+        csv_writer.writerows(lis_ex)
     
-    with open('readme.csv','w', newline='') as new_file:
-        csv_writer = csv.writer(new_file, delimiter=',')
-        for line in lis_readme:
-            csv_writer.writerow(line)
     # render(request,"manage.html")
     return HttpResponseRedirect(reverse("manage"))
 
 def upload_csv(request):
     # if not GET, then proceed
     try:
+        Project.objects.filter(proj_years=this_year).update(schedule_id_id=None)
+        DateExam.objects.all().delete()
+        room = Room.objects.all()
+        time = TimeExam.objects.all()
+        proj = Project.objects.all()
+        teachers = Teacher.objects.all()
         csv_file = request.FILES["csv_file"]
         if not csv_file.name.endswith('.csv'):
             messages.error(request,'File is not CSV type')
@@ -90,29 +79,36 @@ def upload_csv(request):
         if csv_file.multiple_chunks():
             messages.error(request,"Uploaded file is too big (%.2f MB)." % (csv_file.size/(1000*1000),))
             return HttpResponseRedirect(reverse("manage"))
- 
-        file_data = csv_file.read().decode("utf-8")    
+        
+        file_data = csv_file.read().decode('UTF-8')
  
         lines = file_data.splitlines()
         #loop over the lines and save them in db. If error , store as string and then display
         for line in lines:                        
             fields = line.split(",")
-
-            data_dict = {}
-            data_dict["date_id"] = fields[0]
-            data_dict["room_id"] = fields[1]
-            data_dict["time_id"] = fields[2]
-            data_dict["proj_id"] = fields[3]
-            data_dict["teacher_group"] = fields[4]
             
-            lis_id_teacher = fields[5].split("/")
+            data_dict = {}
+            dict_date = {}
+            if room.filter(room_name=fields[1]).exists() and time.filter(time_exam=fields[2]).exists() and proj.filter(proj_name_th=fields[3]).exists() and\
+                teachers.filter(teacher_name=fields[9]).exists() and teachers.filter(teacher_name=fields[10]).exists() and \
+                teachers.filter(teacher_name=fields[11]).exists() and teachers.filter(teacher_name=fields[12]).exists():
 
-            if not DateExam.objects.filter(id=fields[0]).exists() and fields[1] != "room_id" and fields[1] != "----------":
-                dict_date = {}
-                dict_date["id"] = fields[0]
-                dict_date["date_exam"] = fields[0][:2]+"/"+fields[0][2:4]+"/"+fields[0][4:8]
-                dict_date["time_period"] = fields[0][8]
-                dict_date["room_id"] = fields[0][9]
+                data_dict["date_id"] = fields[0].replace('/', '')+"0"+str(room.get(room_name=fields[1]).id)
+                data_dict["room_id"] = str(room.get(room_name=fields[1]).id)
+                data_dict["time_id"] = str(time.get(time_exam=fields[2]).id)
+                data_dict["proj_id"] = str(proj.get(proj_name_th=fields[3]).id)
+                data_dict["teacher_group"] = fields[8]
+                
+                lis_id_teacher = [teachers.get(teacher_name=fields[9]).id, teachers.get(teacher_name=fields[10]).id, \
+                teachers.get(teacher_name=fields[11]).id, teachers.get(teacher_name=fields[12]).id]
+
+            if not DateExam.objects.filter(id=fields[0]).exists() and fields[1] != "room_id" and fields[1] != "----------" and \
+                room.filter(room_name=fields[1]).exists() and time.filter(time_exam=fields[2]).exists():
+                
+                dict_date["id"] = fields[0].replace('/', '')+"0"+str(room.get(room_name=fields[1]).id)
+                dict_date["date_exam"] = fields[0]
+                dict_date["time_period"] = str(time.get(time_exam=fields[2]).time_period)
+                dict_date["room_id"] = str(room.get(room_name=fields[1]).id)
                 try:
                     form_date = DateExamForm(dict_date)
                     if form_date.is_valid():
@@ -131,7 +127,7 @@ def upload_csv(request):
                         teacher = Teacher.objects.get(id=id_t)
                         teacher.schedule_teacher.add(sche)
                         teacher.save()
-                    Project.objects.filter(id=fields[3]).update(schedule_id_id=sche.id)
+                    proj.filter(proj_name_th=fields[3]).update(schedule_id_id=sche.id)
                 else:
                     logging.getLogger("error_logger").error(form.errors.as_json())                                                
             except Exception as e:
@@ -267,13 +263,12 @@ def manage_room(request):
                 schedule = ScheduleRoom(teacher_group=max_count+1, room_id_id=int(room_selected), \
                             date_id_id=id_dateexam, proj_id=list_proj_id[i], time_id_id=i+time_id_condition)
                 schedule.save()
+                Project.objects.filter(id=list_proj_id[i]).update(schedule_id_id=schedule.id)
                 for name in list_teachers:
                     teacher_r = Teacher.objects.get(teacher_name=name)
                     teacher_r.schedule_teacher.add(schedule)
                     teacher_r.save()
                     teacher_r = Teacher.objects.filter(teacher_name=name).update(proj_group_exam=max_count+1)
-                Project.objects.filter(id=list_proj_id[i]).update(schedule_id_id=schedule.id)
-
     pre = prepare_render()
     return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
                     'room_period':pre[1]})
@@ -298,17 +293,18 @@ def table_room(request):
     # //////////////////////////////////////
 
     # query data to html
-    schedule_all = pd.read_sql_query(str(ScheduleRoom.objects.all().query), connection)
-    for i in range(len(schedule_all)):
-        proj_objs = Project.objects.get(schedule_id_id=schedule_all.iloc[i]['id'])
-        room_result = Room.objects.values('room_name').get(id=schedule_all.iloc[i]['room_id_id'])['room_name']
-        date_result = DateExam.objects.values('date_exam').get(id=schedule_all.iloc[i]['date_id_id'])['date_exam']
+    # schedule_all = pd.read_sql_query(str(ScheduleRoom.objects.all().query), connection)
+    schedule_all = ScheduleRoom.objects.all()
+    for i in schedule_all:
+        proj_objs = Project.objects.get(schedule_id_id=i.id)
+        room_result = Room.objects.values('room_name').get(id=i.room_id_id)['room_name']
+        date_result = DateExam.objects.values('date_exam').get(id=i.date_id_id)['date_exam']
         proj_result = proj_objs.proj_name_th
         advisor_result = proj_objs.proj_advisor
-        time_result = TimeExam.objects.values('time_exam').get(id=schedule_all.iloc[i]['time_id_id'])['time_exam']
+        time_result = TimeExam.objects.values('time_exam').get(id=i.time_id_id)['time_exam']
         major_result = Major.objects.values('major_name').get(major_name=proj_objs.proj_major)['major_name']
 
-        result_manage.append({'teacher_group': schedule_all.iloc[i]['teacher_group'], 'room_name': room_result ,\
+        result_manage.append({'teacher_group': i.teacher_group, 'room_name': room_result ,\
                     'date_exam': date_result, 'proj_name_th': proj_result, 'major_name':major_result, \
                     'time_exam': time_result, 'proj_advisor':advisor_result})
 
@@ -326,7 +322,6 @@ def manage(request):
             Project.objects.filter(proj_years=this_year).update(schedule_id_id=None)
             DateExam.objects.all().delete()
             Teacher.objects.all().order_by('proj_group_exam').update(proj_group_exam=0)
-            Teacher.save()
         pre = prepare_render()
         return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
                     'room_period':pre[1]})
