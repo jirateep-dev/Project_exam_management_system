@@ -10,7 +10,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading" data-toggle="collapse" href="#upload_file" style="background: #ffffff;text-align: center">
                     <h4 class="panel-title" style="color: #353b48;font-size: 1.5em">
-                        <a>คลิกที่นี่หากท่านต้องการอัพโหลดไฟล์ตารางสอบ</a>
+                        <label style="font-size: 1.3em">คลิกที่นี่หากท่านต้องการ</label>
+                        <label style="font-size: 1.3em"><u>อัพโหลดไฟล์</u></label>
+                        <label style="font-size: 1.3em">ตารางสอบ</label>
                     </h4>
                 </div>
             </div>
@@ -34,16 +36,19 @@
             <div class="panel panel-default">
                 <div class="panel-heading" data-toggle="collapse" href="#export_file" style="background: #ffffff;text-align: center">
                     <h4 class="panel-title" style="color: #353b48;font-size: 1.5em">
-                        <a>คลิกที่นี่หากท่านต้องการส่งออกตารางสอบเป็นไฟล์ CSV</a>
+                        <label style="font-size: 1.3em">คลิกที่นี่หากท่านต้องการ</label>
+                        <label style="font-size: 1.3em"><u>ส่งออกไฟล์</u></label>
+                        <label style="font-size: 1.3em">ตารางสอบ</label>
                     </h4>
                 </div>
             </div>
             <div id="export_file" class="panel-collapse collapse">
                 <form action="{% url 'export_csv' %}" method="POST" enctype="multipart/form-data" \
-                    class="form-horizontal" >
+                    class="form-horizontal" accept-charset="UTF-8">
                     {% csrf_token %}
                     <div class="form-group">
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
                             <button class="btn btn-primary"> <h3 style="margin: 0"><span class="glyphicon glyphicon-export" style="margin-right:5px;font-size: .5em"></span>ส่งออกไฟล์</h3> </button>
                         </div> 
                     </div>
