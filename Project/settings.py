@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -28,6 +27,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 # AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
+# # AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",'django.contrib.auth.backends.ModelBackend',)
 
 # # The URL of the LDAP server.
 # LDAP_AUTH_URL = "ldap://161.246.38.141:389"
@@ -36,7 +36,8 @@ ALLOWED_HOSTS = []
 # LDAP_AUTH_USE_TLS = False
 
 # # The LDAP search base for looking up users.
-# LDAP_AUTH_SEARCH_BASE = "ou=people,dc=example,dc=com"
+# # LDAP_AUTH_SEARCH_BASE = "ou=people,dc=example,dc=com"
+# LDAP_AUTH_SEARCH_BASE = "ou=users"
 
 # # The LDAP class that represents a user.
 # LDAP_AUTH_OBJECT_CLASS = "inetOrgPerson"
@@ -44,10 +45,16 @@ ALLOWED_HOSTS = []
 # # User model fields mapped to the LDAP
 # # attributes that represent them.
 # LDAP_AUTH_USER_FIELDS = {
-#     "username": "uid",
+#     "username": "sAMAccountName",
 #     "first_name": "givenName",
 #     "last_name": "sn",
 #     "email": "mail",
+# }
+
+# AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+#     "is_active": "cn=active,ou=groups",
+#     "is_staff": "cn=staff,ou=groups",
+#     "is_superuser": "cn=superuser,ou=groups"
 # }
 
 # # A tuple of django model fields used to uniquely identify a user.
@@ -72,10 +79,12 @@ ALLOWED_HOSTS = []
 # # Path to a callable that takes a dict of {model_field_name: value}, and returns
 # # a string of the username to bind to the LDAP server.
 # # Use this to support different types of LDAP server.
-# LDAP_AUTH_FORMAT_USERNAME = "django_python3_ldap.utils.format_username_openldap"
+# # LDAP_AUTH_FORMAT_USERNAME = "django_python3_ldap.utils.format_username_openldap"
+# LDAP_AUTH_FORMAT_USERNAME = "django_python3_ldap.utils.format_username_active_directory_principal"
 
 # # Sets the login domain for Active Directory users.
-# LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN = None
+# # LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN = None
+# LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN = "it.kmitl.ac.th"
 
 # # The LDAP username and password of a user for querying the LDAP database for user
 # # details. If None, then the authenticated user will be used for querying, and
@@ -86,8 +95,6 @@ ALLOWED_HOSTS = []
 # # Set connection/receive timeouts (in seconds) on the underlying `ldap3` library.
 # LDAP_AUTH_CONNECT_TIMEOUT = None
 # LDAP_AUTH_RECEIVE_TIMEOUT = None
-
-
 
 
 #check SQL query.
@@ -105,6 +112,12 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,
+        },
+    },
+    "loggers": {
+        "django_python3_ldap": {
+            "handlers": ["console"],
+            "level": "INFO",
         },
     },
 }

@@ -19,6 +19,7 @@
 		<div class="container">
 			<h1>Welcome</h1>
 			<h3>ระบบจัดตารางสอบวิชาโครงงาน</h3>
+			<!-- <form method="post" action="161.246.38.102:8083/auth"> -->
 			<form method="post" action="{% url 'login' %}">
 				{% csrf_token %}
 				<div class="fieldWrapper" id="username">
@@ -32,9 +33,9 @@
 			</form>
 		</div>
 		{% if form.errors %}
-		{% if not user.is_active %}
-			<h4 style="color:darkred;text-align: center">ท่านไม่ได้รับอนุญาติให้เข้าสู่ระบบในช่วงเวลานี้</h4>
-		{% endif %}
+			{% if not user.is_active %}
+				<h4 style="color:darkred;text-align: center">ท่านไม่ได้รับอนุญาติให้เข้าสู่ระบบในช่วงเวลานี้</h4>
+			{% endif %}
 		{% endif %}
 		
 		<ul class="bg-bubbles">
