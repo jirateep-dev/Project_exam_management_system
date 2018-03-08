@@ -12,16 +12,17 @@ def login_user(request):
         password = request.POST.get('password')
 
         # user = authenticate(username=username, password=password)
-        user = User.objects.get(username=username)
-
-        s = Server('ldap://161.246.38.141', get_info=ALL, use_ssl=True) 
-        c = Connection(s, user=username+"@it.kmitl.ac.th", password=password)
-        
-        if user is not None and c.bind():
-        # if c.bind():
-            login(request, user)
-            state = "Valid account"
-            return render(request, 'scoreproj.html')
-        else:
-            state = "Inactive account"
-    return render(request, 'login.html')
+        try:
+            user = User.objects.get(username=username)
+            s = Server('ldap://161.246.38.141', get_info=ALL, use_ssl=True) 
+            c = Connection(s, user=username+"@it.kmitl.ac.th", password=password)
+            if user is not None and c.bind():
+            # if c.bind():
+                login(request, user)
+                state = "Valid account"
+                return render(request, 'scoreproj.html')
+            else:
+                state = "Inactive account"
+        except Exception:
+            return render(request, 'login.html', {'err_ms':state})
+    return render(request, 'login.html', {'err_ms':state})
