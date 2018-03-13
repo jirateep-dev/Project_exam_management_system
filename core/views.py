@@ -108,7 +108,7 @@ def scoreproj(request):
             projid_teacher.append(projs[i].proj_id)
 
     queryset = []
-    form_setting = Settings.objects.get(id=1).forms
+    form_setting = info_setting.forms
     for i in range(len(projid_teacher)):
         if Project.objects.filter(proj_years=THIS_YEARS, proj_semester=form_setting, id=projid_teacher[i]).exists():
             queryset.append(Project.objects.get(id=projid_teacher[i]))

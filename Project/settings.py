@@ -26,8 +26,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
-# AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",'django.contrib.auth.backends.ModelBackend',)
+# AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
+AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",'django.contrib.auth.backends.ModelBackend',)
 
 # The URL of the LDAP server.
 # LDAP_AUTH_URL = "ldap://161.246.38.141"
