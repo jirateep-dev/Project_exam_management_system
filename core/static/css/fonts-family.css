@@ -16,7 +16,7 @@ span{
 option{
     font-size: 1.6em;
 }
-h1,h2,h3,h4,p,a,label,td,span,option{
+h1,h2,h3,h4,p,a,label,td,span,option,input{
 	font-family: "Fontcraft";
 }
 @font-face{

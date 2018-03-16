@@ -14,30 +14,22 @@
 
 <body>
 	<div class="wrapper">
-		<!-- Modal -->
-        
 		<div class="container">
 			<h1>Welcome</h1>
 			<h3>ระบบจัดตารางสอบวิชาโครงงาน</h3>
-			<!-- <form method="post" action="161.246.38.102:8083/auth"> -->
-			<form method="POST" action="{% url 'login' %}">
+			<form method="POST" action="{% url 'login' %}" style="margin-top: 10%;">
 				{% csrf_token %}
-				<div class="fieldWrapper">
+				<div class="title">Sign in</div>
+				<div class="fieldWrapper" style="margin-top: 5%;">
 					<input type="text" id="username" name="username"  placeholder="Username">
 				</div>
 				<div class="fieldWrapper">
 					<input type="password" name="password" id="password" placeholder="Password">
 				</div>
-
-				<!-- <div class="fieldWrapper" id="username">
-					{{ form.username }}
-				</div>
-				<div class="fieldWrapper" id="password">
-					{{ form.password }}
-				</div> -->
-				<button type="submit" value="login" >Login</button>
+				<button type="submit" value="login" >LOGIN</button>
 				<input type="hidden" name="next" value="{{ next }}" />
 			</form>
+
 		</div>
 		{% if form.errors %}
 			{% if not user.is_active %}
@@ -61,6 +53,7 @@
 	</div>
 	
 
+	<script src="{% static 'js/login.js' %}"></script>
 	{% block javascript %} 
 		{% if not user.is_authenticated %}
 		<script>
@@ -73,6 +66,8 @@
 				$("#password").attr('placeholder', '{{form.password.label}}');
 			});
 		</script>
+
+		
 	{% endblock %}
 </body>
 
