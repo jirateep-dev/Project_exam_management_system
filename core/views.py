@@ -100,7 +100,7 @@ def manage_proj(request):
 def scoreproj(request):
     info_setting = Settings.objects.get(id=1)
     projid_teacher = []
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         user_id = request.user.id
         teacher_sp = Teacher.objects.get(login_user_id=user_id)
         projs = teacher_sp.schedule_teacher.all()
@@ -108,13 +108,13 @@ def scoreproj(request):
             projid_teacher.append(projs[i].proj_id)
 
     queryset = []
-    form_setting = Settings.objects.get(id=1).forms
+    form_setting = info_setting.forms
     for i in range(len(projid_teacher)):
         if Project.objects.filter(proj_years=THIS_YEARS, proj_semester=form_setting, id=projid_teacher[i]).exists():
             queryset.append(Project.objects.get(id=projid_teacher[i]))
     lis_select = []
 
-    if request.method == 'POST' and request.user.is_authenticated():
+    if request.method == 'POST' and request.user.is_authenticated:
         user_id = request.user.id
         teacher_sp = Teacher.objects.get(login_user_id=user_id)
         proj_selected = request.POST.get("data_proj", None)
@@ -212,7 +212,7 @@ def detail_score(request):
 def update_scoreproj(request):
     info_setting = Settings.objects.get(id=1)
     message = ''
-    if request.method == 'POST' and request.user.is_authenticated():
+    if request.method == 'POST' and request.user.is_authenticated:
         # get data from html
         user_id = request.user.id
         teacher_sp = Teacher.objects.get(login_user_id=user_id)
