@@ -29,38 +29,8 @@ ALLOWED_HOSTS = []
 # AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
 AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",'django.contrib.auth.backends.ModelBackend',)
 
-# The URL of the LDAP server.
-# LDAP_AUTH_URL = "ldap://161.246.38.141"
-
 # Initiate TLS on connection.
 LDAP_AUTH_USE_TLS = False
-
-# The LDAP search base for looking up users.
-# LDAP_AUTH_SEARCH_BASE = "ou=people,dc=example,dc=com"
-# LDAP_AUTH_SEARCH_BASE = "ou=User"
-
-# The LDAP class that represents a user.
-# LDAP_AUTH_OBJECT_CLASS = "inetOrgPerson"
-# LDAP_AUTH_OBJECT_CLASS = "teacher"
-
-# User model fields mapped to the LDAP
-# attributes that represent them.
-# LDAP_AUTH_USER_FIELDS = {
-#     "username": "uid",
-#     "password": "password",
-#     "first_name": "givenName",
-#     "last_name": "sn",
-#     "email": "mail",
-# }
-
-# AUTH_LDAP_USER_FLAGS_BY_GROUP = {
-    # "is_active": "cn=active,ou=groups",
-    # "is_staff": "cn=staff,ou=groups",
-    # "is_superuser": "cn=superuser,ou=groups"
-# }
-
-# A tuple of django model fields used to uniquely identify a user.
-# LDAP_AUTH_USER_LOOKUP_FIELDS = ("username",)
 
 # Path to a callable that takes a dict of {model_field_name: value},
 # returning a dict of clean model data.
@@ -97,12 +67,6 @@ LDAP_AUTH_CONNECTION_PASSWORD = None
 # Set connection/receive timeouts (in seconds) on the underlying `ldap3` library.
 LDAP_AUTH_CONNECT_TIMEOUT = None
 LDAP_AUTH_RECEIVE_TIMEOUT = None
-
-# AUTH_LDAP_REQUIRE_GROUP = 
-# AUTH_LDAP_CONNECTION_OPTIONS = {'raise_exceptions': False}
-# AUTH_LDAP_GLOBAL_OPTIONS = {'raise_exceptions': False}
-
-# AUTH_LDAP_FIND_GROUP_PERMS = False
 
 #check SQL query.
 LOGGING = {
@@ -171,11 +135,6 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.i18n',
             ],
-            # 'loaders': [
-            #     'apptemplates.Loader',
-            #     'django.template.loaders.filesystem.Loader',
-            #     'django.template.loaders.app_directories.Loader',
-            # ],
         },
     },
 ]
