@@ -4,7 +4,7 @@
     <div class="row" style="width: 100%;">
         <div class="container" style="text-align: center"><h1 style="font-size: 6.5em;margin-bottom: 30px;">จัดการสอบ</h1></div>
         <div class="jumbotron col-sm-8 well well-lg" style="background: #ffffff;text-align: center;">
-            <h1 style="color: #353b48;font-size: 3em;">การสอบโปรเจคภาคเรียนที่ 1 ปีการศึกษา 2560</h1>
+            <h1 style="color: #353b48;font-size: 4em;">การสอบโปรเจคภาคเรียนที่ 1 ปีการศึกษา 2560</h1>
         </div>
         <div class="col-sm-4">
             <div class="panel panel-default">
@@ -59,12 +59,12 @@
             <h4>
                 <label for="sel1">จำนวนโปรเจคที่เหลือ :</label>
                 {% for pc in proj_count %}
-                    <span>BI : {{pc.bi}}  | </span>
-                    <span>DS : {{pc.ds}}  | </span>
-                    <span>ES : {{pc.es}}  | </span>
-                    <span>MU : {{pc.mu}}  | </span>
-                    <span>NW : {{pc.nw}}  | </span>
-                    <span>SE : {{pc.se}} </span>
+                    <span style="font-size: 1.7em">BI : {{pc.bi}}  | </span>
+                    <span style="font-size: 1.7em">DS : {{pc.ds}}  | </span>
+                    <span style="font-size: 1.7em">ES : {{pc.es}}  | </span>
+                    <span style="font-size: 1.7em">MU : {{pc.mu}}  | </span>
+                    <span style="font-size: 1.7em">NW : {{pc.nw}}  | </span>
+                    <span style="font-size: 1.7em">SE : {{pc.se}} </span>
                 {% endfor %}
             </h4>
         </div>
@@ -98,7 +98,7 @@
             <div class='col-md-5'>
                 <div class="form-group">
                     <label for="sel1">เลือกวันที่ :</label>
-                    <input type="text" class="form-control" name="date_selected" />
+                    <input type="text" class="form-control" name="date_selected" style="font-size: 2em"/>
                 </div>
             </div>
             {% block javascript %} 
@@ -116,7 +116,7 @@
             <div class='col-md-5'>
                 <div class="form-group">
                     <label for="sel1">เลือกช่วงเวลา :</label>
-                    <select class="form-control" name="period_selected">
+                    <select class="form-control" name="period_selected" style="font-size: 1.3em">
                         <option value="0">ช่วงเช้า</option>
                         <option value="1">ช่วงบ่าย</option>
                     </select>
@@ -125,7 +125,7 @@
             <div class='col-md-5'>
                 <div class="form-group">
                     <label for="sel1">เลือกห้อง:</label>
-                    <select class="form-control" name="room_selected">
+                    <select class="form-control" name="room_selected" style="font-size: 1.3em">
                         {% for room in rooms %}
                             <option value={{room.id}}>{{room.room_name}}</option>
                         {% endfor %}
@@ -135,7 +135,7 @@
             <div class='col-md-5'>
                 <div class="form-group">
                     <label for="sel1">เลือกแขนง:</label>
-                    <select class="form-control" name="major_selected">
+                    <select class="form-control" name="major_selected" style="font-size: 1.3em">
                         {% for major in majors %}
                             <option value={{major.id}}>{{major.major_name}}</option>
                         {% endfor %}
