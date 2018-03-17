@@ -46,10 +46,11 @@ def settings(request):
 @login_required(login_url="login/")
 def manage_proj(request):
     teacher = Teacher.objects.all()
+    majors = Major.objects.all()
     if request.method == 'POST':
         mproj = request.POST.get("mproj", None)
         if mproj == "mproj_add":
-            return render(request, "mproj_add.html", {'teachers':teacher})
+            return render(request, "mproj_add.html", {'teachers':teacher, 'majors':majors})
         if mproj == "mproj_edit":
             proj = Project.objects.filter(proj_years=THIS_YEARS)
             return render(request, "mproj_edit.html", {'proj':proj})
@@ -91,7 +92,7 @@ def manage_proj(request):
         
         if type(proj_e) is not type(None):
             pedit_selected = Project.objects.get(proj_name_th=proj_e)
-            return render(request, "mproj_edit2.html", {'proj':pedit_selected, 'teachers':teacher})
+            return render(request, "mproj_edit2.html", {'proj':pedit_selected, 'teachers':teacher, 'majors':majors})
         
 
     return render(request, "manage_proj.html")

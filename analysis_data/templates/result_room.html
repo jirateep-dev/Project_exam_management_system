@@ -3,20 +3,20 @@
     <div class="row" style="width: 100%;">
         <div class="container" style="text-align: center"><h1 style="font-size: 6.5em;margin-bottom: 30px;">ตารางการจัดการสอบ</h1></div>
         <div class="jumbotron well well-lg" style="background: #ffffff;">
-            <h4 style="font-size: 3em;color: #353b48">การสอบโปรเจคภาคเรียนที่ 1 ปีการศึกษา 2560</h4>
+            <h4 style="font-size: 3.3em;color: #353b48">การสอบโปรเจคภาคเรียนที่ 1 ปีการศึกษา 2560</h4>
         </div>
         
         <div class="panel panel-default">
             <div class="panel-heading" data-toggle="collapse" href="#table_project">
                 <h4 class="panel-title">
-                    <a>ตารางการสอบโปรเจค</a>
+                    <a style="font-size: 2em">ตารางการสอบโปรเจค</a>
                 </h4>
             </div>
         </div>
         <div id="table_project" class="panel-collapse collapse in">
             <table class="table table-hover" id="table_project">
                 <thead class="thead-dark">
-                    <tr>
+                    <tr style="font-size: 1.5em">
                         <th>กลุ่มอาจารย์</th>
                         <th>ห้อง</th>
                         <th>วันที่</th>
@@ -28,7 +28,7 @@
                 </thead>
                 <tbody>
                     {% for result in ScheduleRoom %} 
-                    <tr>
+                    <tr style="font-size: 1.1em">
                         <td class="active">{{result.teacher_group}}</td>
                         <td class="danger">{{result.room_name}}</td>
                         <td class="warning">{{result.date_exam}}</td>
@@ -44,14 +44,14 @@
         <div class="panel panel-default">
             <div class="panel-heading" data-toggle="collapse" href="#table_teacher">
                 <h4 class="panel-title">
-                    <a>ตารางคณะกรรมการคุมสอบ</a>
+                    <a style="font-size: 2em">ตารางคณะกรรมการคุมสอบ</a>
                 </h4>
             </div>
         </div>
         <div id="table_teacher" class="panel-collapse collapse in">
             <table class="table table-hover" >
                     <thead>
-                        <tr>
+                        <tr style="font-size: 1.5em">
                             <th>กลุ่มอาจารย์</th>
                             <th>รายชื่ออาจารย์</th>
                             <th>ระดับความใจดี</th>
@@ -59,7 +59,7 @@
                     </thead>
                     <tbody>
                         {% for teacher in list_result_teacher %} 
-                        <tr>
+                        <tr style="font-size: 1.1em">
                             <td class="active">{{teacher.proj_group_exam}}</td>
                             <td class="warning">{{teacher.teacher_name}}</td>
                             <td class="info">{{teacher.levels_teacher}}</td>

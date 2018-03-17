@@ -40,7 +40,14 @@ def login_user(request):
             c = Connection(s, user=username+"@it.kmitl.ac.th", password=password)
             user.backend = "django_python3_ldap.auth.LDAPBackend"
             user.save()
-            if not c.bind():
+            try:
+                if not c.bind():
+                    user_model = authenticate(username=username, password=password)
+                    user_model.backend = 'django.contrib.auth.backends.ModelBackend'
+                    login(request, user_model)
+                    state = "Valid account"
+                    return render(request,"scoreproj.html",{'Projectset':data_user(user_model), 'proj_act':form_setting})
+            except Exception:
                 user_model = authenticate(username=username, password=password)
                 user_model.backend = 'django.contrib.auth.backends.ModelBackend'
                 login(request, user_model)
