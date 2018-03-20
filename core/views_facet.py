@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.http import HttpResponse,  HttpResponseRedirect
+from django.urls import reverse
+from django.contrib import messages
 from database_management.models import *
 from django.db.models import Max
 from django.db.models import Avg
@@ -7,26 +10,44 @@ from django.db.models import F
 from django.shortcuts import redirect
 from django.utils.html import format_html
 import logging
+import numpy
 
 log = logging.getLogger('django.db.backends')
 log.setLevel(logging.DEBUG)
 log.addHandler(logging.StreamHandler())
+
+tch = Teacher.objects.filter(id__lte=32)
+col_de = ['รายชื่ออาจารย์','การวัดผลคะแนนโปรเจค','การวัดผลคะแนนโปสเตอร์','ระดับคะแนนอาจารย์']
+
+teachers = [[i.teacher_name, str(i.measure_sproj), str(i.measure_spost), str(i.levels_teacher)] for i in tch]
+
+def avg(lis):
+    """uses floating-point division."""
+    return sum(lis) / float(len(lis))
 
 def admin_required(login_url=None):
     return user_passes_test(lambda u: u.is_superuser, login_url=login_url)
 
 @login_required(login_url="login/")
 def facet(request):
-    return render(request,"facet.html")
+    
+    return render(request, 'facet.html', {'teachers':teachers, 'col_de':col_de})
 
 @login_required(login_url="login/")
 def import_script(request):
-    files = request.FILES.getlist("script_file")
+    files = request.FILES["script_file"]
+
+    if not files.name.endswith('.txt'):
+        messages.error(request,'File is not txt type')
+        return HttpResponseRedirect(reverse("facet"))
+        #if file is too large, return
+    if files.multiple_chunks():
+        messages.error(request,"Uploaded file is too big (%.2f MB)." % (files.size/(1000*1000),))
+        return HttpResponseRedirect(reverse("facet"))
     
-    if len(files) <= 2:
-        lines = files[0].readlines()
+    try:
+        lines = files.readlines()
         chk = False
-        end = True
         num = 0
         type_data = 1
         for line in lines:
@@ -37,25 +58,25 @@ def import_script(request):
                 type_data = 2
             if 'Teacher Measurement Report  (arranged by mN)' in str_line:
                 chk = True
-            if 'Teacher Measurement Report  (arranged by fN)' in str_line:
+            if 'Teacher Measurement Report  (arranged by fN)' in str_line or '-----------------' in str_line:
                 chk = False
             if chk:
                 num += 1
             spt = str_line.split()
-            if num > 6 and num-6 <= len(Teacher.objects.all())-1 and chk:
+            if num > 6 and chk:
                 print(line.strip())
-                if '-----------------' in str_line:
-                    end = False
-                if type_data == 1 and end:
+                if type_data == 1:
                     Teacher.objects.filter(id=int(spt[22])).update(measure_sproj=float(spt[6]))
-                if type_data == 2 and end:
+                if type_data == 2:
                     Teacher.objects.filter(id=int(spt[22])).update(measure_spost=float(spt[6]))
-            if num-6 == len(Teacher.objects.all())-1:
-                chk = False
-       
         
+        for i in tch:
+            mean_i = avg([i.measure_sproj, i.measure_spost])
+            Teacher.objects.filter(id = i.id).update(levels_teacher=mean_i)
+    except Exception:
+        return render(request, 'facet.html', {'teachers':teachers, 'col_de':col_de})
 
-    return render(request, 'facet.html')
+    return render(request, 'facet.html', {'teachers':teachers, 'col_de':col_de})
 
 @login_required(login_url="login/")
 def export_script(request):
@@ -152,4 +173,4 @@ def export_script(request):
         new_file.close()
 
 
-    return render(request,"facet.html")
+    return render(request, 'facet.html', {'teachers':teachers, 'col_de':col_de})
