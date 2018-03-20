@@ -79,10 +79,10 @@ class Project(models.Model):
         
 class ScoreProj(models.Model):
     proj_id = models.ForeignKey(Project, on_delete=models.CASCADE)
-    presentation_media = models.IntegerField(default=0)
     presentation = models.IntegerField(default=0)
     question = models.IntegerField(default=0)
     report = models.IntegerField(default=0)
+    presentation_media = models.IntegerField(default=0)
     discover = models.IntegerField(default=0)
     analysis = models.IntegerField(default=0)
     quantity = models.IntegerField(default=0)

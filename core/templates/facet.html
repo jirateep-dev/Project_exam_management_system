@@ -1,0 +1,18 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="container" style="text-align: center"><h1 style="font-size: 6.5em;">FACET</h1></div>
+        <div class="jumbotron">
+            <h2>ส่งออกสคริป Score Project</h2>
+            <form action="{% url 'export_script_scoreproj' %}" method="post" id="export_scp_spro">
+                {% csrf_token %} 
+                <button class="btn btn-primary"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span>ส่งออก</button>
+            </form>
+            
+            
+        </div>
+
+    </div>
+</div>
+{% endblock %}
