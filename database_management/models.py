@@ -123,7 +123,9 @@ class ScoreAdvisor(models.Model):
 class Teacher(models.Model):
     login_user = models.ForeignKey(User, on_delete=models.CASCADE, unique=True)
     teacher_name = models.CharField(max_length=1024)
-    levels_teacher = models.IntegerField(default=1)
+    measure_sproj = models.FloatField(default=0)
+    measure_spost = models.FloatField(default=0)
+    levels_teacher = models.FloatField(default=0)
     score_projs = models.ManyToManyField(ScoreProj)
     score_posters = models.ManyToManyField(ScorePoster)
     score_advisor = models.ManyToManyField(ScoreAdvisor)

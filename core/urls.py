@@ -12,5 +12,6 @@ urlpatterns = [
      url(r'^detail_score/', views.detail_score, name='detail_score'),
      url(r'^manage_proj/', views.manage_proj, name='manage_proj'),
      url(r'^facet/', views_facet.facet, name='facet'),
-     url(r'^export_script_scoreproj/', views_facet.export_script_scoreproj, name='export_script_scoreproj'),
+     url(r'^export_script/', views_facet.export_script, name='export_script'),
+     url(r'^import_script/', views_facet.import_script, name='import_script'),
 ]
