@@ -20,7 +20,7 @@
                 <div class="form-group" >
                     <label for="name" class="col-md-3 col-sm-3 col-xs-12 control-label" style="margin-top: 5%">ไฟล์: </label>
                     <div class="col-md-8">
-                        <input type="file" name="script_file" id="script_file" required="True" class="form-control" style="margin-top: 10%" multiple>
+                        <input type="file" name="script_file" id="script_file" required="True" class="form-control" style="margin-top: 10%">
                     </div>                    
                 </div>
                 <div class="form-group">                    
@@ -29,6 +29,26 @@
                     </div> 
                 </div>
             </form>
+        </div>
+        <div class="jumbotron" style="padding: 5%;padding-top: 5%;padding-bottom: 10%">
+            <table class="table table-hover" style="margin-top: 50px;background-color:cornsilk">
+                <thead>
+                <tr style="background-color: slategray;color: aliceblue">
+                    {% for col_name in col_de%}
+                    <th style="text-align: center"><h4 style="font-size: 2.2em">{{col_name}}</h4></t>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                    {% for data in teachers%}
+                    <tr>
+                        {% for i in data%}
+                        <td><h4 style="font-size: 1.2em">{{i}}</h4></td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
 
     </div>
