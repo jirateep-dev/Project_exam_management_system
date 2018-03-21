@@ -113,6 +113,8 @@ def export_script(request):
                         'Data=\r\n')
 
         list_teacher = []
+
+        # query only not fake score ///////////////////////////////////////////////////////////////
         score_proj = ScoreProj.objects.filter(id__lte=469)
 
         for s in score_proj:
@@ -159,6 +161,7 @@ def export_script(request):
                         'Data=\r\n')
 
         list_teacher = []
+        # query only not fake score ///////////////////////////////////////////////////////////////
         score_post = ScorePoster.objects.filter(id__lte=469)
 
         for s in score_post:
