@@ -37,9 +37,9 @@ body :-ms-input-placeholder {
   font-weight: 300;
 }
 .wrapper {
-  background: #50a3a2;
-  background: -webkit-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
-  background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);
+  background: #8E44AD;
+  background: -webkit-linear-gradient(top left, #8E44AD 0%, #46C2FF 100%);
+  background: linear-gradient(to bottom right, #8E44AD 0%, #46C2FF 100%);
   position: absolute;
   top:0;
   left: 0;
@@ -52,24 +52,56 @@ body :-ms-input-placeholder {
           transform: translateY(85px);
 }
 .container {
-  margin-top: 10%;
+  margin-top: 7%;
   max-width: 600px;
   padding: 80px 0;
-  height: 400px;
+  height: 500px;
   text-align: center;
+  font-family: "Fontcraft";
 }
 .container h1{
-  font-size: 40px;
+  font-size: 5em;
   -webkit-transition-duration: 1s;
           transition-duration: 1s;
   -webkit-transition-timing-function: ease-in-put;
           transition-timing-function: ease-in-put;
   font-weight: 200;
 }
+
+.container h3{
+  font-size: 2em;
+}
+.title {
+  width: 100%;
+  line-height: 46px;
+  font-family: "Fontcraft";
+  font-size: 2.7em;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: white;
+  text-align: left;
+  left: 15%;
+  position: relative;
+}
+.title:before {
+  content: "";
+  width: 10px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: -15%;
+  background: white;
+}
 form {
-  padding: 20px 0;
+  background: rgba(255, 255, 255, 0.25);
+  width: 85%;
+  height: 100%;
+  padding: 25px 0;
   position: relative;
   z-index: 2;
+  font-family: "Fontcraft";
+  border-radius: 1.8em;
+  margin-left:5%;
 }
 form input {
   -webkit-appearance: none;
@@ -78,13 +110,14 @@ form input {
   outline: 0;
   border: 1px solid rgba(255, 255, 255, 0.4);
   background-color: rgba(255, 255, 255, 0.2);
-  width: 250px;
+  width: 65%;
+  height: 15%;
   border-radius: 3px;
   padding: 10px 15px;
   margin: 0 auto 10px auto;
   display: block;
   text-align: center;
-  font-size: 18px;
+  font-size: 2em;
   color: white;
   -webkit-transition-duration: 0.25s;
           transition-duration: 0.25s;
@@ -95,7 +128,7 @@ form input:hover {
 }
 form input:focus {
   background-color: white;
-  width: 300px;
+  width: 80%;
   color: #53e3a6;
 }
 form button {
@@ -108,11 +141,12 @@ form button {
   padding: 10px 15px;
   color: #53e3a6;
   border-radius: 3px;
-  width: 250px;
+  width: 65%;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 1.8em;
   -webkit-transition-duration: 0.25s;
           transition-duration: 0.25s;
+  margin-top: 3%;
 }
 form button:hover {
   background-color: #f5f7f9;
@@ -133,8 +167,8 @@ form button:hover {
   height: 40px;
   background-color: rgba(255, 255, 255, 0.15);
   bottom: -160px;
-  -webkit-animation: square 25s infinite;
-  animation: square 25s infinite;
+  -webkit-animation: square 15s infinite;
+  animation: square 15s infinite;
   -webkit-transition-timing-function: linear;
   transition-timing-function: linear;
 }
@@ -147,8 +181,8 @@ form button:hover {
   height: 80px;
   -webkit-animation-delay: 2s;
           animation-delay: 2s;
-  -webkit-animation-duration: 10s;
-          animation-duration: 10s;
+  -webkit-animation-duration: 8s;
+          animation-duration: 8s;
 }
 .bg-bubbles li:nth-child(3) {
   left: 25%;
@@ -159,8 +193,8 @@ form button:hover {
   left: 40%;
   width: 60px;
   height: 60px;
-  -webkit-animation-duration: 22s;
-          animation-duration: 22s;
+  -webkit-animation-duration: 20s;
+          animation-duration: 20s;
   background-color: rgba(255, 255, 255, 0.25);
 }
 .bg-bubbles li:nth-child(5) {
@@ -213,8 +247,8 @@ form button:hover {
             transform: translateY(0);
   }
   100% {
-    -webkit-transform: translateY(-700px) rotate(600deg);
-            transform: translateY(-700px) rotate(600deg);
+    -webkit-transform: translateY(-1400px) rotate(600deg);
+            transform: translateY(-1400px) rotate(600deg);
   }
 }
 @keyframes square {
@@ -223,7 +257,8 @@ form button:hover {
             transform: translateY(0);
   }
   100% {
-    -webkit-transform: translateY(-700px) rotate(600deg);
-            transform: translateY(-700px) rotate(600deg);
+    -webkit-transform: translateY(-1400px) rotate(600deg);
+            transform: translateY(-1400px) rotate(600deg);
   }
 }
+

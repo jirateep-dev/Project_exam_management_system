@@ -9,19 +9,19 @@
             <form action="{% url 'manage_proj' %}" method="post" id="manage_proj">
                     {% csrf_token %} 
                 <div class="container" style="background-color: whitesmoke;margin-top: 50px;">
-                    <label>ชื่อโครงงานภาษาไทย</label><input type="text" class="form-control" \
+                    <label>ชื่อโครงงานภาษาไทย</label><input type="text" class="form-control" style="font-size: 2em"\
                     name="proj_name_th" id="th" placeholder="เฉพาะตัวอักษรภาษาไทย" required value="{{proj.proj_name_th}}">
                     
-                    <label>ชื่อโครงงานภาษาอังกฤษ</label><input type="text" class="form-control" \
+                    <label>ชื่อโครงงานภาษาอังกฤษ</label><input type="text" class="form-control" style="font-size: 2em"\
                     name="proj_name_en" id="eng" placeholder="เฉพาะตัวอักษรภาษาอังกฤษ" required value="{{proj.proj_name_en}}">
                     <div class="container">
                         <div class='col-md-6'>
                             <label>ปีการศึกษา : </label><input type="number" class="form-control" name="proj_year" \
-                            min="0" max="9999" required value={{proj.proj_years}}>
+                            min="0" max="9999" required value={{proj.proj_years}} style="font-size: 2em">
                         </div>
                         <div class='col-md-6'>
                             <label>เทอมที่ : </label><br>
-                            <select style="width: 100%;height: 33PX;" name="semester">
+                            <select style="width: 100%;height: 33PX;" name="semester" style="font-size: 2em">
                                 <option selected="selected" hidden value={{proj.proj_semester}}>{{proj.proj_semester}}</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -31,7 +31,7 @@
                     <div class="container">
                         <div class='col-md-6'>
                             <label>ชื่อ-นามสกุล อาจารย์ที่ปรึกษา :</label>
-                            <select class="form-control" class="select" style="width: 100%;height: 35px;" name="t_name" required>
+                            <select class="form-control" class="select" style="width: 100%;height: 35px;" name="t_name" required style="font-size: 2em">
                                 <option selected="selected" disabled hidden>{{proj.proj_advisor}}</option>
                                 {% for teacher in teachers %}
                                     <option value="{{teacher.teacher_name}}">{{teacher.teacher_name}}</option>
@@ -42,7 +42,7 @@
                         </div>
                         <div class='col-md-6'>
                             <label>ชื่อ-นามสกุล อาจารย์ที่ปรึกษา(ร่วม) :</label>
-                            <select class="form-control" class="select" style="width: 100%;height: 35px;" name="t_name" required>
+                            <select class="form-control" class="select" style="width: 100%;height: 35px;" name="t_name" required style="font-size: 2em">
                                 <option selected="selected" disabled hidden>{{proj.proj_advisor}}</option>
                                 {% for teacher in teachers %}
                                     <option value="{{teacher.teacher_name}}">{{teacher.teacher_name}}</option>
@@ -109,8 +109,15 @@
                     {% endblock %}
 
                     <div class='col-md-6'>
-                        <label>แขนงวิชา : </label><input type="text" class="form-control" name="major" \
-                        id="eng" placeholder="เฉพาะตัวอักษรภาษาอังกฤษ" required value="{{proj.proj_major}}">
+                        <label>แขนงวิชา : </label>
+                        <!-- <input type="text" class="form-control" name="major" \
+                        id="eng" placeholder="เฉพาะตัวอักษรภาษาอังกฤษ" required value="{{proj.proj_major}}"> -->
+                        <select class="form-control" class="select" style="width: 100%;height: 35px;" name="major" required style="font-size: 2em">
+                            <option selected="selected" disabled hidden>{{proj.proj_major}}</option>
+                            {% for major in majors %}
+                                <option value="{{majors.major_name}}">{{major.major_name}}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
             </form>

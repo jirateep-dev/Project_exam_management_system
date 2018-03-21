@@ -14,28 +14,29 @@
 
 <body>
 	<div class="wrapper">
-		<!-- Modal -->
-        
 		<div class="container">
 			<h1>Welcome</h1>
 			<h3>ระบบจัดตารางสอบวิชาโครงงาน</h3>
-			<form method="post" action="{% url 'login' %}">
+			<form method="POST" action="{% url 'login' %}" style="margin-top: 10%;">
 				{% csrf_token %}
-				<div class="fieldWrapper" id="username">
-					{{ form.username }}
+				<div class="title">Sign in</div>
+				<div class="fieldWrapper" style="margin-top: 5%;">
+					<input type="text" id="username" name="username"  placeholder="Username">
 				</div>
-				<div class="fieldWrapper" id="password">
-					{{ form.password }}
+				<div class="fieldWrapper">
+					<input type="password" name="password" id="password" placeholder="Password">
 				</div>
-				<button type="submit" value="login" >Login</button>
+				<button type="submit" value="login" >LOGIN</button>
 				<input type="hidden" name="next" value="{{ next }}" />
 			</form>
+
 		</div>
 		{% if form.errors %}
-		{% if not user.is_active %}
-			<h4 style="color:darkred;text-align: center">ท่านไม่ได้รับอนุญาติให้เข้าสู่ระบบในช่วงเวลานี้</h4>
+			{% if not user.is_active %}
+				<h4 style="color:darkred;text-align: center">ท่านไม่ได้รับอนุญาติให้เข้าสู่ระบบในช่วงเวลานี้</h4>
+			{% endif %}
 		{% endif %}
-		{% endif %}
+		<h4 style="color:darkred;text-align: center">{{err_ms}}</h4>
 		
 		<ul class="bg-bubbles">
 			<li></li>
@@ -51,7 +52,6 @@
 		</ul>
 	</div>
 	
-
 	{% block javascript %} 
 		{% if not user.is_authenticated %}
 		<script>
@@ -64,6 +64,8 @@
 				$("#password").attr('placeholder', '{{form.password.label}}');
 			});
 		</script>
+
+		
 	{% endblock %}
 </body>
 

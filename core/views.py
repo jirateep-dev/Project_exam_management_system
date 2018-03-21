@@ -46,10 +46,11 @@ def settings(request):
 @login_required(login_url="login/")
 def manage_proj(request):
     teacher = Teacher.objects.all()
+    majors = Major.objects.all()
     if request.method == 'POST':
         mproj = request.POST.get("mproj", None)
         if mproj == "mproj_add":
-            return render(request, "mproj_add.html", {'teachers':teacher})
+            return render(request, "mproj_add.html", {'teachers':teacher, 'majors':majors})
         if mproj == "mproj_edit":
             proj = Project.objects.filter(proj_years=THIS_YEARS)
             return render(request, "mproj_edit.html", {'proj':proj})
@@ -91,7 +92,7 @@ def manage_proj(request):
         
         if type(proj_e) is not type(None):
             pedit_selected = Project.objects.get(proj_name_th=proj_e)
-            return render(request, "mproj_edit2.html", {'proj':pedit_selected, 'teachers':teacher})
+            return render(request, "mproj_edit2.html", {'proj':pedit_selected, 'teachers':teacher, 'majors':majors})
         
 
     return render(request, "manage_proj.html")
@@ -100,7 +101,7 @@ def manage_proj(request):
 def scoreproj(request):
     info_setting = Settings.objects.get(id=1)
     projid_teacher = []
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         user_id = request.user.id
         teacher_sp = Teacher.objects.get(login_user_id=user_id)
         projs = teacher_sp.schedule_teacher.all()
@@ -108,13 +109,13 @@ def scoreproj(request):
             projid_teacher.append(projs[i].proj_id)
 
     queryset = []
-    form_setting = Settings.objects.get(id=1).forms
+    form_setting = info_setting.forms
     for i in range(len(projid_teacher)):
         if Project.objects.filter(proj_years=THIS_YEARS, proj_semester=form_setting, id=projid_teacher[i]).exists():
             queryset.append(Project.objects.get(id=projid_teacher[i]))
     lis_select = []
 
-    if request.method == 'POST' and request.user.is_authenticated():
+    if request.method == 'POST' and request.user.is_authenticated:
         user_id = request.user.id
         teacher_sp = Teacher.objects.get(login_user_id=user_id)
         proj_selected = request.POST.get("data_proj", None)
@@ -212,7 +213,7 @@ def detail_score(request):
 def update_scoreproj(request):
     info_setting = Settings.objects.get(id=1)
     message = ''
-    if request.method == 'POST' and request.user.is_authenticated():
+    if request.method == 'POST' and request.user.is_authenticated:
         # get data from html
         user_id = request.user.id
         teacher_sp = Teacher.objects.get(login_user_id=user_id)
