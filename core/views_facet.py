@@ -5,12 +5,13 @@ from django.urls import reverse
 from django.contrib import messages
 from database_management.models import *
 from django.db.models import Max
-from django.db.models import Avg
+from django.db.models import Avg, Sum
 from django.db.models import F
 from django.shortcuts import redirect
 from django.utils.html import format_html
 import logging
 import numpy
+import statistics
 
 log = logging.getLogger('django.db.backends')
 log.setLevel(logging.DEBUG)
@@ -28,14 +29,9 @@ def avg(lis):
     """uses floating-point division."""
     return sum(lis) / float(len(lis))
 
-def admin_required(login_url=None):
-    return user_passes_test(lambda u: u.is_superuser, login_url=login_url)
-
-@login_required(login_url="login/")
 def facet(request):
     return render(request, 'facet.html', {'teachers':detail_teacher(), 'col_de':col_de})
 
-@login_required(login_url="login/")
 def import_script(request):
     files = request.FILES["script_file"]
 
@@ -52,6 +48,7 @@ def import_script(request):
         chk = False
         num = 0
         type_data = 1
+        count_end = 0
         for line in lines:
             str_line = "{}".format(line.strip())
             if 'Title = Analytic Scoring Project' in str_line:
@@ -60,8 +57,11 @@ def import_script(request):
                 type_data = 2
             if 'Teacher Measurement Report  (arranged by mN)' in str_line:
                 chk = True
-            if 'Teacher Measurement Report  (arranged by fN)' in str_line or '-----------------' in str_line:
+            if chk and '+------+' in str_line:
+                count_end += 1
+            if 'Teacher Measurement Report  (arranged by fN)' in str_line or count_end == 2:
                 chk = False
+                break
             if chk:
                 num += 1
             spt = str_line.split()
@@ -71,22 +71,35 @@ def import_script(request):
                     Teacher.objects.filter(id=int(spt[22])).update(measure_sproj=format(float(spt[6]), '.3f'))
                 if type_data == 2:
                     Teacher.objects.filter(id=int(spt[22])).update(measure_spost=format(float(spt[6]), '.3f'))
-        tch = Teacher.objects.filter(id__lte=32)
-        for i in tch:
-            mean_i = avg([i.measure_sproj, i.measure_spost])
-            Teacher.objects.filter(id = i.id).update(levels_teacher=format(mean_i, '.3f'))
+        tch_all = Teacher.objects.all()
+
+        lis_measure = [[],[]]
+        for i in tch_all:
+            if i.measure_sproj != 0:
+                lis_measure[0].append(i.measure_sproj)
+            if i.measure_spost != 0:
+                lis_measure[1].append(i.measure_spost)
+        
         new_tch_sproj = Teacher.objects.filter(measure_sproj=0)
         new_tch_spost = Teacher.objects.filter(measure_spost=0)
-        avgm_sproj = format(Teacher.objects.aggregate(Avg('measure_sproj')).get('measure_sproj__avg'), '.3f')
-        avgm_spost = format(Teacher.objects.aggregate(Avg('measure_spost')).get('measure_spost__avg'), '.3f')
-        new_tch_sproj.update(measure_sproj=avgm_sproj)
-        new_tch_spost.update(measure_spost=avgm_spost)
-    except Exception:
-        return render(request, 'facet.html', {'teachers':detail_teacher(), 'col_de':col_de})
+        if lis_measure[0] != []:
+            avgm_sproj = statistics.median(lis_measure[0])
+            new_tch_sproj.update(measure_sproj=avgm_sproj)
 
-    return render(request, 'facet.html', {'teachers':detail_teacher(), 'col_de':col_de})
+        if lis_measure[1] != []:
+            avgm_spost = statistics.median(lis_measure[1])
+            new_tch_spost.update(measure_spost=avgm_spost)
 
-@login_required(login_url="login/")
+        tch_all = Teacher.objects.all()
+        for i in tch_all:
+            mean_i = avg([i.measure_sproj, i.measure_spost])
+            Teacher.objects.filter(id = i.id).update(levels_teacher=format(float(mean_i), '.3f'))
+    except Exception as e:
+        messages.error(request,e)
+        return HttpResponseRedirect(reverse("facet"))
+
+    return HttpResponseRedirect(reverse("facet"))
+
 def export_script(request):
     # not present
     proj = Project.objects.filter(id__lte=218)
@@ -184,9 +197,8 @@ def export_script(request):
         new_file.close()
 
 
-    return render(request, 'facet.html', {'teachers':detail_teacher(), 'col_de':col_de})
+    return HttpResponseRedirect(reverse("facet"))
 
-@login_required(login_url="login/")
 def reset_teacher(request):
     Teacher.objects.update(measure_sproj=0, measure_spost=0, levels_teacher=0)
-    return render(request, 'facet.html', {'teachers':detail_teacher(), 'col_de':col_de})
+    return HttpResponseRedirect(reverse("facet"))
