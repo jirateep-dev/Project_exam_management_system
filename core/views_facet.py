@@ -16,10 +16,13 @@ log = logging.getLogger('django.db.backends')
 log.setLevel(logging.DEBUG)
 log.addHandler(logging.StreamHandler())
 
-tch = Teacher.objects.filter(id__lte=32)
 col_de = ['รายชื่ออาจารย์','การวัดผลคะแนนโปรเจค','การวัดผลคะแนนโปสเตอร์','ระดับคะแนนอาจารย์']
 
-teachers = [[i.teacher_name, str(i.measure_sproj), str(i.measure_spost), str(i.levels_teacher)] for i in tch]
+def detail_teacher():
+    # test limite id32
+    tch = Teacher.objects.filter(id__lte=32)
+    teachers = [[i.teacher_name, str(i.measure_sproj), str(i.measure_spost), str(i.levels_teacher)] for i in tch]
+    return teachers
 
 def avg(lis):
     """uses floating-point division."""
@@ -30,8 +33,7 @@ def admin_required(login_url=None):
 
 @login_required(login_url="login/")
 def facet(request):
-    
-    return render(request, 'facet.html', {'teachers':teachers, 'col_de':col_de})
+    return render(request, 'facet.html', {'teachers':detail_teacher(), 'col_de':col_de})
 
 @login_required(login_url="login/")
 def import_script(request):
@@ -66,17 +68,23 @@ def import_script(request):
             if num > 6 and chk:
                 print(line.strip())
                 if type_data == 1:
-                    Teacher.objects.filter(id=int(spt[22])).update(measure_sproj=float(spt[6]))
+                    Teacher.objects.filter(id=int(spt[22])).update(measure_sproj=format(float(spt[6]), '.3f'))
                 if type_data == 2:
-                    Teacher.objects.filter(id=int(spt[22])).update(measure_spost=float(spt[6]))
-        
+                    Teacher.objects.filter(id=int(spt[22])).update(measure_spost=format(float(spt[6]), '.3f'))
+        tch = Teacher.objects.filter(id__lte=32)
         for i in tch:
             mean_i = avg([i.measure_sproj, i.measure_spost])
-            Teacher.objects.filter(id = i.id).update(levels_teacher=mean_i)
+            Teacher.objects.filter(id = i.id).update(levels_teacher=format(mean_i, '.3f'))
+        new_tch_sproj = Teacher.objects.filter(measure_sproj=0)
+        new_tch_spost = Teacher.objects.filter(measure_spost=0)
+        avgm_sproj = format(Teacher.objects.aggregate(Avg('measure_sproj')).get('measure_sproj__avg'), '.3f')
+        avgm_spost = format(Teacher.objects.aggregate(Avg('measure_spost')).get('measure_spost__avg'), '.3f')
+        new_tch_sproj.update(measure_sproj=avgm_sproj)
+        new_tch_spost.update(measure_spost=avgm_spost)
     except Exception:
-        return render(request, 'facet.html', {'teachers':teachers, 'col_de':col_de})
+        return render(request, 'facet.html', {'teachers':detail_teacher(), 'col_de':col_de})
 
-    return render(request, 'facet.html', {'teachers':teachers, 'col_de':col_de})
+    return render(request, 'facet.html', {'teachers':detail_teacher(), 'col_de':col_de})
 
 @login_required(login_url="login/")
 def export_script(request):
@@ -176,4 +184,9 @@ def export_script(request):
         new_file.close()
 
 
-    return render(request, 'facet.html', {'teachers':teachers, 'col_de':col_de})
+    return render(request, 'facet.html', {'teachers':detail_teacher(), 'col_de':col_de})
+
+@login_required(login_url="login/")
+def reset_teacher(request):
+    Teacher.objects.update(measure_sproj=0, measure_spost=0, levels_teacher=0)
+    return render(request, 'facet.html', {'teachers':detail_teacher(), 'col_de':col_de})

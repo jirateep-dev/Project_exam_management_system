@@ -1,5 +1,5 @@
 # core / urls.py
-from django.conf.urls import url
+from django.conf.urls import url, include
 from . import views, views_facet
 
 urlpatterns = [
@@ -11,7 +11,5 @@ urlpatterns = [
      url(r'^result_sem1/', views.result_sem1, name='result_sem1'),
      url(r'^detail_score/', views.detail_score, name='detail_score'),
      url(r'^manage_proj/', views.manage_proj, name='manage_proj'),
-     url(r'^facet/', views_facet.facet, name='facet'),
-     url(r'^export_script/', views_facet.export_script, name='export_script'),
-     url(r'^import_script/', views_facet.import_script, name='import_script'),
+     url(r'^facet/', include('core.urls_facet')),
 ]
