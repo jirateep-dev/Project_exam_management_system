@@ -163,6 +163,17 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql', 
+#         'NAME': 'senoir_db',
+#         'USER': 'user',
+#         'PASSWORD': 'pno9i\'g8kirT\'=k9b',
+#         'HOST': '161.246.38.112',   # Or an IP Address that your DB is hosted on
+#         'PORT': '3306',
+#     }
+# }
+
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 

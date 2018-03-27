@@ -19,12 +19,13 @@ from collections import Counter
 from django.db.models import Max
 import logging
 
-this_year = Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
+def this_year():
+    return Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
 
 def export_csv(request):
     setting = Settings.objects.get(id=1)
     sc = ScheduleRoom.objects.all()
-    proj = Project.objects.filter(proj_years=this_year, proj_semester=setting.forms)
+    proj = Project.objects.filter(proj_years=this_year(), proj_semester=setting.forms)
     teachers = Teacher.objects.all()
     room = Room.objects.all()
     time = TimeExam.objects.all()
@@ -65,7 +66,7 @@ def export_csv(request):
 def upload_csv(request):
     # if not GET, then proceed
     try:
-        Project.objects.filter(proj_years=this_year).update(schedule_id_id=None)
+        Project.objects.filter(proj_years=this_year()).update(schedule_id_id=None)
         DateExam.objects.all().delete()
         room = Room.objects.all()
         time = TimeExam.objects.all()
@@ -171,7 +172,7 @@ def approve_teacher(tch_name, date_selected, period_selected):
 
 def count_proj(major):
     # form_setting = Settings.objects.get(id=1).forms
-    return len(Project.objects.filter(proj_years=this_year, schedule_id_id=None, proj_major=major))
+    return len(Project.objects.filter(proj_years=this_year(), schedule_id_id=None, proj_major=major))
 
 def prepare_render():
     result = []
@@ -234,11 +235,11 @@ def manage_room(request):
     # check proj of teacher
     mobj_name = Major.objects.values('major_name')
     if create_schedule:
-        proj_tch_advisor = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=this_year, \
+        proj_tch_advisor = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=this_year(), \
                         proj_advisor__in=[list_teachers[0], list_teachers[1], list_teachers[2]], \
                         schedule_id_id=None, proj_major=mobj_name.get(id=major_selected)['major_name'])))
         for i in range(3):
-            proj_of_teacher = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=this_year, \
+            proj_of_teacher = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=this_year(), \
                         proj_advisor=list_teachers[i], schedule_id_id=None, proj_major=mobj_name.get(id=major_selected)['major_name'])))
             if not proj_of_teacher.empty:
                 rand_index = randint(0,len(proj_of_teacher)-1)
@@ -319,7 +320,7 @@ def manage(request):
     try:
         reset_selected = int(request.POST.get('reset_gen',None))
         if reset_selected:
-            Project.objects.filter(proj_years=this_year).update(schedule_id_id=None)
+            Project.objects.filter(proj_years=this_year()).update(schedule_id_id=None)
             DateExam.objects.all().delete()
             Teacher.objects.all().order_by('proj_group_exam').update(proj_group_exam=0)
         pre = prepare_render()

@@ -11,13 +11,15 @@ import logging
 log = logging.getLogger('django.db.backends')
 log.setLevel(logging.DEBUG)
 log.addHandler(logging.StreamHandler())
-THIS_YEARS = Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
 LIST_COL = ['สื่อการนำเสนอ','การนำเสนอ','การตอบคำถาม','รายงาน','การค้นคว้า','การวิเคราะห์และออกแบบ','ปริมาณงาน','ความยากง่าย','คุณภาพของงาน']
 LIST_COL_AD = ['การพัฒนาโครงงานตามวัตถุประสงค์','การปฏิบัติได้ตรงตามแผนที่วางไว้','การเลือกทฤษฏีและเครื่องมือ','การเข้าพบอาจารย์ที่ปรึกษา',\
             'การปรับปรุงแก้ไขรายงาน','คุณภาพของรายงาน','คุณภาพของโครงงาน']
 LIST_COL_PO = ['การตรงต่อเวลา','บุคลิกภาพและการแต่งกาย','ความชัดเจนในการอธิบาย','ความชัดเจนในการตอบคำถาม','ความชัดเจนของสื่อ','คุณภาพของโครงงาน']
 LIST_COL_RE = ['รหัสนักศึกษา','ชื่อ-นามสกุล','ชื่อโปรเจค','คะแนนโปรเจค (60%)','คะแนนอาจารย์ที่ปรึกษา (40%)', 'รายละอียด']
 LIST_COL_DE = [['รายชื่ออาจารย์']+LIST_COL, ['อาจารย์ที่ปรึกษา']+LIST_COL_AD]
+
+def this_year():
+    return Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
 
 def admin_required(login_url=None):
     return user_passes_test(lambda u: u.is_superuser, login_url=login_url)
@@ -52,10 +54,10 @@ def manage_proj(request):
         if mproj == "mproj_add":
             return render(request, "mproj_add.html", {'teachers':teacher, 'majors':majors})
         if mproj == "mproj_edit":
-            proj = Project.objects.filter(proj_years=THIS_YEARS)
+            proj = Project.objects.filter(proj_years=this_year())
             return render(request, "mproj_edit.html", {'proj':proj})
         if mproj == "mproj_del":
-            proj = Project.objects.filter(proj_years=THIS_YEARS)
+            proj = Project.objects.filter(proj_years=this_year())
             return render(request, "mproj_del.html", {'proj':proj})
 
         np_th = request.POST.get("proj_name_th", None)
@@ -69,7 +71,7 @@ def manage_proj(request):
         proj_d = request.POST.get("project_del", None)
         proj_e = request.POST.get("project_edit", None)
 
-        proj = Project.objects.filter(proj_years=THIS_YEARS, proj_semester=p_semester)
+        proj = Project.objects.filter(proj_years=this_year(), proj_semester=p_semester)
         chk = True
 
         if type(np_th) is type(None) or type(np_en) is type(None) or type(p_year) is type(None) or type(p_semester) is type(None)\
@@ -111,7 +113,7 @@ def scoreproj(request):
     queryset = []
     form_setting = info_setting.forms
     for i in range(len(projid_teacher)):
-        if Project.objects.filter(proj_years=THIS_YEARS, proj_semester=form_setting, id=projid_teacher[i]).exists():
+        if Project.objects.filter(proj_years=this_year(), proj_semester=form_setting, id=projid_teacher[i]).exists():
             queryset.append(Project.objects.get(id=projid_teacher[i]))
     lis_select = []
 
@@ -153,7 +155,7 @@ def scoreposter(request):
 @login_required(login_url="login/")
 def result_sem1(request):
     info_setting = Settings.objects.get(id=1)
-    project = Project.objects.filter(proj_years=THIS_YEARS, proj_semester=1)
+    project = Project.objects.filter(proj_years=this_year(), proj_semester=1)
     lis_stu = []
 
     for num in range(len(project)):
@@ -182,7 +184,7 @@ def result_sem1(request):
             format_html("<button name="'"detail"'" type="'"submit"'" class="'"btn btn-success"'" \
             form="'"detail_score"'" value="+project[num].proj_name_th+"><h4 style="'"font-size: 1.7em;"'">ดูรายละเอียด</h4></button>")])
 
-    return render(request,"result_score.html", {'proj_act':info_setting.forms, 'this_year':THIS_YEARS, \
+    return render(request,"result_score.html", {'proj_act':info_setting.forms, 'this_year':this_year(), \
             'col_result':LIST_COL_RE, 'list_student':lis_stu})
 
 @login_required(login_url="login/")
@@ -206,7 +208,7 @@ def detail_score(request):
                  sc_ad.quality_report, sc_ad.quality_project])
 
             
-    return render(request, "detail_score.html", {'this_year':THIS_YEARS, 'proj_name':proj_name, 'col_de':LIST_COL_DE[0],\
+    return render(request, "detail_score.html", {'this_year':this_year(), 'proj_name':proj_name, 'col_de':LIST_COL_DE[0],\
          'result':lis_result,'col_de2':LIST_COL_DE[1], 'result2':lis_result2})
 
 @login_required(login_url="login/")
