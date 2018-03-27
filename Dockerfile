@@ -1,14 +1,25 @@
-FROM python:3.6-slim
+# Start with a Python image.
+FROM python:latest
 
-WORKDIR /data
+# Some stuff that everyone has been copy-pasting
+# since the dawn of time.
+ENV PYTHONUNBUFFERED 1
 
-RUN set -ex && apt-get update -y && apt-get -y install libmysqlclient-dev \
-				python3-dev libevent-dev build-essential
+# Install some necessary things.
+RUN apt-get update
+RUN apt-get install -y swig libssl-dev dpkg-dev netcat
 
-COPY requirements.txt /data/requirements.txt
+# Copy all our files into the image.
+RUN mkdir /code
+WORKDIR /code
+COPY . /code/
 
-RUN pip install -r requirements.txt
+# Install our requirements.
+RUN pip install -U pip
+RUN pip install -Ur requirements.txt
 
-COPY . /project
+# Collect our static media.
+RUN python /code/manage.py collectstatic --noinput
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]
+# Specify the command to run when the image is run.
+CMD ["/code/misc/tooling/prod_run.sh"]
