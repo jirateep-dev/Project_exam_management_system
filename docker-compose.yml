@@ -3,15 +3,17 @@ version: '2'
 services:
 
   db:
-    image: postgres
+    image: mysql
+    restart: always
     environment:
-      POSTGRES_PASSWORD: password
-    volumes:
-      - ./dbdata:/var/lib/postgresql/data
+        MYSQL_ROOT_PASSWORD: docker
+        MYSQL_DATABASE: docker
+        MYSQL_USER: docker
+        MYSQL_PASSWORD: docker
 
   web:
     # Docker hack to wait until Postgres is up, then run stuff.
-    command: bash -c "while ! nc -w 1 -z db 5432; do sleep 0.1; done; ./manage.py migrate; while :; do ./manage.py runserver_plus 0.0.0.0:8000; sleep 1; done"
+    command: bash -c "while ! nc -w 1 -z db 3306; do sleep 0.1; done; ./manage.py migrate; while :; do ./manage.py runserver_plus 0.0.0.0:8000; sleep 1; done"
     image: django
     build: .
     volumes:
