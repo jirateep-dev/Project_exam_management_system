@@ -6,14 +6,12 @@ services:
     image: mysql
     restart: always
     environment:
-        MYSQL_ROOT_PASSWORD: docker
-        MYSQL_DATABASE: docker
-        MYSQL_USER: docker
-        MYSQL_PASSWORD: docker
-
+        MYSQL_ROOT_PASSWORD : root
+        MYSQL_DATABASE: senior_db
+        MYSQL_USER: standalone
+        MYSQL_PASSWORD: pno9i'g8kirT'=k9b
   web:
-    # Docker hack to wait until Postgres is up, then run stuff.
-    command: bash -c "while ! nc -w 1 -z db 3306; do sleep 0.1; done; ./manage.py migrate; while :; do ./manage.py runserver_plus 0.0.0.0:8000; sleep 1; done"
+    command: bash -c "while ! nc -w 1 -z db 3306; do sleep 0.1; done; chmod +x manage.py migrate; while :; do ./manage.py runserver 0.0.0.0:8000; sleep 1; done"
     image: django
     build: .
     volumes:
@@ -28,5 +26,5 @@ services:
     depends_on:
       - web
     ports:
-      - "80:8000"
+      - "8000:8000"
     command: -port 8000 -host 0.0.0.0 "proxy / web:8000 { }"

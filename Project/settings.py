@@ -156,7 +156,7 @@ WSGI_APPLICATION = 'Project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'senoir_db',
+        'NAME': 'senior_db',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': '127.0.0.1',   # Or an IP Address that your DB is hosted on
@@ -168,7 +168,7 @@ MYSQL_ROOT_PASSWORD = 'root'
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql', 
-#         'NAME': 'senoir_db',
+#         'NAME': 'senior_db',
 #         'USER': 'user',
 #         'PASSWORD': 'pno9i\'g8kirT\'=k9b',
 #         'HOST': '161.246.38.112',   # Or an IP Address that your DB is hosted on
