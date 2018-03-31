@@ -146,10 +146,6 @@ def upload_csv(request):
 # /////////////////////////////////////      old code here    ////////////////////////////////////////////
 # /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-def manageTeacher(major_id, date_input, period_input):
-    list_teachers = []
-    return list_teachers
-
 def approve_teacher(tch_name, date_selected, period_selected):
     approve_tch = False
 
@@ -169,6 +165,13 @@ def approve_teacher(tch_name, date_selected, period_selected):
                 approve_tch = True
 
     return approve_tch
+
+def manageTeacher(major_id, date_input, period_input):
+    list_teachers = []
+
+    
+
+    return list_teachers
 
 def count_proj(major):
     # form_setting = Settings.objects.get(id=1).forms
