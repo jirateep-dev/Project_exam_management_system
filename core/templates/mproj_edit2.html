@@ -32,7 +32,7 @@
                         <div class='col-md-6'>
                             <label>ชื่อ-นามสกุล อาจารย์ที่ปรึกษา :</label>
                             <select class="form-control" class="select" style="width: 100%;height: 35px;" name="t_name" required style="font-size: 2em">
-                                <option selected="selected" disabled hidden>{{proj.proj_advisor}}</option>
+                                <option selected="selected">{{proj.proj_advisor}}</option>
                                 {% for teacher in teachers %}
                                     <option value="{{teacher.teacher_name}}">{{teacher.teacher_name}}</option>
                                 {% endfor %}
@@ -42,8 +42,8 @@
                         </div>
                         <div class='col-md-6'>
                             <label>ชื่อ-นามสกุล อาจารย์ที่ปรึกษา(ร่วม) :</label>
-                            <select class="form-control" class="select" style="width: 100%;height: 35px;" name="t_name" required style="font-size: 2em">
-                                <option selected="selected" disabled hidden>{{proj.proj_advisor}}</option>
+                            <select class="form-control" class="select" style="width: 100%;height: 35px;" name="cot_name" required style="font-size: 2em">
+                                <option selected="selected">{{proj.proj_co_advisor}}</option>
                                 {% for teacher in teachers %}
                                     <option value="{{teacher.teacher_name}}">{{teacher.teacher_name}}</option>
                                 {% endfor %}
@@ -113,9 +113,9 @@
                         <!-- <input type="text" class="form-control" name="major" \
                         id="eng" placeholder="เฉพาะตัวอักษรภาษาอังกฤษ" required value="{{proj.proj_major}}"> -->
                         <select class="form-control" class="select" style="width: 100%;height: 35px;" name="major" required style="font-size: 2em">
-                            <option selected="selected" disabled hidden>{{proj.proj_major}}</option>
+                            <option selected="selected">{{proj.proj_major}}</option>
                             {% for major in majors %}
-                                <option value="{{majors.major_name}}">{{major.major_name}}</option>
+                                <option value="{{major.major_name}}">{{major.major_name}}</option>
                             {% endfor %}
                         </select>
                     </div>

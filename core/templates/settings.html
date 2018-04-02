@@ -4,9 +4,9 @@
     <div class="row">
         <div class="container" style="text-align: center"><h1 style="font-size: 6.5em;">ตั้งค่าระบบ</h1></div>
         <div class="jumbotron">
-            <h2>เปิด-ปิดระบบ</h2>
             <form action="{% url 'settings' %}" method="post" id="settings">
                 {% csrf_token %} 
+                <h2>เปิด-ปิดระบบ</h2>
                 {% if activated == 1 %}
                 <input name="on_off_sys" type="checkbox" checked data-toggle="toggle" data-size="large" data-offstyle="danger">
                 {% else %}
@@ -20,6 +20,14 @@
                 <input name="proj_num" type="checkbox"  data-toggle="toggle" data-size="large"\
                 data-on="Project 1" data-off="Project 2" data-onstyle="success" data-offstyle="info">
                 {% endif %}
+                <h2>load อาจารย์</h2>
+                <div class="form-group">
+                    <select class="form-control" name="load_tch" style="width: 10%;">
+                        <option value=5>5</option>
+                        <option value=6>6</option>
+                        <option value=7>7</option>
+                    </select>
+                </div>
             </form>
         </div>
 
