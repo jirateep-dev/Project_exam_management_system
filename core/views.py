@@ -28,6 +28,12 @@ def admin_required(login_url=None):
     return user_passes_test(lambda u: u.is_superuser, login_url=login_url)
 
 @login_required
+def upload_projs(request):
+    
+
+    return render(request, "upload_projs.html")
+
+@login_required
 @admin_required(login_url="login/")
 def settings(request):
     if request.method == 'POST':
@@ -48,6 +54,23 @@ def settings(request):
         User.objects.filter(is_staff=0).update(is_active=num_on_off)
     info_setting = Settings.objects.get(id=1)
     return render(request,"settings.html", {'activated':info_setting.activate, 'proj_act':info_setting.forms})
+
+
+def manage_student(std1_id, std_name, p_semester, new_proj):
+    if Student.objects.filter(student_name=std_name).exists():
+        if p_semester == '1':
+            Student.objects.filter(student_name=std_name).update(proj1_id_id=new_proj.id, \
+            student_id=std1_id, student_name=std_name)
+        else:
+            Student.objects.filter(student_name=std_name).update(proj2_id_id=new_proj.id, \
+            student_id=std1_id, student_name=std_name)
+    else:
+        if p_semester == '1':
+            new_std = Student(proj1_id_id=new_proj.id, proj2_id_id='', student_id=std1_id, student_name=std_name)
+            new_std.save()
+        else:
+            new_std = Student(proj1_id_id='', proj2_id_id=new_proj.id, student_id=std1_id, student_name=std_name)
+            new_std.save()
 
 @login_required(login_url="login/")
 def manage_proj(request):
@@ -88,25 +111,56 @@ def manage_proj(request):
         n_t = request.POST.get("t_name", None)
         n_cot = request.POST.get("cot_name", None)
 
+        std1_id = request.POST.get("std1_id", None)
+        pre_std1 = request.POST.get("std1_pre_name", None)
+        std1_fname = request.POST.get("std1_fname", None)
+        std1_lname = request.POST.get("std1_lname", None)
+
+        std2_id = request.POST.get("std2_id", None)
+        pre_std2 = request.POST.get("std2_pre_name", None)
+        std2_fname = request.POST.get("std2_fname", None)
+        std2_lname = request.POST.get("std2_lname", None)
+
         proj_d = request.POST.get("project_del", None)
         proj_e = request.POST.get("project_edit", None)
 
         chk = True
+        lis_chk = [np_th, np_en, p_year, p_semester, p_major, n_t, std1_id, pre_std1, std1_fname, std1_lname]
 
-        if type(np_th) is type(None) or type(np_en) is type(None) or type(p_year) is type(None) or type(p_semester) is type(None)\
-            or type(p_major) is type(None) or type(n_t) is type(None):
-            chk = False
+        for i in lis_chk:
+            if type(i) is type(None):
+                chk = False
+                break
+
+        # if type(np_th) is type(None) or type(np_en) is type(None) or type(p_year) is type(None) or type(p_semester) is type(None)\
+        #     or type(p_major) is type(None) or type(n_t) is type(None):
+        #     chk = False
 
         if chk:
             if type(n_cot) is type(None):
                 n_cot = ''
+            if type(std1_id) is type(None) or type(pre_std2) is type(None) or type(std2_fname) is type(None):
+                pre_std2 = ''
+                std2_fname = ''
+                std2_lname = ''
+                std1_id = ''
+            if type(std2_lname) is type(None):
+                std2_lname = ''
+
             if Project.objects.filter(proj_name_th=np_th).exists():
                 Project.objects.filter(proj_name_th=np_th).update(proj_years=p_year, proj_semester=p_semester,\
                  proj_name_th=np_th, proj_name_en=np_en, proj_major=p_major, proj_advisor=n_t, proj_co_advisor=n_cot)
+            
             else:
                 new_proj = Project(proj_years=p_year, proj_semester=p_semester, proj_name_th=np_th, proj_name_en=np_en,\
                                 proj_major=p_major, proj_advisor=n_t, proj_co_advisor=n_cot)
                 new_proj.save()
+
+                std1_nstr = pre_std1+std1_fname+' '+std1_lname
+                std2_nstr = pre_std2+std2_fname+' '+std2_lname
+                manage_student(std1_id, std1_nstr, p_semester, new_proj)
+                manage_student(std2_id, std2_nstr, p_semester, new_proj)
+
             return HttpResponseRedirect(reverse("manage_proj"))
         
         if type(proj_d) is not type(None):
@@ -180,7 +234,7 @@ def result_sem1(request):
     lis_stu = []
 
     for num in range(len(project)):
-        stu = Student.objects.filter(proj_id_id=project[num].id)
+        stu = Student.objects.filter(proj1_id_id=project[num].id)
 
         # calculate score project 60%
         test = ScoreProj.objects.annotate(result_scoreproj = ((F('presentation')+F('presentation_media')+F('question'))*90/100) + \

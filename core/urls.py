@@ -15,4 +15,5 @@ urlpatterns = [
     url(r'^export_script/', views_facet.export_script, name='export_script'),
     url(r'^import_script/', views_facet.import_script, name='import_script'),
     url(r'^reset_teacher/', views_facet.reset_teacher, name='reset_teacher'),
+    url(r'^upload_projs/', views.upload_projs, name='upload_projs'),
 ]

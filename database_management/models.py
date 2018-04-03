@@ -141,7 +141,8 @@ class Teacher(models.Model):
         return self.teacher_name
 
 class Student(models.Model):
-    proj_id = models.ForeignKey(Project, on_delete=models.CASCADE)
+    proj1_id = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, related_name='+')
+    proj2_id = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, related_name='+')
     student_id = models.IntegerField(default=0)
     student_name = models.CharField(max_length=1024)
     objects = models.Manager()

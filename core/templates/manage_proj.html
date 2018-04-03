@@ -18,29 +18,91 @@
             </form>
         </div>
         <div class="jumbotron col-sm-4" style="padding: 0">
-            <form action="{% url 'manage_proj' %}" method="post" id="manage_proj">
+            <button type="submit" data-toggle="collapse" data-target="#del_proj"\
+            class="btn btn-danger" style="width: 100%;height: 80px;"><h2 style="font-size: 3em">ลบโครงงาน</h2></button>
+            <!-- <form action="{% url 'manage_proj' %}" method="post" id="manage_proj">
                 {% csrf_token %}
                 <button type="submit" name="mproj" value="mproj_del" form="manage_proj"\
-                name="mproj_add" class="btn btn-danger" style="width: 100%;height: 80px;"><h2 style="font-size: 3em">ลบโครงงาน</h2></button>
-            </form>
+                class="btn btn-danger" style="width: 100%;height: 80px;"><h2 style="font-size: 3em">ลบโครงงาน</h2></button>
+            </form> -->
+        </div>
+
+        <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 33%;text-align: center;padding-bottom: 2%">
+                        <div class="collapse" id="add_proj" style="padding: 0;">
+                            <form action="{% url 'manage_proj' %}" method="post" id="manage_proj">
+                                {% csrf_token %}
+                                <button type="submit" name="mproj" value="mproj_add"  form="manage_proj"\
+                                class="btn btn-info" style="width: 80%;height: 50px;"><h2 style="font-size: 1.7em;margin: 0">เพิ่มโครงงานเดี่ยว</h2></button>      
+                            </form>
+                            <button data-toggle="modal" data-target="#add_mulproj"\
+                                class="btn btn-info" style="width: 80%;height: 50px;margin-top: 2%"><h2 style="font-size: 1.7em;margin: 0">นำเข้าหลายโครงงาน</h2></button>
+                        </div>
+                    </th>
+                    <th style="width: 33%"></th>
+                    <th style="width: 33%;text-align: center;padding-bottom: 2%">
+                        <div class="collapse" id="del_proj" style="padding: 0;">
+                            <form action="{% url 'manage_proj' %}" method="post" id="manage_proj">
+                                {% csrf_token %}
+                                <button type="submit" name="mproj" value="mproj_del"  form="manage_proj"\
+                                class="btn btn-info" style="width: 80%;height: 50px;"><h2 style="font-size: 1.7em;margin: 0">ลบโครงงานเดี่ยว</h2></button>      
+                            </form>
+                            <button data-toggle="modal" data-target="#del_mulproj"\
+                                class="btn btn-info" style="width: 80%;height: 50px;margin-top: 2%"><h2 style="font-size: 1.7em;margin: 0">ลบหลายโครงงาน</h2></button>
+                        </div>
+                    </th>
+                  </tr>
+                </thead>
+        </table>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="del_mulproj" role="dialog">
+            <div class="modal-dialog modal-md">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <form action="{% url 'manage_proj' %}" method="POST" enctype="multipart/form-data" \
+                    class="form-horizontal" >
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h1 class="modal-title">ลบหลายโครงงาน</h1>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="name" class="col-md-3 col-sm-3 col-xs-12 control-label">เลือกเทอม: </label>
+                                <div class="col-md-8">
+                                    <select class="form-control" class="select" style="width: 100%;height: 100%;margin-top: 3%;" name="std1_pre_name">
+                                        <option selected="selected" disabled hidden style="font-size: 2em">เทอม</option>
+                                        <option value="1" style="font-size: 2em">1</option>
+                                        <option value="2" style="font-size: 2em">2</option>
+                                    </select>
+                                </div>                    
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="form-group">                    
+                                <button type="submit" class="btn btn-danger" style="margin-right: 10%;"> 
+                                    <span class="glyphicon glyphicon-remove" style="margin-right:5px;"></span> ยืนยันการลบ</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
 
-        <div class="collapse col-sm-3" id="add_proj" style="padding: 0;margin-left: 3%;">
-            <form action="{% url 'manage_proj' %}" method="post" id="manage_proj">
-                {% csrf_token %}
-                <button type="submit" name="mproj" value="mproj_add"  form="manage_proj"\
-                class="btn btn-info" style="width: 100%;height: 50px;"><h2 style="font-size: 1.7em;margin: 0">เพิ่มโครงงานเดี่ยว</h2></button>      
-            </form>
-            <button data-toggle="modal" data-target="#add_mulproj"\
-                class="btn btn-info" style="width: 100%;height: 50px;margin-top: 2%"><h2 style="font-size: 1.7em;margin: 0">นำเข้าหลายโครงงาน</h2></button>
-        </div>
+
+        
+        
         <!-- Modal -->
         <div class="modal fade" id="add_mulproj" role="dialog">
             <div class="modal-dialog modal-md">
                 <!-- Modal content-->
                 <div class="modal-content">
-                    <form action="{% url 'upload_csv' %}" method="POST" enctype="multipart/form-data" \
+                    <form action="{% url 'upload_projs' %}" method="POST" enctype="multipart/form-data" \
                     class="form-horizontal" >
                         {% csrf_token %}
                         <div class="modal-header">
@@ -57,7 +119,7 @@
                         </div>
                         <div class="modal-footer">
                             <div class="form-group">                    
-                                <button class="btn btn-primary" style="margin-right: 10%;"> 
+                                <button type="submit" class="btn btn-primary" style="margin-right: 10%;"> 
                                     <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span>อัพโหลด </button>
                             </div>
                         </div>
