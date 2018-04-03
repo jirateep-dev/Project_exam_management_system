@@ -114,9 +114,6 @@
     $(document).on("click", ".open-Dialog", function () {
         var myId = $(this).data('id');
         $(".modal-footer #project_del").val( myId );
-        // As pointed out in comments, 
-        // it is superfluous to have to manually call the modal.
-        // $('#addBookDialog').modal('show');
     });
 </script>
 {% endblock %}
