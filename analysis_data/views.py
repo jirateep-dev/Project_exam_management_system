@@ -66,13 +66,14 @@ def export_csv(request):
 def upload_csv(request):
     # if not GET, then proceed
     try:
+        csv_file = request.FILES["csv_file"]
         Project.objects.filter(proj_years=this_year()).update(schedule_id_id=None)
         DateExam.objects.all().delete()
         room = Room.objects.all()
         time = TimeExam.objects.all()
         proj = Project.objects.all()
         teachers = Teacher.objects.all()
-        csv_file = request.FILES["csv_file"]
+        
         if not csv_file.name.endswith('.csv'):
             messages.error(request,'File is not CSV type')
             return HttpResponseRedirect(reverse("manage"))
@@ -146,10 +147,6 @@ def upload_csv(request):
 # /////////////////////////////////////      old code here    ////////////////////////////////////////////
 # /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-def manageTeacher(major_id, date_input, period_input):
-    list_teachers = []
-    return list_teachers
-
 def approve_teacher(tch_name, date_selected, period_selected):
     approve_tch = False
 
@@ -169,6 +166,13 @@ def approve_teacher(tch_name, date_selected, period_selected):
                 approve_tch = True
 
     return approve_tch
+
+def manageTeacher(major_id, date_input, period_input):
+    list_teachers = []
+
+    
+
+    return list_teachers
 
 def count_proj(major):
     # form_setting = Settings.objects.get(id=1).forms

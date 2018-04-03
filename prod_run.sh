@@ -1,4 +1,4 @@
 #!/bin/bash
 
-./manage.py migrate
+chmod +x manage.py migrate
 uwsgi --ini uwsgi.ini

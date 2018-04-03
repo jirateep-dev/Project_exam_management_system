@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, user_passes_test
 from database_management.models import *
+from django.http import HttpResponse,  HttpResponseRedirect
+from django.urls import reverse
 from django.db.models import Max
 from django.db.models import Avg
 from django.db.models import F
@@ -17,6 +19,7 @@ LIST_COL_AD = ['การพัฒนาโครงงานตามวัต�
 LIST_COL_PO = ['การตรงต่อเวลา','บุคลิกภาพและการแต่งกาย','ความชัดเจนในการอธิบาย','ความชัดเจนในการตอบคำถาม','ความชัดเจนของสื่อ','คุณภาพของโครงงาน']
 LIST_COL_RE = ['รหัสนักศึกษา','ชื่อ-นามสกุล','ชื่อโปรเจค','คะแนนโปรเจค (60%)','คะแนนอาจารย์ที่ปรึกษา (40%)', 'รายละอียด']
 LIST_COL_DE = [['รายชื่ออาจารย์']+LIST_COL, ['อาจารย์ที่ปรึกษา']+LIST_COL_AD]
+LIST_COL_PROJ = ['ปีการศึกษา', 'เทอม', 'ชื่อโปรเจค(TH)', 'ชื่อโปรเจค(EN)', 'แขนง', 'ที่ปรึกษา', 'ที่ปรึกษา(ร่วม)', 'รายละเอียด']
 
 def this_year():
     return Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
@@ -30,6 +33,7 @@ def settings(request):
     if request.method == 'POST':
         on_off = request.POST.get("on_off_sys", None)
         proj_num = request.POST.get("proj_num", None)
+        load = request.POST.get("load_tch", None)
         
         if on_off == 'on':
             num_on_off = 1
@@ -40,7 +44,7 @@ def settings(request):
         if proj_num != 'on':
             proj_int = 2
 
-        Settings.objects.filter(id=1).update(activate=num_on_off, forms=proj_int)
+        Settings.objects.filter(id=1).update(load=load, activate=num_on_off, forms=proj_int)
         User.objects.filter(is_staff=0).update(is_active=num_on_off)
     info_setting = Settings.objects.get(id=1)
     return render(request,"settings.html", {'activated':info_setting.activate, 'proj_act':info_setting.forms})
@@ -49,16 +53,32 @@ def settings(request):
 def manage_proj(request):
     teacher = Teacher.objects.all()
     majors = Major.objects.all()
+    projs = Project.objects.filter(proj_years=this_year())
+    col_proj = 7
+    list_projs = []
+    for i in projs:
+        list_projs.append([i.proj_years, i.proj_semester, i.proj_name_th, i.proj_name_en, i.proj_major, i.proj_advisor, i.proj_co_advisor])
     if request.method == 'POST':
         mproj = request.POST.get("mproj", None)
         if mproj == "mproj_add":
             return render(request, "mproj_add.html", {'teachers':teacher, 'majors':majors})
         if mproj == "mproj_edit":
-            proj = Project.objects.filter(proj_years=this_year())
-            return render(request, "mproj_edit.html", {'proj':proj})
+            col_proj = 8
+            list_projs = []
+            for i in projs:
+                list_projs.append([i.proj_years, i.proj_semester, i.proj_name_th, i.proj_name_en, i.proj_major, i.proj_advisor, i.proj_co_advisor, \
+                format_html("<button name="'"project_edit"'" type="'"submit"'" class="'"btn btn-warning"'" \
+                form="'"manage_proj"'" value=""'"+i.proj_name_th+"'""><h4 style="'"font-size: 1.7em;"'">แก้ไข</h4></button>")])
+            return render(request, "manage_proj.html", {"col_result":LIST_COL_PROJ[:col_proj], "list_proj":list_projs})
+            # return render(request, "mproj_edit.html", {'proj':projs})
         if mproj == "mproj_del":
-            proj = Project.objects.filter(proj_years=this_year())
-            return render(request, "mproj_del.html", {'proj':proj})
+            col_proj = 8
+            list_projs = []
+            for i in projs:
+                list_projs.append([i.proj_years, i.proj_semester, i.proj_name_th, i.proj_name_en, i.proj_major, i.proj_advisor, i.proj_co_advisor, \
+                format_html("<button type="'"button"'"  class="'"open-Dialog btn btn-danger"'" data-toggle="'"modal"'" data-target="'"#del_modal"'"\
+                data-id=""'"+i.proj_name_th+"'""><h4 style="'"font-size: 1.7em;"'">ลบ</h4></button>")])
+            return render(request, "manage_proj.html", {"col_result":LIST_COL_PROJ[:col_proj], "list_proj":list_projs})
 
         np_th = request.POST.get("proj_name_th", None)
         np_en = request.POST.get("proj_name_en", None)
@@ -71,7 +91,6 @@ def manage_proj(request):
         proj_d = request.POST.get("project_del", None)
         proj_e = request.POST.get("project_edit", None)
 
-        proj = Project.objects.filter(proj_years=this_year(), proj_semester=p_semester)
         chk = True
 
         if type(np_th) is type(None) or type(np_en) is type(None) or type(p_year) is type(None) or type(p_semester) is type(None)\
@@ -88,16 +107,18 @@ def manage_proj(request):
                 new_proj = Project(proj_years=p_year, proj_semester=p_semester, proj_name_th=np_th, proj_name_en=np_en,\
                                 proj_major=p_major, proj_advisor=n_t, proj_co_advisor=n_cot)
                 new_proj.save()
+            return HttpResponseRedirect(reverse("manage_proj"))
         
         if type(proj_d) is not type(None):
             Project.objects.filter(proj_name_th=proj_d).delete()
+            return HttpResponseRedirect(reverse("manage_proj"))
         
         if type(proj_e) is not type(None):
             pedit_selected = Project.objects.get(proj_name_th=proj_e)
             return render(request, "mproj_edit2.html", {'proj':pedit_selected, 'teachers':teacher, 'majors':majors})
-        
+    
 
-    return render(request, "manage_proj.html")
+    return render(request, "manage_proj.html", {"col_result":LIST_COL_PROJ[:col_proj], "list_proj":list_projs})
 
 @login_required(login_url="login/")
 def scoreproj(request):

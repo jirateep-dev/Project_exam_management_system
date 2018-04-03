@@ -24,4 +24,4 @@ COPY . /code/
 RUN python manage.py collectstatic --noinput
 
 # Specify the command to run when the image is run.
-# CMD ["misc\tooling\prod_run.sh"]
+# CMD ["misc/tooling/prod_run.sh"]
