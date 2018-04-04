@@ -8,6 +8,8 @@ from django.db.models import Avg
 from django.db.models import F
 from django.shortcuts import redirect
 from django.utils.html import format_html
+from django.contrib import messages
+from .forms import *
 import logging
 
 log = logging.getLogger('django.db.backends')
@@ -26,6 +28,11 @@ def this_year():
 
 def admin_required(login_url=None):
     return user_passes_test(lambda u: u.is_superuser, login_url=login_url)
+
+@login_required
+def upload_projs(request):
+    
+    return render(request, "upload_projs.html")
 
 @login_required
 @admin_required(login_url="login/")
@@ -48,6 +55,113 @@ def settings(request):
         User.objects.filter(is_staff=0).update(is_active=num_on_off)
     info_setting = Settings.objects.get(id=1)
     return render(request,"settings.html", {'activated':info_setting.activate, 'proj_act':info_setting.forms})
+
+
+def manage_student(std1_id, std_name, p_semester, new_proj):
+    if Student.objects.filter(student_name=std_name).exists():
+        if p_semester == '1':
+            Student.objects.filter(student_name=std_name).update(proj1_id_id=new_proj.id, \
+            student_id=std1_id, student_name=std_name)
+        else:
+            Student.objects.filter(student_name=std_name).update(proj2_id_id=new_proj.id, \
+            student_id=std1_id, student_name=std_name)
+    else:
+        if p_semester == '1':
+            new_std = Student(proj1_id_id=new_proj.id, proj2_id_id='', student_id=std1_id, student_name=std_name)
+            new_std.save()
+        else:
+            new_std = Student(proj1_id_id='', proj2_id_id=new_proj.id, student_id=std1_id, student_name=std_name)
+            new_std.save()
+
+def del_projs(del_semester):
+    projs = Project.objects.filter(proj_years=this_year(), proj_semester=del_semester)
+    for proj in projs:
+        Student.objects.filter(proj1_id_id=proj.id).update(proj1_id_id=None)
+        Student.objects.filter(proj2_id_id=proj.id).update(proj2_id_id=None)
+    
+    Student.objects.filter(proj1_id_id=None).filter(proj2_id_id=None).delete()
+    Project.objects.filter(proj_years=this_year(), proj_semester=del_semester).delete()
+
+    return True
+
+def import_student(data_std, semester, proj_form):
+    std_id = data_std.get('student_id')
+    std_name = data_std.get('student_name')
+    if Student.objects.filter(student_id=std_id).exists():
+        if semester == '1':
+            Student.objects.filter(student_id=std_id).update(proj1_id_id=proj_form.id)
+        else:
+            Student.objects.filter(student_id=std_id).update(proj2_id_id=proj_form.id)
+    else:
+        if semester == '1':
+            std = Student(proj1_id_id=proj_form.id, proj2_id_id=None, student_id=std_id, student_name=std_name)
+            std.save()
+        else:
+            std = Student(proj1_id_id=None, proj2_id_id=proj_form.id, student_id=std_id, student_name=std_name)
+            std.save()
+
+def import_projs(request, csv_file, add_semester):
+    # if not GET, then proceed
+    try:
+        if Project.objects.filter(proj_years=this_year(), proj_semester=add_semester).exists():
+            Project.objects.filter(proj_years=this_year(), proj_semester=add_semester).delete()
+        
+        if not csv_file.name.endswith('.csv'):
+            messages.error(request,'File is not CSV type')
+            return HttpResponseRedirect(reverse("manage_proj"))
+        #if file is too large, return
+        if csv_file.multiple_chunks():
+            messages.error(request,"Uploaded file is too big (%.2f MB)." % (csv_file.size/(1000*1000),))
+            return HttpResponseRedirect(reverse("manage_proj"))
+        
+        file_data = csv_file.read().decode('UTF-8')
+ 
+        lines = file_data.splitlines()
+        #loop over the lines and save them in db. If error , store as string and then display
+        start = False
+        for line in lines:                        
+            fields = line.split(",")
+            data_dict = {}
+            data_std1, data_std2 = {}, {}
+            print(fields)
+            if fields[0] == '1':
+                start = True
+            if start:
+                data_dict["proj_years"] = this_year()
+                data_dict["proj_semester"] = add_semester
+                data_dict["proj_name_th"] = fields[1]
+                data_dict["proj_name_en"] = fields[2]
+                data_dict["proj_major"] = fields[9]
+                data_dict["proj_advisor"] = fields[7]
+                if '-' in fields[8] and len(fields[8]) <= 3:
+                    fields[8] = ''
+                data_dict["proj_co_advisor"] = fields[8]
+
+                data_std1["student_id"] = fields[3]
+                data_std1["student_name"] = fields[4]
+
+                if '-' in fields[5] and len(fields[5]) <= 3:
+                    fields[5] = ''
+                    fields[6] = ''
+                data_std2["student_id"] = fields[5]
+                data_std2["student_name"] = fields[6]
+                try:
+                    form = ProjectForm(data_dict)
+                    if form.is_valid():
+                        proj = form.save()
+                        form.save()
+                        import_student(data_std1, add_semester, proj)
+                        import_student(data_std2, add_semester, proj)
+                except Exception as e:
+                    logging.getLogger("error_logger").error(form.errors.as_json())
+                    pass
+ 
+    except Exception as e:
+        logging.getLogger("error_logger").error("Unable to upload file. "+repr(e))
+        messages.error(request,"Unable to upload file. "+repr(e))
+        return False
+ 
+    return True
 
 @login_required(login_url="login/")
 def manage_proj(request):
@@ -88,25 +202,73 @@ def manage_proj(request):
         n_t = request.POST.get("t_name", None)
         n_cot = request.POST.get("cot_name", None)
 
+        std1_id = request.POST.get("std1_id", None)
+        pre_std1 = request.POST.get("std1_pre_name", None)
+        std1_fname = request.POST.get("std1_fname", None)
+        std1_lname = request.POST.get("std1_lname", None)
+
+        std2_id = request.POST.get("std2_id", None)
+        pre_std2 = request.POST.get("std2_pre_name", None)
+        std2_fname = request.POST.get("std2_fname", None)
+        std2_lname = request.POST.get("std2_lname", None)
+
         proj_d = request.POST.get("project_del", None)
         proj_e = request.POST.get("project_edit", None)
 
-        chk = True
+        del_semester = request.POST.get("del_semester", None)
+        add_semester = request.POST.get("add_semester", None)
 
-        if type(np_th) is type(None) or type(np_en) is type(None) or type(p_year) is type(None) or type(p_semester) is type(None)\
-            or type(p_major) is type(None) or type(n_t) is type(None):
-            chk = False
+        try:
+            csv_file = request.FILES["csv_file"]
+        except Exception:
+            pass
+
+        if not type(del_semester) is type(None):
+            if del_projs(del_semester):
+               return HttpResponseRedirect(reverse('manage_proj'))
+
+
+        if not type(add_semester) is type(None) and not type(csv_file) is type(None):
+           if import_projs(request, csv_file, add_semester):
+               return HttpResponseRedirect(reverse('upload_projs'))
+
+        chk = True
+        lis_chk = [np_th, np_en, p_year, p_semester, p_major, n_t, std1_id, pre_std1, std1_fname, std1_lname]
+
+        for i in lis_chk:
+            if type(i) is type(None):
+                chk = False
+                break
+
+        # if type(np_th) is type(None) or type(np_en) is type(None) or type(p_year) is type(None) or type(p_semester) is type(None)\
+        #     or type(p_major) is type(None) or type(n_t) is type(None):
+        #     chk = False
 
         if chk:
             if type(n_cot) is type(None):
                 n_cot = ''
+            if type(std1_id) is type(None) or type(pre_std2) is type(None) or type(std2_fname) is type(None):
+                pre_std2 = ''
+                std2_fname = ''
+                std2_lname = ''
+                std1_id = ''
+            if type(std2_lname) is type(None):
+                std2_lname = ''
+
             if Project.objects.filter(proj_name_th=np_th).exists():
                 Project.objects.filter(proj_name_th=np_th).update(proj_years=p_year, proj_semester=p_semester,\
                  proj_name_th=np_th, proj_name_en=np_en, proj_major=p_major, proj_advisor=n_t, proj_co_advisor=n_cot)
+            
             else:
                 new_proj = Project(proj_years=p_year, proj_semester=p_semester, proj_name_th=np_th, proj_name_en=np_en,\
                                 proj_major=p_major, proj_advisor=n_t, proj_co_advisor=n_cot)
                 new_proj.save()
+
+                std1_nstr = pre_std1+std1_fname+' '+std1_lname
+                std2_nstr = pre_std2+std2_fname+' '+std2_lname
+                manage_student(std1_id, std1_nstr, p_semester, new_proj)
+                manage_student(std2_id, std2_nstr, p_semester, new_proj)
+
             return HttpResponseRedirect(reverse("manage_proj"))
         
         if type(proj_d) is not type(None):
@@ -180,7 +342,7 @@ def result_sem1(request):
     lis_stu = []
 
     for num in range(len(project)):
-        stu = Student.objects.filter(proj_id_id=project[num].id)
+        stu = Student.objects.filter(proj1_id_id=project[num].id)
 
         # calculate score project 60%
         test = ScoreProj.objects.annotate(result_scoreproj = ((F('presentation')+F('presentation_media')+F('question'))*90/100) + \
