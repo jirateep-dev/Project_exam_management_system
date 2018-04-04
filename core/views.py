@@ -182,7 +182,7 @@ def manage_proj(request):
             for i in projs:
                 list_projs.append([i.proj_years, i.proj_semester, i.proj_name_th, i.proj_name_en, i.proj_major, i.proj_advisor, i.proj_co_advisor, \
                 format_html("<button name="'"project_edit"'" type="'"submit"'" class="'"btn btn-warning"'" \
-                form="'"manage_proj"'" value=""'"+i.proj_name_th+"'""><h4 style="'"font-size: 1.7em;"'">แก้ไข</h4></button>")])
+                form="'"manage_proj"'" value=""'"+str(i.proj_semester)+i.proj_name_th+"'""><h4 style="'"font-size: 1.7em;"'">แก้ไข</h4></button>")])
             return render(request, "manage_proj.html", {"col_result":LIST_COL_PROJ[:col_proj], "list_proj":list_projs})
             # return render(request, "mproj_edit.html", {'proj':projs})
         if mproj == "mproj_del":
@@ -191,7 +191,7 @@ def manage_proj(request):
             for i in projs:
                 list_projs.append([i.proj_years, i.proj_semester, i.proj_name_th, i.proj_name_en, i.proj_major, i.proj_advisor, i.proj_co_advisor, \
                 format_html("<button type="'"button"'"  class="'"open-Dialog btn btn-danger"'" data-toggle="'"modal"'" data-target="'"#del_modal"'"\
-                data-id=""'"+i.proj_name_th+"'""><h4 style="'"font-size: 1.7em;"'">ลบ</h4></button>")])
+                data-id=""'"+str(i.proj_semester)+i.proj_name_th+"'""><h4 style="'"font-size: 1.7em;"'">ลบ</h4></button>")])
             return render(request, "manage_proj.html", {"col_result":LIST_COL_PROJ[:col_proj], "list_proj":list_projs})
 
         np_th = request.POST.get("proj_name_th", None)
@@ -272,11 +272,23 @@ def manage_proj(request):
             return HttpResponseRedirect(reverse("manage_proj"))
         
         if type(proj_d) is not type(None):
-            Project.objects.filter(proj_name_th=proj_d).delete()
+            proj_del = Project.objects.filter(proj_semester=proj_d[0], proj_name_th=proj_d[1:])
+
+            if proj_d[0] == '1':
+                Student.objects.filter(proj1_id_id=proj_del[0].id).update(proj1_id_id=None)
+            else:
+                Student.objects.filter(proj2_id_id=proj_del[0].id).update(proj2_id_id=None)
+            Student.objects.filter(proj1_id_id=None).filter(proj2_id_id=None).delete()
+            proj_del.delete()
             return HttpResponseRedirect(reverse("manage_proj"))
         
         if type(proj_e) is not type(None):
-            pedit_selected = Project.objects.get(proj_name_th=proj_e)
+            pedit_selected = Project.objects.get(proj_semester=proj_e[0], proj_name_th=proj_e[1:])
+            # if proj_e[0] == 1:
+            #     stds = Student.objects.filter(proj1_id_id=pedit_selected.id)
+            # else:
+            #     stds = Student.objects.filter(proj2_id_id=pedit_selected.id)
+            
             return render(request, "mproj_edit2.html", {'proj':pedit_selected, 'teachers':teacher, 'majors':majors})
     
 

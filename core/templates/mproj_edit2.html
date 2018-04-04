@@ -14,6 +14,54 @@
                     
                     <label>ชื่อโครงงานภาษาอังกฤษ</label><input type="text" class="form-control" style="font-size: 2em"\
                     name="proj_name_en" id="eng" placeholder="เฉพาะตัวอักษรภาษาอังกฤษ" required value="{{proj.proj_name_en}}">
+
+                    <label>ชื่อนักศึกษาคนที่ 1</label>
+                    <div class="container">
+                        <div class='col-md-2'>
+                            <input type="text" class="form-control" \
+                            name="std1_id" id="th" placeholder="รหัสนักศึกษา" required style="font-size: 1.7em">
+                        </div>
+                        <div class='col-md-2'>
+                            <select class="form-control" class="select" style="width: 100%;height: 100%;" name="std1_pre_name">
+                                <option selected="selected" disabled hidden style="font-size: 2em">คำนำหน้า</option>
+                                <option value="นาย" style="font-size: 2em">นาย</option>
+                                <option value="นาง" style="font-size: 2em">นาง</option>
+                                <option value="นางสาว" style="font-size: 2em">นางสาว</option>
+                            </select>
+                        </div>
+                        <div class='col-md-4'>
+                            <input type="text" class="form-control" \
+                            name="std1_fname" id="th" placeholder="ชื่อ" required style="font-size: 1.7em">
+                        </div>
+                        <div class='col-md-4'>
+                            <input type="text" class="form-control" \
+                            name="std1_lname" id="th" placeholder="นามสกุล" required style="font-size: 1.7em">
+                        </div>
+                    </div>
+                    <label>ชื่อนักศึกษาคนที่ 2 (ถ้ามี)</label>
+                    <div class="container">
+                        <div class='col-md-2'>
+                            <input type="text" class="form-control" \
+                            name="std2_id" id="th" placeholder="รหัสนักศึกษา" required style="font-size: 1.7em">
+                        </div>
+                        <div class='col-md-2'>
+                            <select class="form-control" class="select" style="width: 100%;height: 100%;" name="std2_pre_name">
+                                <option selected="selected" disabled hidden style="font-size: 2em">คำนำหน้า</option>
+                                <option value="นาย" style="font-size: 2em">นาย</option>
+                                <option value="นาง" style="font-size: 2em">นาง</option>
+                                <option value="นางสาว" style="font-size: 2em">นางสาว</option>
+                            </select>
+                        </div>
+                        <div class='col-md-4'>
+                            <input type="text" class="form-control" \
+                            name="std2_fname" id="th" placeholder="ชื่อ" required style="font-size: 1.7em">
+                        </div>
+                        <div class='col-md-4'>
+                            <input type="text" class="form-control" \
+                            name="std2_lname" id="th" placeholder="นามสกุล" required style="font-size: 1.7em">
+                        </div>
+                    </div>
+                    
                     <div class="container">
                         <div class='col-md-6'>
                             <label>ปีการศึกษา : </label><input type="number" class="form-control" name="proj_year" \

@@ -66,7 +66,7 @@ def export_csv(request):
         response['content_type'] = 'application/schedule_room'
         response['Content-Disposition'] = 'attachment;filename=schedule_room.csv'
         return response
-    # render(request,"manage.html")
+
     return HttpResponseRedirect(reverse("manage"))
 
 def upload_csv(request):
