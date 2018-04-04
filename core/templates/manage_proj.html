@@ -107,14 +107,26 @@
                         {% csrf_token %}
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h1 class="modal-title">อัพโหลดรายชื่อโปรเจค</h1>
+                            <h1 class="modal-title">อัพโหลดรายการโปรเจค</h1>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="name" class="col-md-3 col-sm-3 col-xs-12 control-label">ไฟล์: </label>
-                                <div class="col-md-8">
-                                    <input type="file" name="csv_file" id="csv_file" required="True" class="form-control">
-                                </div>                    
+                                <div class="row">
+                                <label for="name" class="col-md-3 control-label">เลือกเทอม: </label>
+                                <div class="col-md-9">
+                                    <select class="form-control" class="select" style="width: 30%;height: 100%;margin-top: 3%;" name="add_semester">
+                                        <option selected="selected" disabled hidden style="font-size: 2em">เทอม</option>
+                                        <option value="1" style="font-size: 2em">1</option>
+                                        <option value="2" style="font-size: 2em">2</option>
+                                    </select>
+                                </div>
+                                </div>
+                                <div class="row">
+                                    <label for="name" class="col-md-3 control-label">ไฟล์: </label>
+                                    <div class="col-md-8"  style="margin-top: 2%;">
+                                        <input type="file" name="csv_file" id="csv_file" required="True" class="form-control">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">

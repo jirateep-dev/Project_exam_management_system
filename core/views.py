@@ -8,6 +8,8 @@ from django.db.models import Avg
 from django.db.models import F
 from django.shortcuts import redirect
 from django.utils.html import format_html
+from django.contrib import messages
+from .forms import *
 import logging
 
 log = logging.getLogger('django.db.backends')
@@ -54,23 +56,6 @@ def settings(request):
         User.objects.filter(is_staff=0).update(is_active=num_on_off)
     info_setting = Settings.objects.get(id=1)
     return render(request,"settings.html", {'activated':info_setting.activate, 'proj_act':info_setting.forms})
-
-
-def manage_student(std1_id, std_name, p_semester, new_proj):
-    if Student.objects.filter(student_name=std_name).exists():
-        if p_semester == '1':
-            Student.objects.filter(student_name=std_name).update(proj1_id_id=new_proj.id, \
-            student_id=std1_id, student_name=std_name)
-        else:
-            Student.objects.filter(student_name=std_name).update(proj2_id_id=new_proj.id, \
-            student_id=std1_id, student_name=std_name)
-    else:
-        if p_semester == '1':
-            new_std = Student(proj1_id_id=new_proj.id, proj2_id_id='', student_id=std1_id, student_name=std_name)
-            new_std.save()
-        else:
-            new_std = Student(proj1_id_id='', proj2_id_id=new_proj.id, student_id=std1_id, student_name=std_name)
-            new_std.save()
 
 @login_required(login_url="login/")
 def manage_proj(request):
@@ -123,6 +108,23 @@ def manage_proj(request):
 
         proj_d = request.POST.get("project_del", None)
         proj_e = request.POST.get("project_edit", None)
+
+        del_semester = request.POST.get("del_semester", None)
+        add_semester = request.POST.get("add_semester", None)
+
+        try:
+            csv_file = request.FILES["csv_file"]
+        except Exception:
+            pass
+
+        if not type(del_semester) is type(None):
+            if del_projs(del_semester):
+               return HttpResponseRedirect(reverse('manage_proj'))
+
+
+        if not type(add_semester) is type(None) and not type(csv_file) is type(None):
+           if import_projs(request, csv_file, add_semester):
+               return HttpResponseRedirect(reverse('upload_projs'))
 
         chk = True
         lis_chk = [np_th, np_en, p_year, p_semester, p_major, n_t, std1_id, pre_std1, std1_fname, std1_lname]

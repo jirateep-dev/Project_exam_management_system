@@ -61,7 +61,6 @@ class ScheduleRoom(models.Model):
 
 class Project(models.Model):
     schedule_id = models.ForeignKey(ScheduleRoom, on_delete=models.SET_NULL, null=True)
-    # schedule_id = models.OneToOneField(ScheduleRoom, on_delete=models.CASCADE, blank=True, null=True)
     proj_years = models.IntegerField(default=0)
     proj_semester = models.IntegerField(default=1)
     proj_name_th = models.CharField(max_length=1024)
