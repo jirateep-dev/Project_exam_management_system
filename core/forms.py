@@ -1,11 +1,15 @@
-# #core/forms.py
-# from django.contrib.auth.forms import AuthenticationForm 
-# from django import forms
+from django import forms
+from database_management.models import Project, Student
 
-# # If you don't do this you cannot use Bootstrap CSS
-# class LoginForm(AuthenticationForm):
-#     username = forms.CharField(label="Username", max_length=30, 
-#                                widget=forms.TextInput(attrs={'class': 'form-control', 'name': 'username'}))
-#     password = forms.CharField(label="Password", max_length=30, 
-#                                widget=forms.TextInput(attrs={'class': 'form-control', 'name': 'password'}))
+class ProjectForm(forms.ModelForm):
+    proj_co_advisor = forms.CharField(max_length=1024, required=False)
+    class Meta:
+        model = Project
+        fields = ('proj_years', 'proj_semester', 'proj_name_th', 'proj_name_en', 'proj_major','proj_advisor', 'proj_co_advisor',)
 
+class StudentForm(forms.ModelForm):
+    proj1_id = forms.CharField(max_length=1024, required=False)
+    proj2_id = forms.CharField(max_length=1024, required=False)
+    class Meta:
+        model = Student
+        fields = ('proj1_id', 'proj2_id', 'student_id', 'student_name',)
