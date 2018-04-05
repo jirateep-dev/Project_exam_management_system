@@ -97,14 +97,15 @@ def upload_csv(request):
             
             data_dict = {}
             dict_date = {}
-            if room.filter(room_name=fields[1]).exists() and time.filter(time_exam=fields[2]).exists() and proj.filter(proj_name_th=fields[3]).exists() and\
+            if room.filter(room_name=fields[1]).exists() and time.filter(time_exam=fields[2]).exists() and \
+                proj.filter(proj_name_th=fields[3], proj_semester=1).exists() and\
                 teachers.filter(teacher_name=fields[9]).exists() and teachers.filter(teacher_name=fields[10]).exists() and \
                 teachers.filter(teacher_name=fields[11]).exists() and teachers.filter(teacher_name=fields[12]).exists():
 
                 data_dict["date_id"] = fields[0].replace('/', '')+"0"+str(room.get(room_name=fields[1]).id)
                 data_dict["room_id"] = str(room.get(room_name=fields[1]).id)
                 data_dict["time_id"] = str(time.get(time_exam=fields[2]).id)
-                data_dict["proj_id"] = str(proj.get(proj_name_th=fields[3]).id)
+                data_dict["proj_id"] = str(proj.get(proj_name_th=fields[3], proj_semester=1).id)
                 data_dict["teacher_group"] = fields[8]
                 
                 lis_id_teacher = [teachers.get(teacher_name=fields[9]).id, teachers.get(teacher_name=fields[10]).id, \
@@ -135,7 +136,7 @@ def upload_csv(request):
                         teacher = Teacher.objects.get(id=id_t)
                         teacher.schedule_teacher.add(sche)
                         teacher.save()
-                    proj.filter(proj_name_th=fields[3]).update(schedule_id_id=sche.id)
+                    proj.filter(proj_name_th=fields[3], proj_semester=1).update(schedule_id_id=sche.id)
                 else:
                     logging.getLogger("error_logger").error(form.errors.as_json())                                                
             except Exception as e:
@@ -182,7 +183,7 @@ def manageTeacher(major_id, date_input, period_input):
 
 def count_proj(major):
     # form_setting = Settings.objects.get(id=1).forms
-    return len(Project.objects.filter(proj_years=this_year(), schedule_id_id=None, proj_major=major))
+    return len(Project.objects.filter(proj_years=this_year(), proj_semester=1, schedule_id_id=None, proj_major=major))
 
 def prepare_render():
     result = []
