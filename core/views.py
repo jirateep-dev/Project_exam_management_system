@@ -386,7 +386,7 @@ def result_sem1(request):
 def detail_score(request):
     if request.method == 'POST':
         proj_name = request.POST.get("detail", None)
-        proj = Project.objects.get(proj_name_th=proj_name)
+        proj = Project.objects.get(proj_name_th=proj_name, proj_semester=1)
         teacher = Teacher.objects.all()
         lis_result = []
         lis_result2 = []
