@@ -56,22 +56,26 @@ def settings(request):
     info_setting = Settings.objects.get(id=1)
     return render(request,"settings.html", {'activated':info_setting.activate, 'proj_act':info_setting.forms})
 
-
-def manage_student(std1_id, std_name, p_semester, new_proj):
-    if Student.objects.filter(student_name=std_name).exists():
+def manage_student(std_dic, p_semester, proj):
+    if Student.objects.filter(id=std_dic['pk']).exists():
         if p_semester == '1':
-            Student.objects.filter(student_name=std_name).update(proj1_id_id=new_proj.id, \
-            student_id=std1_id, student_name=std_name)
+            Student.objects.filter(id=std_dic['pk']).update(proj1_id_id=proj.id, \
+            student_id=std_dic['std_id'], student_name=std_dic['name'])
+            if Student.objects.get(id=std_dic['pk']).proj1_id_id == Student.objects.get(id=std_dic['pk']).proj2_id_id:
+                Student.objects.filter(id=std_dic['pk']).update(proj2_id_id=None)
         else:
-            Student.objects.filter(student_name=std_name).update(proj2_id_id=new_proj.id, \
-            student_id=std1_id, student_name=std_name)
+            Student.objects.filter(id=std_dic['pk']).update(proj2_id_id=proj.id, \
+            student_id=std_dic['std_id'], student_name=std_dic['name'])
+            if Student.objects.get(id=std_dic['pk']).proj1_id_id == Student.objects.get(id=std_dic['pk']).proj2_id_id:
+                Student.objects.filter(id=std_dic['pk']).update(proj1_id_id=None)
     else:
         if p_semester == '1':
-            new_std = Student(proj1_id_id=new_proj.id, proj2_id_id='', student_id=std1_id, student_name=std_name)
+            new_std = Student(proj1_id_id=proj.id, proj2_id_id='', student_id=std_dic['std_id'], student_name=std_dic['name'])
             new_std.save()
         else:
-            new_std = Student(proj1_id_id='', proj2_id_id=new_proj.id, student_id=std1_id, student_name=std_name)
+            new_std = Student(proj1_id_id='', proj2_id_id=proj.id, student_id=std_dic['std_id'], student_name=std_dic['name'])
             new_std.save()
+
 
 def del_projs(del_semester):
     projs = Project.objects.filter(proj_years=this_year(), proj_semester=del_semester)
@@ -124,7 +128,7 @@ def import_projs(request, csv_file, add_semester):
             data_dict = {}
             data_std1, data_std2 = {}, {}
             print(fields)
-            if fields[0] == '1':
+            if fields[0].isdigit():
                 start = True
             if start:
                 data_dict["proj_years"] = this_year()
@@ -183,6 +187,7 @@ def manage_proj(request):
                 list_projs.append([i.proj_years, i.proj_semester, i.proj_name_th, i.proj_name_en, i.proj_major, i.proj_advisor, i.proj_co_advisor, \
                 format_html("<button name="'"project_edit"'" type="'"submit"'" class="'"btn btn-warning"'" \
                 form="'"manage_proj"'" value=""'"+str(i.proj_semester)+i.proj_name_th+"'""><h4 style="'"font-size: 1.7em;"'">แก้ไข</h4></button>")])
+            
             return render(request, "manage_proj.html", {"col_result":LIST_COL_PROJ[:col_proj], "list_proj":list_projs})
             # return render(request, "mproj_edit.html", {'proj':projs})
         if mproj == "mproj_del":
@@ -194,6 +199,7 @@ def manage_proj(request):
                 data-id=""'"+str(i.proj_semester)+i.proj_name_th+"'""><h4 style="'"font-size: 1.7em;"'">ลบ</h4></button>")])
             return render(request, "manage_proj.html", {"col_result":LIST_COL_PROJ[:col_proj], "list_proj":list_projs})
 
+        pj_pk = request.POST.get('proj_pk', None)
         np_th = request.POST.get("proj_name_th", None)
         np_en = request.POST.get("proj_name_en", None)
         p_year = request.POST.get("proj_year", None)
@@ -202,11 +208,13 @@ def manage_proj(request):
         n_t = request.POST.get("t_name", None)
         n_cot = request.POST.get("cot_name", None)
 
+        std1_pk = request.POST.get("std1_pk", None)
         std1_id = request.POST.get("std1_id", None)
         pre_std1 = request.POST.get("std1_pre_name", None)
         std1_fname = request.POST.get("std1_fname", None)
         std1_lname = request.POST.get("std1_lname", None)
 
+        std2_pk = request.POST.get("std2_pk", None)
         std2_id = request.POST.get("std2_id", None)
         pre_std2 = request.POST.get("std2_pre_name", None)
         std2_fname = request.POST.get("std2_fname", None)
@@ -240,24 +248,28 @@ def manage_proj(request):
                 chk = False
                 break
 
-        # if type(np_th) is type(None) or type(np_en) is type(None) or type(p_year) is type(None) or type(p_semester) is type(None)\
-        #     or type(p_major) is type(None) or type(n_t) is type(None):
-        #     chk = False
-
         if chk:
             if type(n_cot) is type(None):
                 n_cot = ''
-            if type(std1_id) is type(None) or type(pre_std2) is type(None) or type(std2_fname) is type(None):
+            if type(std2_id) is type(None) or type(pre_std2) is type(None) or type(std2_fname) is type(None):
                 pre_std2 = ''
                 std2_fname = ''
                 std2_lname = ''
-                std1_id = ''
+                std2_id = ''
             if type(std2_lname) is type(None):
                 std2_lname = ''
 
-            if Project.objects.filter(proj_name_th=np_th).exists():
-                Project.objects.filter(proj_name_th=np_th).update(proj_years=p_year, proj_semester=p_semester,\
+            if Project.objects.filter(id=pj_pk).exists():
+                Project.objects.filter(id=pj_pk).update(proj_years=p_year, proj_semester=p_semester,\
                  proj_name_th=np_th, proj_name_en=np_en, proj_major=p_major, proj_advisor=n_t, proj_co_advisor=n_cot)
+
+                get_proj = Project.objects.get(id=pj_pk)
+                std1_nstr = pre_std1+std1_fname+' '+std1_lname
+                std2_nstr = pre_std2+std2_fname+' '+std2_lname
+                std_dic = {'std1':{'pk':std1_pk, 'std_id':std1_id, 'name':std1_nstr}, \
+                'std2':{'pk':std2_pk, 'std_id':std2_id, 'name':std2_nstr}}
+                manage_student(std_dic['std1'], p_semester, get_proj)
+                manage_student(std_dic['std2'], p_semester, get_proj)
             
             else:
                 new_proj = Project(proj_years=p_year, proj_semester=p_semester, proj_name_th=np_th, proj_name_en=np_en,\
@@ -266,8 +278,10 @@ def manage_proj(request):
 
                 std1_nstr = pre_std1+std1_fname+' '+std1_lname
                 std2_nstr = pre_std2+std2_fname+' '+std2_lname
-                manage_student(std1_id, std1_nstr, p_semester, new_proj)
-                manage_student(std2_id, std2_nstr, p_semester, new_proj)
+                std_dic = {'std1':{'pk':std1_pk, 'std_id':std1_id, 'name':std1_nstr}, \
+                'std2':{'pk':std2_pk, 'std_id':std2_id, 'name':std2_nstr}}
+                manage_student(std_dic['std1'], p_semester, new_proj)
+                manage_student(std_dic['std2'], p_semester, new_proj)
 
             return HttpResponseRedirect(reverse("manage_proj"))
         
@@ -284,12 +298,39 @@ def manage_proj(request):
         
         if type(proj_e) is not type(None):
             pedit_selected = Project.objects.get(proj_semester=proj_e[0], proj_name_th=proj_e[1:])
-            # if proj_e[0] == 1:
-            #     stds = Student.objects.filter(proj1_id_id=pedit_selected.id)
-            # else:
-            #     stds = Student.objects.filter(proj2_id_id=pedit_selected.id)
+            if int(proj_e[0]) == 1:
+                stds = Student.objects.filter(proj1_id_id=pedit_selected.id)
+            else:
+                stds = Student.objects.filter(proj2_id_id=pedit_selected.id)
             
-            return render(request, "mproj_edit2.html", {'proj':pedit_selected, 'teachers':teacher, 'majors':majors})
+            stds1 = stds[0]
+            students = {}
+            name_s1 = stds1.student_name.split(" ")
+
+            if name_s1[0][:6] == 'นางสาว':
+                pre1 = 'นางสาว'
+                fname1 = name_s1[0][6:]
+            else:
+                pre1 = name_s1[0][:3]
+                fname1 = name_s1[0][3:]
+            lname1 = name_s1[1]
+            students['std1'] = {'id':stds1.id, 'std_id':stds1.student_id, 'pre':pre1, 'fname':fname1, 'lname':lname1}
+
+            if len(stds) == 2:
+                stds2 = stds[1]
+                name_s2 = stds2.student_name.split(" ")
+
+                if name_s2[0][:6] == 'นางสาว':
+                    pre2 = 'นางสาว'
+                    fname2 = name_s2[0][6:]
+                else:
+                    pre2 = name_s2[0][:3]
+                    fname2 = name_s2[0][3:]
+                lname2 = name_s2[1]
+                students['std2'] = {'id':stds2.id, 'std_id':stds2.student_id, 'pre':pre2, 'fname':fname2, 'lname':lname2}
+            
+            return render(request, "mproj_edit2.html", {'proj':pedit_selected, 'teachers':teacher, 'majors':majors, \
+            'students':students})
     
 
     return render(request, "manage_proj.html", {"col_result":LIST_COL_PROJ[:col_proj], "list_proj":list_projs})

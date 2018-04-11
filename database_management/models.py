@@ -48,19 +48,8 @@ class DateExam(models.Model):
     def __str__(self):
         return self.date_exam
 
-class ScheduleRoom(models.Model):
-    room_id = models.ForeignKey(Room, on_delete=models.CASCADE)
-    date_id = models.ForeignKey(DateExam, on_delete=models.CASCADE, null=True)
-    time_id = models.ForeignKey(TimeExam, on_delete=models.CASCADE, null=True)
-    proj_id = models.IntegerField(default=0)
-    teacher_group = models.IntegerField(default=0)
-    objects = models.Manager()
-
-    class Meta:
-        verbose_name_plural = 'ตารางกำหนดการ'
-
 class Project(models.Model):
-    schedule_id = models.ForeignKey(ScheduleRoom, on_delete=models.SET_NULL, null=True)
+    schedule_id = models.IntegerField(blank=True, null=True)
     proj_years = models.IntegerField(default=0)
     proj_semester = models.IntegerField(default=1)
     proj_name_th = models.CharField(max_length=1024)
@@ -75,7 +64,18 @@ class Project(models.Model):
 
     def __str__(self):
         return self.proj_name_th
-        
+
+class ScheduleRoom(models.Model):
+    room_id = models.ForeignKey(Room, on_delete=models.CASCADE)
+    date_id = models.ForeignKey(DateExam, on_delete=models.CASCADE, null=True)
+    time_id = models.ForeignKey(TimeExam, on_delete=models.CASCADE, null=True)
+    proj_id = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
+    teacher_group = models.IntegerField(default=0)
+    objects = models.Manager()
+
+    class Meta:
+        verbose_name_plural = 'ตารางกำหนดการ'
+
 class ScoreProj(models.Model):
     proj_id = models.ForeignKey(Project, on_delete=models.CASCADE)
     presentation = models.IntegerField(default=0)
@@ -142,8 +142,8 @@ class Teacher(models.Model):
 class Student(models.Model):
     proj1_id = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, related_name='+')
     proj2_id = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, related_name='+')
-    student_id = models.IntegerField(default=0)
-    student_name = models.CharField(max_length=1024)
+    student_id = models.CharField(max_length=1024)
+    student_name = models.CharField(max_length=1024, default='')
     objects = models.Manager()
 
     class Meta:

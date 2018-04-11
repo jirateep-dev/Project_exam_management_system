@@ -14,52 +14,55 @@
                     
                     <label>ชื่อโครงงานภาษาอังกฤษ</label><input type="text" class="form-control" style="font-size: 2em"\
                     name="proj_name_en" id="eng" placeholder="เฉพาะตัวอักษรภาษาอังกฤษ" required value="{{proj.proj_name_en}}">
+                    <input type="hidden" name="proj_pk" value="{{proj.id}}">
 
                     <label>ชื่อนักศึกษาคนที่ 1</label>
                     <div class="container">
                         <div class='col-md-2'>
-                            <input type="text" class="form-control" \
+                            <input type="text" class="form-control" value="{{students.std1.std_id}}" \
                             name="std1_id" id="th" placeholder="รหัสนักศึกษา" required style="font-size: 1.7em">
                         </div>
                         <div class='col-md-2'>
                             <select class="form-control" class="select" style="width: 100%;height: 100%;" name="std1_pre_name">
-                                <option selected="selected" disabled hidden style="font-size: 2em">คำนำหน้า</option>
+                                <option value="{{students.std1.pre}}" selected="selected" hidden style="font-size: 2em">{{students.std1.pre}}</option>
                                 <option value="นาย" style="font-size: 2em">นาย</option>
                                 <option value="นาง" style="font-size: 2em">นาง</option>
                                 <option value="นางสาว" style="font-size: 2em">นางสาว</option>
                             </select>
                         </div>
                         <div class='col-md-4'>
-                            <input type="text" class="form-control" \
+                            <input type="text" class="form-control" value="{{students.std1.fname}}" \
                             name="std1_fname" id="th" placeholder="ชื่อ" required style="font-size: 1.7em">
                         </div>
                         <div class='col-md-4'>
-                            <input type="text" class="form-control" \
+                            <input type="text" class="form-control" value="{{students.std1.lname}}" \
                             name="std1_lname" id="th" placeholder="นามสกุล" required style="font-size: 1.7em">
                         </div>
+                        <input type="hidden" name="std1_pk" value="{{students.std1.id}}">
                     </div>
                     <label>ชื่อนักศึกษาคนที่ 2 (ถ้ามี)</label>
                     <div class="container">
                         <div class='col-md-2'>
-                            <input type="text" class="form-control" \
-                            name="std2_id" id="th" placeholder="รหัสนักศึกษา" required style="font-size: 1.7em">
+                            <input type="text" class="form-control" value="{{students.std2.std_id}}" \
+                            name="std2_id" id="th" placeholder="รหัสนักศึกษา" style="font-size: 1.7em">
                         </div>
                         <div class='col-md-2'>
                             <select class="form-control" class="select" style="width: 100%;height: 100%;" name="std2_pre_name">
-                                <option selected="selected" disabled hidden style="font-size: 2em">คำนำหน้า</option>
+                                <option value="{{students.std2.pre}}" selected="selected" hidden style="font-size: 2em">{{students.std2.pre}}</option>
                                 <option value="นาย" style="font-size: 2em">นาย</option>
                                 <option value="นาง" style="font-size: 2em">นาง</option>
                                 <option value="นางสาว" style="font-size: 2em">นางสาว</option>
                             </select>
                         </div>
                         <div class='col-md-4'>
-                            <input type="text" class="form-control" \
-                            name="std2_fname" id="th" placeholder="ชื่อ" required style="font-size: 1.7em">
+                            <input type="text" class="form-control" value="{{students.std2.fname}}" \
+                            name="std2_fname" id="th" placeholder="ชื่อ" style="font-size: 1.7em">
                         </div>
                         <div class='col-md-4'>
-                            <input type="text" class="form-control" \
-                            name="std2_lname" id="th" placeholder="นามสกุล" required style="font-size: 1.7em">
+                            <input type="text" class="form-control" value="{{students.std2.lname}}" \
+                            name="std2_lname" id="th" placeholder="นามสกุล" style="font-size: 1.7em">
                         </div>
+                        <input type="hidden" name="std2_pk" value="{{students.std2.id}}">
                     </div>
                     
                     <div class="container">
