@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 # AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
-AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",'django.contrib.auth.backends.ModelBackend',)
+AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend","django.contrib.auth.backends.ModelBackend",)
 
 # Initiate TLS on connection.
 LDAP_AUTH_USE_TLS = False

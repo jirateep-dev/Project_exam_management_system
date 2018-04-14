@@ -54,7 +54,7 @@ def settings(request):
         Settings.objects.filter(id=1).update(load=load, activate=num_on_off, forms=proj_int)
         User.objects.filter(is_staff=0).update(is_active=num_on_off)
     info_setting = Settings.objects.get(id=1)
-    return render(request,"settings.html", {'activated':info_setting.activate, 'proj_act':info_setting.forms})
+    return render(request,"settings.html", {'activated':info_setting.activate, 'proj_act':info_setting.forms, 'load_proj':info_setting.load})
 
 def manage_student(std_dic, p_semester, proj):
     if Student.objects.filter(id=std_dic['pk']).exists():
@@ -344,7 +344,7 @@ def scoreproj(request):
         teacher_sp = Teacher.objects.get(login_user_id=user_id)
         projs = teacher_sp.schedule_teacher.all()
         for i in range(len(projs)):
-            projid_teacher.append(projs[i].proj_id)
+            projid_teacher.append(projs[i].proj_id_id)
 
     queryset = []
     form_setting = info_setting.forms
