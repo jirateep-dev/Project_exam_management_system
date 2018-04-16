@@ -228,7 +228,24 @@ def manageTeacher(major_id, date_input, period_input):
                     break
                 else:
                     list_teachers.pop(3)
-    
+
+    templis = list(list_teachers)
+    if len(list_teachers) < 3:
+        while True:
+            while len(list_teachers) != 4:
+                tch_ran = Teacher.objects.order_by('?').first()
+                if approve_teacher(tch_ran.teacher_name, date_input, period_input):
+                    list_teachers.append(tch_ran.teacher_name)
+            if len(list_teachers) == 4:
+                sum_lev = 0
+                for name in list_teachers:
+                    split_name = name.split(' ')
+                    last_name = split_name[len(split_name)-1]
+                    sum_lev += Teacher.objects.get(teacher_name__contains=last_name).levels_teacher
+                if (sum_lev/4.0) <= safe_zone['max'] and (sum_lev/4.0) >= safe_zone['min']:
+                    break
+                else:
+                    list_teachers = list(templis)
 
     return list_teachers
 
