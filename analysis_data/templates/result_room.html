@@ -49,23 +49,35 @@
             </div>
         </div>
         <div id="table_teacher" class="panel-collapse collapse in">
-            <table class="table table-hover" >
-                    <thead>
-                        <tr style="font-size: 1.5em">
-                            <th>กลุ่มอาจารย์</th>
-                            <th>รายชื่ออาจารย์</th>
-                            <th>ค่าความเข้มงวด</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for teacher in list_result_teacher %} 
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th><label>SAFE ZONE MIN : </label><label style="margin-left:20px;color: green">{{safezone.min}}</label></th>
+                        <th><label>SAFE ZONE MAX : </label><label style="margin-left:20px;color: red">{{safezone.max}}</label></th>
+                    </tr>
+                    <tr style="font-size: 1.5em">
+                        <th>กลุ่มอาจารย์</th>
+                        <th>รายชื่ออาจารย์</th>
+                        <th>ค่าความเข้มงวด</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for teacher in result_teacher %} 
                         <tr style="font-size: 1.1em">
                             <td class="active">{{teacher.proj_group_exam}}</td>
                             <td class="warning">{{teacher.teacher_name}}</td>
                             <td class="info">{{teacher.levels_teacher}}</td>
                         </tr>
-                        {% endfor %}
-                    </tbody>
+                        {% if teacher.count_group == 4 %}
+                            <tr style="font-size: 1.1em">
+                                <td class="success"></td>
+                                <td class="success">ค่าเฉลี่ยกลุ่ม</td>
+                                <td class="success">{{teacher.avg}}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
             </table>
         </div>
     </div>
