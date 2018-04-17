@@ -30,7 +30,8 @@ def avg(lis):
     return sum(lis) / float(len(lis))
 
 def facet(request):
-    return render(request, 'facet.html', {'teachers':detail_teacher(), 'col_de':col_de})
+    sem = Settings.objects.get(id=1).forms
+    return render(request, 'facet.html', {'teachers':detail_teacher(), 'col_de':col_de, 'proj_act':sem})
 
 def import_script(request):
     files = request.FILES["script_file"]

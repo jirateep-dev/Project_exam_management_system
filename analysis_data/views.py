@@ -360,6 +360,7 @@ def table_room(request):
     result_manage = []
     # query teacher_group
 
+    sem = Settings.objects.get(id=1).forms
     sched_r = ScheduleRoom.objects.all()
     list_group = list(sched_r.values('teacher_group').distinct())
     for i in list_group:
@@ -398,7 +399,8 @@ def table_room(request):
                     'date_exam': date_result, 'proj_name_th': proj_result, 'major_name':major_result, \
                     'time_exam': time_result, 'proj_advisor':advisor_result})
 
-    return render(request,"result_room.html",{'result_teacher': teacher_groups, 'ScheduleRoom': result_manage, 'safezone':level_safezone()})
+    return render(request,"result_room.html",{'result_teacher': teacher_groups, 'ScheduleRoom': result_manage,\
+             'safezone':level_safezone(), 'proj_act':sem})
 
 def admin_required(login_url=None):
     return user_passes_test(lambda u: u.is_superuser, login_url=login_url)
@@ -406,17 +408,17 @@ def admin_required(login_url=None):
 @login_required
 @admin_required(login_url="login/")
 def manage(request):
+    sem = Settings.objects.get(id=1).forms
     try:
         reset_selected = int(request.POST.get('reset_gen',None))
-        sem = Settings.objects.get(id=1).forms
         if reset_selected:
             Project.objects.filter(proj_years=this_year(), proj_semester=sem).update(schedule_id=None)
             DateExam.objects.all().delete()
             # Teacher.objects.all().order_by('proj_group_exam').update(proj_group_exam=0)
         pre = prepare_render()
         return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
-                    'room_period':pre[1]})
+                    'room_period':pre[1], 'proj_act':sem})
     except Exception as error:
         pre = prepare_render()
         return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
-                    'room_period':pre[1]})
+                    'room_period':pre[1], 'proj_act':sem})

@@ -171,6 +171,7 @@ def import_projs(request, csv_file, add_semester):
 def manage_proj(request):
     teacher = Teacher.objects.all()
     majors = Major.objects.all()
+    info_setting = Settings.objects.get(id=1)
     projs = Project.objects.filter(proj_years=this_year())
     col_proj = 7
     list_projs = []
@@ -330,10 +331,11 @@ def manage_proj(request):
                 students['std2'] = {'id':stds2.id, 'std_id':stds2.student_id, 'pre':pre2, 'fname':fname2, 'lname':lname2}
             
             return render(request, "mproj_edit2.html", {'proj':pedit_selected, 'teachers':teacher, 'majors':majors, \
-            'students':students})
+            'students':students, 'proj_act':info_setting.forms})
     
 
-    return render(request, "manage_proj.html", {"col_result":LIST_COL_PROJ[:col_proj], "list_proj":list_projs})
+    return render(request, "manage_proj.html", {"col_result":LIST_COL_PROJ[:col_proj], "list_proj":list_projs, \
+                'proj_act':info_setting.forms})
 
 @login_required(login_url="login/")
 def scoreproj(request):
@@ -358,7 +360,7 @@ def scoreproj(request):
         teacher_sp = Teacher.objects.get(login_user_id=user_id)
         proj_selected = request.POST.get("data_proj", None)
         if type(proj_selected) is not type(None):
-            proj = Project.objects.get(proj_name_th=proj_selected)
+            proj = Project.objects.get(proj_name_th=proj_selected, proj_semester=form_setting)
 
             if teacher_sp.teacher_name == proj.proj_advisor:
                 for i in range(len(LIST_COL_AD)):
@@ -427,7 +429,8 @@ def result_sem1(request):
 def detail_score(request):
     if request.method == 'POST':
         proj_name = request.POST.get("detail", None)
-        proj = Project.objects.get(proj_name_th=proj_name, proj_semester=1)
+        sem = Settings.objects.get(id=1).forms
+        proj = Project.objects.get(proj_name_th=proj_name, proj_semester=sem)
         teacher = Teacher.objects.all()
         lis_result = []
         lis_result2 = []
@@ -445,7 +448,7 @@ def detail_score(request):
 
             
     return render(request, "detail_score.html", {'this_year':this_year(), 'proj_name':proj_name, 'col_de':LIST_COL_DE[0],\
-         'result':lis_result,'col_de2':LIST_COL_DE[1], 'result2':lis_result2})
+         'result':lis_result,'col_de2':LIST_COL_DE[1], 'result2':lis_result2, 'proj_act':sem})
 
 @login_required(login_url="login/")
 def update_scoreproj(request):
@@ -456,7 +459,7 @@ def update_scoreproj(request):
         user_id = request.user.id
         teacher_sp = Teacher.objects.get(login_user_id=user_id)
         proj_selected = request.POST.get("data_proj", None)
-        proj = Project.objects.get(proj_name_th=proj_selected)
+        proj = Project.objects.get(proj_name_th=proj_selected, proj_semester=info_setting.forms)
         form_setting = Settings.objects.get(id=1).forms
         lis_selected = []
         len_lis = 0
