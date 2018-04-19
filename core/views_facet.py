@@ -9,6 +9,11 @@ from django.db.models import Avg, Sum
 from django.db.models import F
 from django.shortcuts import redirect
 from django.utils.html import format_html
+try:
+    from BytesIO import BytesIO
+except ImportError:
+    from io import BytesIO
+from zipfile import ZipFile
 import logging
 import numpy
 import statistics
@@ -196,7 +201,28 @@ def export_script(request):
             str(i.presentation_spo)+','+str(i.question_spo)+','+str(i.media_spo)+','+str(i.quality_spo)+'\r\n')
 
         new_file.close()
+    
+    in_memory = BytesIO()
+    with ZipFile(in_memory, "a") as zip:
 
+        with open('script_scoreproj.txt', 'rb') as script_scoreproj:
+            zip.writestr("script_scoreproj.txt", script_scoreproj.read())
+        with open('script_scorepost.txt', 'rb') as script_scorepost:
+            zip.writestr("script_scorepost.txt", script_scorepost.read())
+        
+        # fix for Linux zip files read in Windows
+        for file in zip.filelist:
+            file.create_system = 0    
+            
+        zip.close()
+
+        response = HttpResponse(content_type="application/x-zip-compressed")
+        response["Content-Disposition"] = "attachment; filename=script.zip"
+        
+        in_memory.seek(0)    
+        response.write(in_memory.read())
+        
+        return response
 
     return HttpResponseRedirect(reverse("facet"))
 

@@ -270,6 +270,7 @@ def prepare_render():
                 proj_id = ScheduleRoom.objects.filter(date_id_id=id_date[j]['id'])
                 lis_major = [Project.objects.get(id=i.proj_id_id).proj_major for i in proj_id]
                 lis = []
+                test_error = Project.objects.filter(id=proj_id[0].proj_id_id)
                 for obj in proj_id:
                     type_proj = Project.objects.get(id=obj.proj_id_id)
                     if type_proj.proj_major+' : '+str(lis_major.count(type_proj.proj_major)) not in lis:
@@ -280,9 +281,9 @@ def prepare_render():
                         period_one[dic_keep[j][0]] = lis
             except Exception as error:
                 if dic_keep[j][1] == 0:
-                    period_zero[dic_keep[j][0]] = 'Error :'+str(error)
+                    period_zero[dic_keep[j][0]] = 'Error'
                 else:
-                    period_one[dic_keep[j][0]] = 'Error :'+str(error)
+                    period_one[dic_keep[j][0]] = 'Error'
         dic[i] = (period_zero, period_one)
     result.append(pc_result)
     result.append(dic)
