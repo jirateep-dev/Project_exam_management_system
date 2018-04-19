@@ -1,6 +1,6 @@
 # core / urls.py
 from django.conf.urls import url, include
-from . import views, views_facet
+from . import views, views_facet, manage_score
 
 urlpatterns = [
     url(r'^$', views.scoreproj, name='scoreproj'),
@@ -14,6 +14,9 @@ urlpatterns = [
     url(r'^facet/', views_facet.facet, name='facet'),
     url(r'^export_script/', views_facet.export_script, name='export_script'),
     url(r'^import_script/', views_facet.import_script, name='import_script'),
+    url(r'^export_forms/', manage_score.export_forms, name='export_forms'),
+    url(r'^import_score/', manage_score.import_score, name='import_score'),
+    url(r'^reset_score/', manage_score.reset_score, name='reset_score'),
     url(r'^reset_teacher/', views_facet.reset_teacher, name='reset_teacher'),
     url(r'^upload_projs/', views.upload_projs, name='upload_projs'),
 ]

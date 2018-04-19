@@ -10,6 +10,12 @@ from django.shortcuts import redirect
 from django.utils.html import format_html
 from django.contrib import messages
 from .forms import *
+try:
+    from BytesIO import BytesIO
+except ImportError:
+    from io import BytesIO
+from zipfile import ZipFile
+import csv, codecs
 import logging
 
 log = logging.getLogger('django.db.backends')
@@ -393,11 +399,14 @@ def scoreposter(request):
 @login_required(login_url="login/")
 def result_sem1(request):
     info_setting = Settings.objects.get(id=1)
-    project = Project.objects.filter(proj_years=this_year(), proj_semester=1)
+    project = Project.objects.filter(proj_years=this_year(), proj_semester=info_setting.forms)
     lis_stu = []
 
     for num in range(len(project)):
-        stu = Student.objects.filter(proj1_id_id=project[num].id)
+        if info_setting.forms == 1:
+            stu = Student.objects.filter(proj1_id_id=project[num].id)
+        else:
+            stu = Student.objects.filter(proj2_id_id=project[num].id)
 
         # calculate score project 60%
         test = ScoreProj.objects.annotate(result_scoreproj = ((F('presentation')+F('presentation_media')+F('question'))*90/100) + \
