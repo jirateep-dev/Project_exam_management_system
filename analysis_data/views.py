@@ -104,7 +104,7 @@ def upload_csv(request):
                 teachers.filter(teacher_name=fields[9]).exists() and teachers.filter(teacher_name=fields[10]).exists() and \
                 teachers.filter(teacher_name=fields[11]).exists() and teachers.filter(teacher_name=fields[12]).exists():
 
-                data_dict["date_id"] = fields[0].replace('/', '')+"0"+str(room.get(room_name=fields[1]).id)
+                data_dict["date_id"] = fields[0].replace('/', '')+str(time.get(time_exam=fields[2]).time_period)+str(room.get(room_name=fields[1]).id)
                 data_dict["room_id"] = str(room.get(room_name=fields[1]).id)
                 data_dict["time_id"] = str(time.get(time_exam=fields[2]).id)
                 data_dict["proj_id"] = str(proj.get(proj_name_th=fields[3], proj_semester=1).id)
@@ -116,7 +116,7 @@ def upload_csv(request):
             if not DateExam.objects.filter(id=fields[0]).exists() and fields[1] != "room_id" and fields[1] != "----------" and \
                 room.filter(room_name=fields[1]).exists() and time.filter(time_exam=fields[2]).exists():
                 
-                dict_date["id"] = fields[0].replace('/', '')+"0"+str(room.get(room_name=fields[1]).id)
+                dict_date["id"] = fields[0].replace('/', '')+str(time.get(time_exam=fields[2]).time_period)+str(room.get(room_name=fields[1]).id)
                 dict_date["date_exam"] = fields[0]
                 dict_date["time_period"] = str(time.get(time_exam=fields[2]).time_period)
                 dict_date["room_id"] = str(room.get(room_name=fields[1]).id)
@@ -266,12 +266,23 @@ def prepare_render():
             dic_keep[j] = (rm_date[j]['room_id_id']-1, tp_date[j]['time_period'])
 
         for j in range(len(dic_keep)):
-            proj_id = ScheduleRoom.objects.filter(date_id_id=id_date[j]['id'])
-            type_proj = Project.objects.get(id=proj_id[0].proj_id_id).proj_major
-            if dic_keep[j][1] == 0:
-                period_zero[dic_keep[j][0]] = type_proj+' : '+str(len(proj_id))
-            else:
-                period_one[dic_keep[j][0]] = type_proj+' : '+str(len(proj_id))
+            try:
+                proj_id = ScheduleRoom.objects.filter(date_id_id=id_date[j]['id'])
+                lis_major = [Project.objects.get(id=i.proj_id_id).proj_major for i in proj_id]
+                lis = []
+                for obj in proj_id:
+                    type_proj = Project.objects.get(id=obj.proj_id_id)
+                    if type_proj.proj_major+' : '+str(lis_major.count(type_proj.proj_major)) not in lis:
+                        lis.append(type_proj.proj_major+' : '+str(lis_major.count(type_proj.proj_major)))
+                    if dic_keep[j][1] == 0:
+                        period_zero[dic_keep[j][0]] = lis
+                    else:
+                        period_one[dic_keep[j][0]] = lis
+            except Exception as error:
+                if dic_keep[j][1] == 0:
+                    period_zero[dic_keep[j][0]] = 'Error :'+str(error)
+                else:
+                    period_one[dic_keep[j][0]] = 'Error :'+str(error)
         dic[i] = (period_zero, period_one)
     result.append(pc_result)
     result.append(dic)
@@ -384,7 +395,6 @@ def table_room(request):
     # //////////////////////////////////////
 
     # query data to html
-    # schedule_all = pd.read_sql_query(str(ScheduleRoom.objects.all().query), connection)
     schedule_all = ScheduleRoom.objects.all()
     for i in schedule_all:
         proj_objs = Project.objects.get(schedule_id=i.id)
