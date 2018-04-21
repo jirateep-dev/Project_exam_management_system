@@ -25,6 +25,11 @@ LIST_COL_AD = ['การพัฒนาโครงงานตามวัต�
 def this_year():
     return Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
 
+def lastname_tch(tch_name):
+    split_name = tch_name.split(' ')
+    last_name = split_name[len(split_name)-1]
+    return last_name
+
 def export_forms(request):
     sem = Settings.objects.get(id=1).forms
     schedule = ScheduleRoom.objects.all()
@@ -99,6 +104,7 @@ def export_forms(request):
     return HttpResponseRedirect(reverse('result_sem1'))
 
 def import_score(request):
+    sem = Settings.objects.get(id=1).forms
     files = request.FILES["score_file"]
 
     if not files.name.endswith('.csv'):
@@ -114,9 +120,43 @@ def import_score(request):
  
         lines = file_data.splitlines()
         #loop over the lines and save them in db. If error , store as string and then display
-        for line in lines:                        
+        count_line = 0
+        form_score = 0
+        tch_name = ''
+        ready = 0
+        for line in lines:
             fields = line.split(",")
-            # str_line = "{}".format(line.strip())
+            if '*' in fields[1]:
+                ready = 0
+            if "คะแนนสอบโปรเจค" in fields[0] and count_line == 0:
+                form_score = 1
+            if fields[1] != '' or '*' not in fields[1]:
+                if Teacher.objects.filter(teacher_name=fields[1]).exists():
+                    tch_name = fields[1]
+                    ready += 1
+                if 'รายชื่อโครงงานภาษาอังกฤษ' == fields[1]:
+                    ready += 1
+                if ready == 2 and 'รายชื่อโครงงานภาษาอังกฤษ' != fields[1]:
+                    tch = Teacher.objects.get(teacher_name=tch_name)
+                    proj = Project.objects.get(proj_name_th=fields[0], proj_years=this_year(), proj_semester=sem)
+                    if not tch.score_projs.filter(proj_id_id=proj.id).exists() and \
+                        lastname_tch(tch.teacher_name) != lastname_tch(proj.proj_advisor) and form_score == 1:
+                        score_proj = ScoreProj(proj_id_id=proj.id, presentation=fields[3], question=fields[4], report=fields[5],\
+                            presentation_media=fields[2], discover=fields[6], analysis=fields[7], \
+                            quantity=fields[8], levels=fields[9], quality=fields[10])
+                        score_proj.save()
+                        tch.score_projs.add(score_proj)
+                        tch.save()
+                    if not tch.score_advisor.filter(proj_id_id=proj.id).exists() and \
+                        lastname_tch(tch.teacher_name) == lastname_tch(proj.proj_advisor) and form_score != 1:
+                        score_ad = ScoreAdvisor(proj_id_id=proj.id, propose=fields[2], planning=fields[3], tool=fields[4],\
+                                        advice=fields[5], improve=fields[6], quality_report=fields[7], \
+                                        quality_project=fields[8])
+                        score_ad.save()
+                        tch.score_advisor.add(score_ad)
+                        tch.save()
+            
+            count_line += 1
             
     except Exception as e:
         messages.error(request,e)
@@ -125,5 +165,14 @@ def import_score(request):
     return HttpResponseRedirect(reverse('result_sem1'))
 
 def reset_score(request):
+    reset_types = request.POST.get("reset_types", None)
+    sem = Settings.objects.get(id=1).forms
+    projs = Project.objects.filter(proj_years=this_year(), proj_semester=sem)
+    if reset_types == '1':
+        for proj in projs:
+            ScoreProj.objects.filter(proj_id_id=proj.id).delete()
+    else:
+        for proj in projs:
+            ScoreAdvisor.objects.filter(proj_id_id=proj.id).delete()
 
     return HttpResponseRedirect(reverse('result_sem1'))

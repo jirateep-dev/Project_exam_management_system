@@ -32,6 +32,11 @@ LIST_COL_PROJ = ['ปีการศึกษา', 'เทอม', 'ชื่อ
 def this_year():
     return Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
 
+def lastname_tch(tch_name):
+    split_name = tch_name.split(' ')
+    last_name = split_name[len(split_name)-1]
+    return last_name
+
 def admin_required(login_url=None):
     return user_passes_test(lambda u: u.is_superuser, login_url=login_url)
 
@@ -477,7 +482,7 @@ def update_scoreproj(request):
             len_lis = len(LIST_COL)-1
         if form_setting == 2:
             len_lis = len(LIST_COL)
-        if teacher_sp.teacher_name == proj.proj_advisor:
+        if lastname_tch(teacher_sp.teacher_name) == lastname_tch(proj.proj_advisor):
             len_lis = len(LIST_COL_AD)
 
         for i in range(len_lis):
@@ -485,7 +490,7 @@ def update_scoreproj(request):
             lis_selected.append(int(selected_option))
 
         
-        if not teacher_sp.score_projs.filter(proj_id_id=proj.id).exists() and teacher_sp.teacher_name != proj.proj_advisor:
+        if not teacher_sp.score_projs.filter(proj_id_id=proj.id).exists() and lastname_tch(teacher_sp.teacher_name) != lastname_tch(proj.proj_advisor):
             score_proj = ScoreProj(proj_id_id=proj.id, presentation=lis_selected[0], question=lis_selected[1], report=lis_selected[2],\
                             presentation_media=lis_selected[3], discover=lis_selected[4], analysis=lis_selected[5], \
                             quantity=lis_selected[6], levels=lis_selected[7])
@@ -494,9 +499,9 @@ def update_scoreproj(request):
             teacher_sp.save()
         else:
             message = 'ท่านได้ส่งคะแนนเป็นที่เรียบร้อยแล้ว คะแนนจะไม่ถูกอัพเดทหรือแก้ไขได้'
-            if teacher_sp.teacher_name == proj.proj_advisor:
+            if lastname_tch(teacher_sp.teacher_name) == lastname_tch(proj.proj_advisor):
                 message = ''
-        if not teacher_sp.score_advisor.filter(proj_id_id=proj.id).exists() and teacher_sp.teacher_name == proj.proj_advisor:
+        if not teacher_sp.score_advisor.filter(proj_id_id=proj.id).exists() and lastname_tch(teacher_sp.teacher_name) == lastname_tch(proj.proj_advisor):
             score_ad = ScoreAdvisor(proj_id_id=proj.id, propose=lis_selected[0], planning=lis_selected[1], tool=lis_selected[2],\
                             advice=lis_selected[3], improve=lis_selected[4], quality_report=lis_selected[5], \
                             quality_project=lis_selected[6])

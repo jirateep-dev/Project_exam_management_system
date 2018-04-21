@@ -24,6 +24,11 @@ import logging
 def this_year():
     return Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
 
+def lastname_tch(tch_name):
+    split_name = tch_name.split(' ')
+    last_name = split_name[len(split_name)-1]
+    return last_name
+
 def export_csv(request):
     setting = Settings.objects.get(id=1)
     sc = ScheduleRoom.objects.all()
@@ -160,8 +165,7 @@ def approve_teacher(tch_name, date_selected, period_selected):
     load = Settings.objects.get(id=1).load
     approve_tch = False
 
-    split_name = tch_name.split(' ')
-    last_name = split_name[len(split_name)-1]
+    last_name = lastname_tch(tch_name)
 
     if not Teacher.objects.get(teacher_name__contains=last_name).schedule_teacher.all().exists():
         approve_tch = True
@@ -219,10 +223,8 @@ def manageTeacher(major_id, date_input, period_input):
             tch_ran = Teacher.objects.order_by('?').first()
             check_lastname = True
             for name in list_teachers:
-                split_name = name.split(' ')
-                last_name = split_name[len(split_name)-1]
-                split_temp = tch_ran.teacher_name.split(' ')
-                last_name_t = split_temp[len(split_temp)-1]
+                last_name = lastname_tch(name)
+                last_name_t = lastname_tch(tch_ran.teacher_name)
                 if last_name == last_name_t:
                     check_lastname = False
             if approve_teacher(tch_ran.teacher_name, date_input, period_input) and check_lastname:
@@ -230,8 +232,7 @@ def manageTeacher(major_id, date_input, period_input):
         if len(list_teachers) == 4:
             sum_lev = 0
             for name in list_teachers:
-                split_name = name.split(' ')
-                last_name = split_name[len(split_name)-1]
+                last_name = lastname_tch(name)
                 sum_lev += Teacher.objects.get(teacher_name__contains=last_name).levels_teacher
             if (sum_lev/4.0) <= safe_zone['max'] and (sum_lev/4.0) >= safe_zone['min']:
                 break
@@ -357,8 +358,7 @@ def manage_room(request):
                 schedule.save()
                 Project.objects.filter(id=list_proj_id[i]).update(schedule_id=schedule.id)
                 for name in list_teachers:
-                    split_name = name.split(' ')
-                    last_name = split_name[len(split_name)-1]
+                    last_name = lastname_tch(name)
                     teacher_r = Teacher.objects.get(teacher_name__contains=last_name)
                     teacher_r.schedule_teacher.add(schedule)
                     teacher_r.save()
@@ -428,8 +428,8 @@ def manage(request):
             # Teacher.objects.all().order_by('proj_group_exam').update(proj_group_exam=0)
         pre = prepare_render()
         return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
-                    'room_period':pre[1], 'proj_act':sem})
+                    'room_period':pre[1], 'proj_act':sem, 'proj_years':this_year()})
     except Exception as error:
         pre = prepare_render()
         return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
-                    'room_period':pre[1], 'proj_act':sem})
+                    'room_period':pre[1], 'proj_act':sem, 'proj_years':this_year()})
