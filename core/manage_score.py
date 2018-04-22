@@ -140,7 +140,8 @@ def import_score(request):
                     tch = Teacher.objects.get(teacher_name=tch_name)
                     proj = Project.objects.get(proj_name_th=fields[0], proj_years=this_year(), proj_semester=sem)
                     if not tch.score_projs.filter(proj_id_id=proj.id).exists() and \
-                        lastname_tch(tch.teacher_name) != lastname_tch(proj.proj_advisor) and form_score == 1:
+                        lastname_tch(tch.teacher_name) != lastname_tch(proj.proj_advisor) and \
+                        lastname_tch(tch.teacher_name) != lastname_tch(proj.proj_co_advisor) and form_score == 1:
                         score_proj = ScoreProj(proj_id_id=proj.id, presentation=fields[3], question=fields[4], report=fields[5],\
                             presentation_media=fields[2], discover=fields[6], analysis=fields[7], \
                             quantity=fields[8], levels=fields[9], quality=fields[10])
@@ -148,7 +149,8 @@ def import_score(request):
                         tch.score_projs.add(score_proj)
                         tch.save()
                     if not tch.score_advisor.filter(proj_id_id=proj.id).exists() and \
-                        lastname_tch(tch.teacher_name) == lastname_tch(proj.proj_advisor) and form_score != 1:
+                        (lastname_tch(tch.teacher_name) == lastname_tch(proj.proj_advisor) or \
+                        lastname_tch(tch.teacher_name) == lastname_tch(proj.proj_co_advisor)) and form_score != 1:
                         score_ad = ScoreAdvisor(proj_id_id=proj.id, propose=fields[2], planning=fields[3], tool=fields[4],\
                                         advice=fields[5], improve=fields[6], quality_report=fields[7], \
                                         quality_project=fields[8])

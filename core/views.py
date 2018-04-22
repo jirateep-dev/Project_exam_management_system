@@ -26,7 +26,8 @@ LIST_COL_AD = ['การพัฒนาโครงงานตามวัต�
             'การปรับปรุงแก้ไขรายงาน','คุณภาพของรายงาน','คุณภาพของโครงงาน']
 LIST_COL_PO = ['การตรงต่อเวลา','บุคลิกภาพและการแต่งกาย','ความชัดเจนในการอธิบาย','ความชัดเจนในการตอบคำถาม','ความชัดเจนของสื่อ','คุณภาพของโครงงาน']
 LIST_COL_RE = ['รหัสนักศึกษา','ชื่อ-นามสกุล','ชื่อโปรเจค','คะแนนโปรเจค (60%)','คะแนนอาจารย์ที่ปรึกษา (40%)', 'รายละอียด']
-LIST_COL_DE = [['รายชื่ออาจารย์']+LIST_COL, ['อาจารย์ที่ปรึกษา']+LIST_COL_AD]
+LIST_COL_RE2 = ['รหัสนักศึกษา','ชื่อ-นามสกุล','ชื่อโปรเจค','คะแนนโปรเจค (40%)','คะแนนโปสเตอร์ (20%)','คะแนนอาจารย์ที่ปรึกษา (40%)', 'รายละอียด']
+LIST_COL_DE = [['รายชื่ออาจารย์']+LIST_COL, ['รายชื่ออาจารย์']+LIST_COL_PO , ['อาจารย์ที่ปรึกษา']+LIST_COL_AD]
 LIST_COL_PROJ = ['ปีการศึกษา', 'เทอม', 'ชื่อโปรเจค(TH)', 'ชื่อโปรเจค(EN)', 'แขนง', 'ที่ปรึกษา', 'ที่ปรึกษา(ร่วม)', 'รายละเอียด']
 
 def this_year():
@@ -413,16 +414,20 @@ def result_sem1(request):
         else:
             stu = Student.objects.filter(proj2_id_id=project[num].id)
 
-        # calculate score project 60%
-        test = ScoreProj.objects.annotate(result_scoreproj = ((F('presentation')+F('presentation_media')+F('question'))*90/100) + \
-            (F('report')*90/100) + ((F('discover')+F('analysis'))*70/100) + ((F('quantity')+F('levels'))*90/100)).filter(proj_id_id=project[num].id)
+        # calculate score project (percentage)
+        if info_setting.forms == 1:
+            test = ScoreProj.objects.annotate(result_scoreproj = ((F('presentation')+F('presentation_media')+F('question'))*90/100) + \
+                (F('report')*90/100) + ((F('discover')+F('analysis'))*70/100) + ((F('quantity')+F('levels'))*90/100)).filter(proj_id_id=project[num].id)
+        else:
+            test = ScoreProj.objects.annotate(result_scoreproj = ((F('presentation')+F('presentation_media')+F('question'))*80/100) + \
+                (F('report')*80/100) + ((F('discover')+F('analysis'))*70/100) + ((F('quantity')+F('levels')+F('quality'))*70/100)).filter(proj_id_id=project[num].id)
         avg_scorep = 0
         for i in test:
             avg_scorep += i.result_scoreproj
         if len(test) != 0:
             avg_scorep = avg_scorep / len(test)
 
-        # calculate score advisor 40%
+        # calculate score advisor (percentage)
         test = ScoreAdvisor.objects.annotate(result_scoreproj = (F('propose')+F('planning')+F('tool')+\
             F('advice')+F('improve')+F('quality_report')+F('quality_project'))*60/100).filter(proj_id_id=project[num].id)
         avg_scoread = 0
@@ -431,11 +436,28 @@ def result_sem1(request):
         if len(test) != 0:
             avg_scoread = avg_scoread / len(test)
 
-        for i in stu:
-            lis_stu.append([i.student_id, i.student_name, project[num].proj_name_th, "%.2f" %avg_scorep, "%.2f" %avg_scoread, \
-            format_html("<button name="'"detail"'" type="'"submit"'" class="'"btn btn-success"'" \
-            form="'"detail_score"'" value="+project[num].proj_name_th+"><h4 style="'"font-size: 1.7em;"'">ดูรายละเอียด</h4></button>")])
+        # calculate score poster (percentage)
+        test = ScorePoster.objects.annotate(result_scoreproj = (F('time_spo')+F('character_spo')+F('presentation_spo')+\
+            F('question_spo')+F('media_spo')+F('quality_spo'))*80/100).filter(proj_id_id=project[num].id)
+        avg_scorepo = 0
+        for i in test:
+            avg_scorepo += i.result_scoreproj
+        if len(test) != 0:
+            avg_scorepo = avg_scorepo / len(test)
 
+        for i in stu:
+            if info_setting.forms == 1:
+                lis_stu.append([i.student_id, i.student_name, project[num].proj_name_th, "%.2f" %avg_scorep, "%.2f" %avg_scoread, \
+                format_html("<button name="'"detail"'" type="'"submit"'" class="'"btn btn-success"'" \
+                form="'"detail_score"'" value="+project[num].proj_name_th+"><h4 style="'"font-size: 1.7em;"'">ดูรายละเอียด</h4></button>")])
+            else:
+                lis_stu.append([i.student_id, i.student_name, project[num].proj_name_th, "%.2f" %avg_scorep, "%.2f" %avg_scorepo, "%.2f" %avg_scoread, \
+                format_html("<button name="'"detail"'" type="'"submit"'" class="'"btn btn-success"'" \
+                form="'"detail_score"'" value="+project[num].proj_name_th+"><h4 style="'"font-size: 1.7em;"'">ดูรายละเอียด</h4></button>")])
+
+    if info_setting.forms == 2:
+        return render(request,"result_score.html", {'proj_act':info_setting.forms, 'this_year':this_year(), \
+            'col_result':LIST_COL_RE2, 'list_student':lis_stu})
     return render(request,"result_score.html", {'proj_act':info_setting.forms, 'this_year':this_year(), \
             'col_result':LIST_COL_RE, 'list_student':lis_stu})
 
@@ -446,23 +468,29 @@ def detail_score(request):
         sem = Settings.objects.get(id=1).forms
         proj = Project.objects.get(proj_name_th=proj_name, proj_semester=sem)
         teacher = Teacher.objects.all()
-        lis_result = []
-        lis_result2 = []
+        result_sproj = []
+        result_spost = []
+        result_sadvisor = []
         for i in teacher:
             if i.score_projs.filter(proj_id_id=proj.id).exists():
                 t_name = i.teacher_name
                 sc_de =  i.score_projs.get(proj_id_id=proj.id)
-                lis_result.append([t_name, sc_de.presentation_media, sc_de.presentation, sc_de.question, sc_de.report,\
+                result_sproj.append([t_name, sc_de.presentation_media, sc_de.presentation, sc_de.question, sc_de.report,\
                             sc_de.discover, sc_de.analysis, sc_de.quantity, sc_de.levels, sc_de.quality])
             if i.score_advisor.filter(proj_id_id=proj.id).exists():
                 sc_ad = i.score_advisor.get(proj_id_id=proj.id)
                 t_ad_name = i.teacher_name
-                lis_result2.append([t_ad_name, sc_ad.propose, sc_ad.planning, sc_ad.tool, sc_ad.advice, sc_ad.improve,\
+                result_sadvisor.append([t_ad_name, sc_ad.propose, sc_ad.planning, sc_ad.tool, sc_ad.advice, sc_ad.improve,\
                  sc_ad.quality_report, sc_ad.quality_project])
+            if i.score_posters.filter(proj_id_id=proj.id).exists():
+                sc_post = i.score_posters.get(proj_id_id=proj.id)
+                t_ad_name = i.teacher_name
+                result_spost.append([t_ad_name, sc_post.time_spo, sc_post.character_spo, sc_post.presentation_spo,\
+                 sc_post.question_spo, sc_post.media_spo, sc_post.quality_spo])
 
             
     return render(request, "detail_score.html", {'this_year':this_year(), 'proj_name':proj_name, 'col_de':LIST_COL_DE[0],\
-         'result':lis_result,'col_de2':LIST_COL_DE[1], 'result2':lis_result2, 'proj_act':sem})
+         'result':result_sproj, 'result1':result_spost, 'col_de1':LIST_COL_DE[1],'col_de2':LIST_COL_DE[2], 'result2':result_sadvisor, 'proj_act':sem})
 
 @login_required(login_url="login/")
 def update_scoreproj(request):

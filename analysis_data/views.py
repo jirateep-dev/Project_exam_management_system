@@ -203,15 +203,30 @@ def level_safezone():
 
 def manageTeacher(major_id, date_input, period_input):
     list_teachers = []
+    temp_tch = []
     setting = Settings.objects.get(id=1)
     major = Major.objects.get(id=major_id)
 
-    tch_projNull = Project.objects.filter(proj_years=this_year(), proj_semester=setting.forms, \
-                    proj_major=major.major_name, schedule_id=None).values_list('proj_advisor', flat=True).distinct()
+    # tch_projNull = Project.objects.filter(proj_years=this_year(), proj_semester=setting.forms, \
+    #                 proj_major=major.major_name, schedule_id=None).values_list('proj_advisor', flat=True).distinct()
+    
+    proj_null = Project.objects.filter(proj_years=this_year(), proj_semester=setting.forms, \
+                    proj_major=major.major_name, schedule_id=None)
 
-    for i in tch_projNull:
-        if approve_teacher(i, date_input, period_input):
-            list_teachers.append(i)
+    # for i in tch_projNull:
+    #     if approve_teacher(i, date_input, period_input):
+    #         list_teachers.append(i)
+    #     if len(list_teachers) == 3:
+    #         break
+
+    for i in proj_null:
+        if approve_teacher(i.proj_advisor, date_input, period_input) and i.proj_advisor not in list_teachers:
+            list_teachers.append(i.proj_advisor)
+            temp_tch.append(i.proj_co_advisor)
+        if i.proj_co_advisor != '' and (approve_teacher(i.proj_co_advisor, date_input, period_input) and i.proj_co_advisor not in list_teachers and \
+            not approve_teacher(i.proj_advisor, date_input, period_input)):
+            list_teachers.append(i.proj_co_advisor)
+            temp_tch.append(i.proj_advisor)
         if len(list_teachers) == 3:
             break
 
@@ -222,10 +237,11 @@ def manageTeacher(major_id, date_input, period_input):
         while len(list_teachers) != 4:
             tch_ran = Teacher.objects.order_by('?').first()
             check_lastname = True
-            for name in list_teachers:
-                last_name = lastname_tch(name)
+            for i in range(len(list_teachers)):
+                last_name = lastname_tch(list_teachers[i])
                 last_name_t = lastname_tch(tch_ran.teacher_name)
-                if last_name == last_name_t:
+                last_name_co = lastname_tch(temp_tch[i])
+                if last_name == last_name_t and last_name_co == last_name_t:
                     check_lastname = False
             if approve_teacher(tch_ran.teacher_name, date_input, period_input) and check_lastname:
                 list_teachers.append(tch_ran.teacher_name)
