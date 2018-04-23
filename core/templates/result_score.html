@@ -11,7 +11,7 @@
                 </form>
             </div>
             <div class="jumbotron col-sm-4" style="padding: 0;">
-                    <button type="submit" data-toggle="collapse" data-target="#import_score"\
+                    <button type="submit" data-toggle="modal" data-target="#import_score"\
                     class="btn btn-success" style="width: 100%;"><h2 style="font-size: 3em">นำเข้าคะแนน</h2></button>
                 </form>
             </div>
@@ -24,34 +24,32 @@
             </div>
         </div>
         
-        
-        <table class="table">
-            <thead>
-                <tr>
-                <th style="width: 33%;text-align: center;padding-bottom: 2%"></th>
-                <th style="width: 33%;text-align: center;padding-bottom: 2%">
-                    <div class="collapse" id="import_score" style="padding: 0;">
-                        <form action="{% url 'import_score' %}" method="POST" id="import_score" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <div class="form-group" >
-                                <label for="name" class="col-md-3 col-sm-3 col-xs-12 control-label" style="margin-top: 5%">ไฟล์: </label>
-                                <div class="col-md-8">
-                                    <input type="file" name="score_file" id="score_file" required="True" class="form-control" style="margin-top: 10%">
-                                </div>                    
-                            </div>
-                            <div class="form-group">                    
-                                <div class="col-md-3 col-sm-3 col-xs-12 col-md-offset-3" style="margin-bottom:10px;margin-top: 3%;">
-                                    <button class="btn btn-primary"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span>อัพโหลด </button>
-                                </div> 
-                            </div>
-                        </form>
+        <!-- Modal -->
+        <div class="modal fade" id="import_score" role="dialog">
+            <div class="modal-dialog modal-md">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <form action="{% url 'import_score' %}" method="POST" id="import_score" enctype="multipart/form-data">
+                        {% csrf_token %}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <label class="modal-title">นำเข้าคะแนน</label>
                     </div>
-                </th>
-                <th style="width: 33%;text-align: center;padding-bottom: 2%"></th>
-                </tr>
-            </thead>
-        </table>
-
+                    <div class="modal-body">
+                        <div class="form-group" >
+                            <h2 for="name">ไฟล์ csv: </h2>
+                            <input type="file" name="score_file" id="score_file" required="True" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button class="btn btn-primary"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span>อัพโหลด </button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
 
 
