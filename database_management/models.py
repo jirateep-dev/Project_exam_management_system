@@ -71,6 +71,7 @@ class ScheduleRoom(models.Model):
     time_id = models.ForeignKey(TimeExam, on_delete=models.CASCADE, null=True)
     proj_id = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
     teacher_group = models.IntegerField(default=0)
+    semester = models.IntegerField(default=1)
     objects = models.Manager()
 
     class Meta:
@@ -153,7 +154,8 @@ class Student(models.Model):
         return self.student_id
 
 class Settings(models.Model):
-    load = models.IntegerField(default=0)
+    load = models.IntegerField(default=8)
+    load_post = models.IntegerField(default=8)
     activate = models.IntegerField(default=1)
     forms = models.IntegerField(default=1)
     objects = models.Manager()

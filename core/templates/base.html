@@ -26,6 +26,7 @@
                 <li><a href="/scoreproj" style="color: #ffffff;">คะแนนโปรเจค</a></li>
                 {% if proj_act == 2 %}
                 <li><a href="/scoreposter" style="color: #ffffff;">คะแนนโปสเตอร์</a></li>
+                <li><a href="/manage/manage_poster" style="color: #ffffff;">จัดการสอบโปสเตอร์</a></li>
                 {% endif %}
                 {% if user.is_superuser %}
                 <li><a href="/manage" style="color: #ffffff;">จัดห้องสอบ</a></li>
@@ -33,7 +34,7 @@
                 <li><a href="/result_sem1" style="color: #ffffff;">ผลคะแนนภาคเรียนที่ {{proj_act}}</a></li>
                 <!-- <li><a href="/result_sem1">ผลคะแนนภาคเรือนที่ 2</a></li> -->
                 <li><a href="/manage_proj" style="color: #ffffff;">จัดการโครงงาน</a></li>
-                <li><a href="/facet" style="color: #ffffff;">FACET</a></li>
+                <li><a href="/manage/facet" style="color: #ffffff;">FACET</a></li>
                 {% endif %}
                 <div class="nav nav-tabs navbar-right pull-right" style="padding-right: 30px;border: 0">
                     {% if user.is_superuser %}

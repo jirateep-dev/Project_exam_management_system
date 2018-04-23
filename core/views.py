@@ -53,7 +53,7 @@ def settings(request):
         on_off = request.POST.get("on_off_sys", None)
         proj_num = request.POST.get("proj_num", None)
         load = request.POST.get("load_tch", None)
-        
+        load_post = request.POST.get("load_tch_post", None)
         if on_off == 'on':
             num_on_off = 1
         if on_off != 'on':
@@ -63,10 +63,11 @@ def settings(request):
         if proj_num != 'on':
             proj_int = 2
 
-        Settings.objects.filter(id=1).update(load=load, activate=num_on_off, forms=proj_int)
+        Settings.objects.filter(id=1).update(load=load,load_post=load_post, activate=num_on_off, forms=proj_int)
         User.objects.filter(is_staff=0).update(is_active=num_on_off)
     info_setting = Settings.objects.get(id=1)
-    return render(request,"settings.html", {'activated':info_setting.activate, 'proj_act':info_setting.forms, 'load_proj':info_setting.load})
+    return render(request,"settings.html", {'activated':info_setting.activate, 'proj_act':info_setting.forms, \
+     'load_proj':info_setting.load, 'load_post':info_setting.load_post})
 
 def manage_student(std_dic, p_semester, proj):
     if Student.objects.filter(id=std_dic['pk']).exists():

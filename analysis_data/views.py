@@ -86,6 +86,7 @@ def upload_csv(request):
         time = TimeExam.objects.all()
         proj = Project.objects.all()
         teachers = Teacher.objects.all()
+        sem = Settings.objects.get(id=1).forms
         
         if not csv_file.name.endswith('.csv'):
             messages.error(request,'File is not CSV type')
@@ -109,11 +110,12 @@ def upload_csv(request):
                 teachers.filter(teacher_name=fields[9]).exists() and teachers.filter(teacher_name=fields[10]).exists() and \
                 teachers.filter(teacher_name=fields[11]).exists() and teachers.filter(teacher_name=fields[12]).exists():
 
-                data_dict["date_id"] = fields[0].replace('/', '')+str(time.get(time_exam=fields[2]).time_period)+str(room.get(room_name=fields[1]).id)
+                data_dict["date_id"] = fields[0].replace('/', '')+str(time.get(time_exam=fields[2]).time_period)+str(room.get(room_name=fields[1]).id)+str(sem)
                 data_dict["room_id"] = str(room.get(room_name=fields[1]).id)
                 data_dict["time_id"] = str(time.get(time_exam=fields[2]).id)
                 data_dict["proj_id"] = str(proj.get(proj_name_th=fields[3], proj_semester=1).id)
                 data_dict["teacher_group"] = fields[8]
+                data_dict["semester"] = sem
                 
                 lis_id_teacher = [teachers.get(teacher_name=fields[9]).id, teachers.get(teacher_name=fields[10]).id, \
                 teachers.get(teacher_name=fields[11]).id, teachers.get(teacher_name=fields[12]).id]
@@ -121,7 +123,7 @@ def upload_csv(request):
             if not DateExam.objects.filter(id=fields[0]).exists() and fields[1] != "room_id" and fields[1] != "----------" and \
                 room.filter(room_name=fields[1]).exists() and time.filter(time_exam=fields[2]).exists():
                 
-                dict_date["id"] = fields[0].replace('/', '')+str(time.get(time_exam=fields[2]).time_period)+str(room.get(room_name=fields[1]).id)
+                dict_date["id"] = fields[0].replace('/', '')+str(time.get(time_exam=fields[2]).time_period)+str(room.get(room_name=fields[1]).id)+str(sem)
                 dict_date["date_exam"] = fields[0]
                 dict_date["time_period"] = str(time.get(time_exam=fields[2]).time_period)
                 dict_date["room_id"] = str(room.get(room_name=fields[1]).id)
@@ -264,19 +266,20 @@ def count_proj(major):
 def prepare_render():
     result = []
     dic = {}
+    sem =Settings.objects.get(id=1).forms
     room = Room.objects.values('room_name')
-    date = DateExam.objects.values('date_exam').distinct()
+    date = DateExam.objects.values('date_exam').filter(id__endswith=str(sem)).distinct()
     date_all = DateExam.objects.all()
     pc_result = [{'bi':count_proj('Business Intelligence'), 'ds':count_proj('Data Science'), 'es':count_proj('Embedded Systems'), \
                 'mu':count_proj('Multimedia'), 'nw':count_proj('Network and Communication'), 'se':count_proj('Software Development')}]
     date_result = [date[i]['date_exam'] for i in range(len(date))]
 
     for i in date_result:
+        dic_keep = {}
         period_zero = ['Available' for i in range(len(room))]
         period_one = ['Available' for i in range(len(room))]
         tp_date = DateExam.objects.values('time_period').filter(date_exam=i)
         rm_date = DateExam.objects.values('room_id_id').filter(date_exam=i)
-        dic_keep = {}
         id_date = DateExam.objects.values('id').filter(date_exam=i)
 
         for j in range(len(tp_date)):
@@ -284,7 +287,7 @@ def prepare_render():
 
         for j in range(len(dic_keep)):
             try:
-                proj_id = ScheduleRoom.objects.filter(date_id_id=id_date[j]['id'])
+                proj_id = ScheduleRoom.objects.filter(date_id_id=id_date[j]['id'], semester=sem)
                 lis_major = [Project.objects.get(id=i.proj_id_id).proj_major for i in proj_id]
                 lis = []
                 test_error = Project.objects.filter(id=proj_id[0].proj_id_id)
@@ -319,13 +322,14 @@ def manage_room(request):
     create_schedule = False
     fail_teacher = False
     list_teachers = manageTeacher(major_selected, date_selected, period_selected)
+    sem = Settings.objects.get(id=1).forms
 
     # check date in database and insert
     dataframe_date = pd.DataFrame(list(DateExam.objects.values('date_exam')))
     dataframe_period = pd.DataFrame(list(DateExam.objects.values('time_period')))
     dataframe_room = pd.DataFrame(list(DateExam.objects.values('room_id_id')))
 
-    id_dateexam = str((date_selected+period_selected+room_selected).replace('/',''))
+    id_dateexam = str((date_selected+period_selected+room_selected+str(sem)).replace('/',''))
 
     if not DateExam.objects.filter(id=id_dateexam).exists() and not (list_teachers == [] or len(list_teachers) < 4):
         create_schedule = True
@@ -336,7 +340,6 @@ def manage_room(request):
 
     # check proj of teacher
     major = Major.objects.get(id=major_selected)
-    sem = Settings.objects.get(id=1).forms
 
     if create_schedule:
         proj_tch_advisor = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=this_year(), proj_semester=sem, \
@@ -389,8 +392,8 @@ def table_room(request):
     # query teacher_group
 
     sem = Settings.objects.get(id=1).forms
-    sched_r = ScheduleRoom.objects.all()
-    list_group = list(sched_r.values('teacher_group').distinct())
+    sched_r = ScheduleRoom.objects.filter(semester=str(sem))
+    list_group = list(sched_r.values('teacher_group').filter(semester=str(sem)).distinct())
     for i in list_group:
         dtset_id_sch = sched_r.values('id').filter(teacher_group=i['teacher_group'])
         count_teacher = 0
@@ -412,7 +415,7 @@ def table_room(request):
     # //////////////////////////////////////
 
     # query data to html
-    schedule_all = ScheduleRoom.objects.all()
+    schedule_all = ScheduleRoom.objects.filter(semester=str(sem))
     for i in schedule_all:
         proj_objs = Project.objects.get(schedule_id=i.id)
         room_result = Room.objects.values('room_name').get(id=i.room_id_id)['room_name']
@@ -427,7 +430,7 @@ def table_room(request):
                     'time_exam': time_result, 'proj_advisor':advisor_result})
 
     return render(request,"result_room.html",{'result_teacher': teacher_groups, 'ScheduleRoom': result_manage,\
-             'safezone':level_safezone(), 'proj_act':sem})
+             'safezone':level_safezone(), 'proj_act':sem, 'proj_years':this_year()})
 
 def admin_required(login_url=None):
     return user_passes_test(lambda u: u.is_superuser, login_url=login_url)
@@ -436,16 +439,18 @@ def admin_required(login_url=None):
 @admin_required(login_url="login/")
 def manage(request):
     sem = Settings.objects.get(id=1).forms
+    str_link = "manage.html"
+    if sem == 2:
+        str_link = "manage_sem2.html"
     try:
         reset_selected = int(request.POST.get('reset_gen',None))
         if reset_selected:
             Project.objects.filter(proj_years=this_year(), proj_semester=sem).update(schedule_id=None)
-            DateExam.objects.all().delete()
-            # Teacher.objects.all().order_by('proj_group_exam').update(proj_group_exam=0)
+            DateExam.objects.all().filter(id__endswith=str(sem)).delete()
         pre = prepare_render()
-        return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
+        return render(request,str_link,{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
                     'room_period':pre[1], 'proj_act':sem, 'proj_years':this_year()})
     except Exception as error:
         pre = prepare_render()
-        return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
+        return render(request,str_link,{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
                     'room_period':pre[1], 'proj_act':sem, 'proj_years':this_year()})
