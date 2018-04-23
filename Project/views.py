@@ -8,7 +8,8 @@ from database_management.models import *
 from django.db.models import Max
 from django_python3_ldap.auth import LDAPBackend
 
-THIS_YEARS = Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
+def this_year():
+    return Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
 
 def data_user(user_model):
     projid_teacher = []
@@ -16,13 +17,13 @@ def data_user(user_model):
         user_id = user_model.id
         teacher_sp = Teacher.objects.get(login_user_id=user_id)
         projs = teacher_sp.schedule_teacher.all()
-        for i in range(len(projs)):
-            projid_teacher.append(projs[i].proj_id)
+        for i in projs:
+            projid_teacher.append(i.proj_id_id)
     queryset = []
     info_setting = Settings.objects.get(id=1)
     form_setting = info_setting.forms
     for i in range(len(projid_teacher)):
-        if Project.objects.filter(proj_years=THIS_YEARS, proj_semester=form_setting, id=projid_teacher[i]).exists():
+        if Project.objects.filter(proj_years=this_year(), proj_semester=form_setting, id=projid_teacher[i]).exists():
             queryset.append(Project.objects.get(id=projid_teacher[i]))
     
     return queryset
@@ -43,13 +44,13 @@ def login_user(request):
             try:
                 if not c.bind():
                     user_model = authenticate(username=username, password=password)
-                    user_model.backend = 'django.contrib.auth.backends.ModelBackend'
+                    user_model.backend = "django.contrib.auth.backends.ModelBackend"
                     login(request, user_model)
                     state = "Valid account"
                     return render(request,"scoreproj.html",{'Projectset':data_user(user_model), 'proj_act':form_setting})
             except Exception:
                 user_model = authenticate(username=username, password=password)
-                user_model.backend = 'django.contrib.auth.backends.ModelBackend'
+                user_model.backend = "django.contrib.auth.backends.ModelBackend"
                 login(request, user_model)
                 state = "Valid account"
                 return render(request,"scoreproj.html",{'Projectset':data_user(user_model), 'proj_act':form_setting})

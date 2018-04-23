@@ -14,6 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -24,10 +25,10 @@ SECRET_KEY = '66981n9uombkzs)ebdt_4cx@-0k_i&atg(h)cm30(=nj-sk34y'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
-AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",'django.contrib.auth.backends.ModelBackend',)
+AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend","django.contrib.auth.backends.ModelBackend",)
 
 # Initiate TLS on connection.
 LDAP_AUTH_USE_TLS = False
@@ -155,13 +156,25 @@ WSGI_APPLICATION = 'Project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'senoir_db',
+        'NAME': 'senior_db',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': '127.0.0.1',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }
 }
+MYSQL_ROOT_PASSWORD = 'root'
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql', 
+#         'NAME': 'senior_db',
+#         'USER': 'user',
+#         'PASSWORD': 'pno9i\'g8kirT\'=k9b',
+#         'HOST': '161.246.38.112',   # Or an IP Address that your DB is hosted on
+#         'PORT': '3306',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -200,6 +213,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(PROJECT_ROOT, "staticfiles")
 
 LOGIN_REDIRECT_URL = '/'
 

@@ -1,32 +1,60 @@
 {% extends 'base.html' %} {% block content %}
 
 <div class="container">
-    <div class="row">
-        <div class="container" style="text-align: center"><h1 style="font-size: 6.5em;">ตั้งค่าระบบ</h1></div>
-        <div class="jumbotron">
-            <h2>เปิด-ปิดระบบ</h2>
+    <div class="container" style="text-align: center"><h1 style="font-size: 6.5em;">ตั้งค่าระบบ</h1></div>
+    <div class="jumbotron">
+        <div class="row">
             <form action="{% url 'settings' %}" method="post" id="settings">
                 {% csrf_token %} 
-                {% if activated == 1 %}
-                <input name="on_off_sys" type="checkbox" checked data-toggle="toggle" data-size="large" data-offstyle="danger">
-                {% else %}
-                <input name="on_off_sys" type="checkbox" data-toggle="toggle" data-size="large" data-offstyle="danger">
-                {% endif %}
-                <h2>อนุญาติให้สอบโปรเจคที่</h2>
-                {% if proj_act == 1 %}
-                <input name="proj_num" type="checkbox" checked data-toggle="toggle" data-size="large"\
-                data-on="Project 1" data-off="Project 2" data-onstyle="success" data-offstyle="info">
-                {% else %}
-                <input name="proj_num" type="checkbox"  data-toggle="toggle" data-size="large"\
-                data-on="Project 1" data-off="Project 2" data-onstyle="success" data-offstyle="info">
-                {% endif %}
+                <div class="col-sm-6">
+                    <h2>เปิด-ปิดระบบ</h2>
+                    {% if activated == 1 %}
+                    <input name="on_off_sys" type="checkbox" checked data-toggle="toggle" data-size="large" data-offstyle="danger">
+                    {% else %}
+                    <input name="on_off_sys" type="checkbox" data-toggle="toggle" data-size="large" data-offstyle="danger">
+                    {% endif %}
+                </div>
+                <div class="col-sm-6">
+                    <h2>อนุญาติให้สอบโปรเจคที่</h2>
+                    {% if proj_act == 1 %}
+                    <input name="proj_num" type="checkbox" checked data-toggle="toggle" data-size="large"\
+                    data-on="Project 1" data-off="Project 2" data-onstyle="success" data-offstyle="info">
+                    {% else %}
+                    <input name="proj_num" type="checkbox"  data-toggle="toggle" data-size="large"\
+                    data-on="Project 1" data-off="Project 2" data-onstyle="success" data-offstyle="info">
+                    {% endif %}
+                </div>
+                <div class="col-sm-6" style="margin-top: 5%;">
+                    <h2>load อาจารย์ (การสอบโปรเจค)</h2>
+                    <div class="form-group">
+                        <select class="form-control" name="load_tch" style="width: 20%;">
+                            <option value="{{load_proj}}" hidden selected="selected">{{load_proj}}</option>
+                            <option value=7>7</option>
+                            <option value=8>8</option>
+                            <option value=9>9</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-6" style="margin-top: 5%;">
+                    <h2>load อาจารย์ (การสอบโปสเตอร์)</h2>
+                    <div class="form-group">
+                        <select class="form-control" name="load_tch_post" style="width: 20%;">
+                            <option value="{{load_proj}}" hidden selected="selected">{{load_post}}</option>
+                            <option value=7>7</option>
+                            <option value=8>8</option>
+                            <option value=9>9</option>
+                        </select>
+                    </div>
+                </div>
+                
             </form>
         </div>
+    </div>
 
-        <button name="submit_settings" type="submit" class="btn btn-success" form="settings"><h3>บันทึกการตั้งค่า</h3></button>
-        <div class="col-xs-10">
-            <!-- <button name="reset_score" type="submit" class="btn btn-danger"><h4>รีเซ็ตผลคะแนน</h4></button> -->
-        </div>
+    <button name="submit_settings" type="submit" class="btn btn-success" form="settings"><h3>บันทึกการตั้งค่า</h3></button>
+    <div class="col-xs-10">
+        <!-- <button name="reset_score" type="submit" class="btn btn-danger"><h4>รีเซ็ตผลคะแนน</h4></button> -->
     </div>
 </div>
 {% endblock %}

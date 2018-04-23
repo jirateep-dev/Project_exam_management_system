@@ -3,7 +3,7 @@
     <div class="row" style="width: 100%;">
         <div class="container" style="text-align: center"><h1 style="font-size: 6.5em;margin-bottom: 30px;">ตารางการจัดการสอบ</h1></div>
         <div class="jumbotron well well-lg" style="background: #ffffff;">
-            <h4 style="font-size: 3.3em;color: #353b48">การสอบโปรเจคภาคเรียนที่ 1 ปีการศึกษา 2560</h4>
+            <h4 style="font-size: 3.3em;color: #353b48">การสอบโปรเจคภาคเรียนที่ {{proj_act}} ปีการศึกษา {{proj_years}}</h4>
         </div>
         
         <div class="panel panel-default">
@@ -49,23 +49,35 @@
             </div>
         </div>
         <div id="table_teacher" class="panel-collapse collapse in">
-            <table class="table table-hover" >
-                    <thead>
-                        <tr style="font-size: 1.5em">
-                            <th>กลุ่มอาจารย์</th>
-                            <th>รายชื่ออาจารย์</th>
-                            <th>ระดับความใจดี</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for teacher in list_result_teacher %} 
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th><label>SAFE ZONE MIN : </label><label style="margin-left:20px;color: green">{{safezone.min}}</label></th>
+                        <th><label>SAFE ZONE MAX : </label><label style="margin-left:20px;color: red">{{safezone.max}}</label></th>
+                    </tr>
+                    <tr style="font-size: 1.5em">
+                        <th>กลุ่มอาจารย์</th>
+                        <th>รายชื่ออาจารย์</th>
+                        <th>ค่าความเข้มงวด</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for teacher in result_teacher %} 
                         <tr style="font-size: 1.1em">
                             <td class="active">{{teacher.proj_group_exam}}</td>
                             <td class="warning">{{teacher.teacher_name}}</td>
                             <td class="info">{{teacher.levels_teacher}}</td>
                         </tr>
-                        {% endfor %}
-                    </tbody>
+                        {% if teacher.count_group == 4 %}
+                            <tr style="font-size: 1.1em">
+                                <td class="success"></td>
+                                <td class="success">ค่าเฉลี่ยกลุ่ม</td>
+                                <td class="success">{{teacher.avg}}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
             </table>
         </div>
     </div>

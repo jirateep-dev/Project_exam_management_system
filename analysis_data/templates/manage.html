@@ -4,14 +4,13 @@
     <div class="row" style="width: 100%;">
         <div class="container" style="text-align: center"><h1 style="font-size: 6.5em;margin-bottom: 30px;">จัดการสอบ</h1></div>
         <div class="jumbotron col-sm-8 well well-lg" style="background: #ffffff;text-align: center;">
-            <h1 style="color: #353b48;font-size: 4em;">การสอบโปรเจคภาคเรียนที่ 1 ปีการศึกษา 2560</h1>
+            <h1 style="color: #353b48;font-size: 4em;">การสอบโปรเจคภาคเรียนที่ {{proj_act}} ปีการศึกษา {{proj_years}}</h1>
         </div>
         <div class="col-sm-4">
             <div class="panel panel-default">
                 <div class="panel-heading" data-toggle="collapse" href="#upload_file" style="background: #ffffff;text-align: center">
                     <h4 class="panel-title" style="color: #353b48;font-size: 1.5em">
-                        <label style="font-size: 1.3em">คลิกที่นี่หากท่านต้องการ</label>
-                        <label style="font-size: 1.3em"><u>อัพโหลดไฟล์</u></label>
+                        <label style="font-size: 1.3em"><u>นำเข้าไฟล์</u></label>
                         <label style="font-size: 1.3em">ตารางสอบ</label>
                     </h4>
                 </div>
@@ -28,7 +27,7 @@
                     </div>
                     <div class="form-group">                    
                         <div class="col-md-3 col-sm-3 col-xs-12 col-md-offset-3" style="margin-bottom:10px;">
-                            <button class="btn btn-primary"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span>อัพโหลด </button>
+                            <button class="btn btn-primary"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span>นำเข้า </button>
                         </div> 
                     </div>
                 </form>
@@ -36,7 +35,6 @@
             <div class="panel panel-default">
                 <div class="panel-heading" data-toggle="collapse" href="#export_file" style="background: #ffffff;text-align: center">
                     <h4 class="panel-title" style="color: #353b48;font-size: 1.5em">
-                        <label style="font-size: 1.3em">คลิกที่นี่หากท่านต้องการ</label>
                         <label style="font-size: 1.3em"><u>ส่งออกไฟล์</u></label>
                         <label style="font-size: 1.3em">ตารางสอบ</label>
                     </h4>
@@ -64,7 +62,7 @@
                     <span style="font-size: 1.7em">ES : {{pc.es}}  | </span>
                     <span style="font-size: 1.7em">MU : {{pc.mu}}  | </span>
                     <span style="font-size: 1.7em">NW : {{pc.nw}}  | </span>
-                    <span style="font-size: 1.7em">SE : {{pc.se}} </span>
+                    <span style="font-size: 1.7em">SD : {{pc.se}} </span>
                 {% endfor %}
             </h4>
         </div>
@@ -82,13 +80,37 @@
                     <td rowspan="2"><h4 style="font-size: 1.3em">{{key}}</h4></td>
                     <td><h4 style="font-size: 1.3em">ช่วงเช้า</h4></td>
                     {% for i in values.0%}
-                        <td><h4 style="font-size: 1.3em">{{i}}</h4></td>
+                        {% if i == 'Available' %}
+                            <td><h4 style="font-size: 1.3em;color: green">{{i}}</h4></td>
+                        {% endif %}
+                        {% if i == 'Error' %}
+                            <td><h4 style="font-size: 1.3em;color: red">{{i}}</h4></td>
+                        {% endif %}
+                        {% if i != 'Available' and i != 'Error' %}
+                            <td>
+                                {% for j in i%}
+                                    <h4 style="font-size: 1.3em">{{j}}</h4>
+                                {% endfor %}
+                            </td>
+                        {% endif %}
                     {% endfor %}
                 </tr>
                 <tr>
                     <td><h4 style="font-size: 1.3em">ช่วงบ่าย</h4></td>
                     {% for i in values.1%}
-                        <td><h4 style="font-size: 1.3em">{{i}}</h4></td>
+                        {% if i == 'Available' %}
+                            <td><h4 style="font-size: 1.3em;color: green">{{i}}</h4></td>
+                        {% endif %}
+                        {% if i == 'Error' %}
+                            <td><h4 style="font-size: 1.3em;color: red">{{i}}</h4></td>
+                        {% endif %}
+                        {% if i != 'Available' and i != 'Error' %}
+                            <td>
+                                {% for j in i%}
+                                    <h4 style="font-size: 1.3em">{{j}}</h4>
+                                {% endfor %}
+                            </td>
+                        {% endif %}
                     {% endfor %}
                 </tr>
             {% endfor %}
@@ -144,6 +166,7 @@
             </div>
         </form>
     </div>
+    <hr style="margin-top: 5%;">
     <form action="{% url 'manage' %}" method="POST" id="reset_form" style="margin-left: 100px;padding-bottom: 50px;">
         {% csrf_token %}
         <div class="row" style="margin-left: 70%;margin-top: 30px">
@@ -155,8 +178,6 @@
             </div>
         </div>
     </form>
-
-
 
 </div>
 {% endblock %}

@@ -17,14 +17,22 @@ from django.db.models import Q
 from random import randint
 from collections import Counter
 from django.db.models import Max
+from random import randint
+import statistics
 import logging
 
-this_year = Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
+def this_year():
+    return Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
+
+def lastname_tch(tch_name):
+    split_name = tch_name.split(' ')
+    last_name = split_name[len(split_name)-1]
+    return last_name
 
 def export_csv(request):
     setting = Settings.objects.get(id=1)
     sc = ScheduleRoom.objects.all()
-    proj = Project.objects.filter(proj_years=this_year, proj_semester=setting.forms)
+    proj = Project.objects.filter(proj_years=this_year(), proj_semester=setting.forms)
     teachers = Teacher.objects.all()
     room = Room.objects.all()
     time = TimeExam.objects.all()
@@ -45,9 +53,9 @@ def export_csv(request):
                     lis_tch.append(tch.teacher_name)
         lis_sub = []
         lis_sub.extend([str(date.get(id=objs.date_id_id).date_exam), str(room.get(id=objs.room_id_id).room_name), str(time.get(id=objs.time_id_id).time_exam), \
-        str(proj.get(id=objs.proj_id).proj_name_th), str(proj.get(id=objs.proj_id).proj_name_en), \
-        str(proj.get(id=objs.proj_id).proj_major), str(proj.get(id=objs.proj_id).proj_advisor), \
-        str(proj.get(id=objs.proj_id).proj_co_advisor), str(objs.teacher_group), str(lis_tch[0]), str(lis_tch[1]), str(lis_tch[2]), str(lis_tch[3])])
+        str(proj.get(id=objs.proj_id_id).proj_name_th), str(proj.get(id=objs.proj_id_id).proj_name_en), \
+        str(proj.get(id=objs.proj_id_id).proj_major), str(proj.get(id=objs.proj_id_id).proj_advisor), \
+        str(proj.get(id=objs.proj_id_id).proj_co_advisor), str(objs.teacher_group), str(lis_tch[0]), str(lis_tch[1]), str(lis_tch[2]), str(lis_tch[3])])
         
         if checkloop != objs.teacher_group:
             checkloop = objs.teacher_group
@@ -58,20 +66,28 @@ def export_csv(request):
     with open('schedule_room.csv','w', newline='', encoding='utf-8-sig') as new_file:
         csv_writer = csv.writer(new_file, delimiter=',')
         csv_writer.writerows(lis_ex)
-    
-    # render(request,"manage.html")
+    new_file.closed
+
+    with open('schedule_room.csv', 'rb') as schedule_room:
+        response = HttpResponse(schedule_room.read())
+        response['content_type'] = 'application/schedule_room'
+        response['Content-Disposition'] = 'attachment;filename=schedule_room.csv'
+        return response
+
     return HttpResponseRedirect(reverse("manage"))
 
 def upload_csv(request):
     # if not GET, then proceed
     try:
-        Project.objects.filter(proj_years=this_year).update(schedule_id_id=None)
+        csv_file = request.FILES["csv_file"]
+        Project.objects.filter(proj_years=this_year()).update(schedule_id=None)
         DateExam.objects.all().delete()
         room = Room.objects.all()
         time = TimeExam.objects.all()
         proj = Project.objects.all()
         teachers = Teacher.objects.all()
-        csv_file = request.FILES["csv_file"]
+        sem = Settings.objects.get(id=1).forms
+        
         if not csv_file.name.endswith('.csv'):
             messages.error(request,'File is not CSV type')
             return HttpResponseRedirect(reverse("manage"))
@@ -89,15 +105,17 @@ def upload_csv(request):
             
             data_dict = {}
             dict_date = {}
-            if room.filter(room_name=fields[1]).exists() and time.filter(time_exam=fields[2]).exists() and proj.filter(proj_name_th=fields[3]).exists() and\
+            if room.filter(room_name=fields[1]).exists() and time.filter(time_exam=fields[2]).exists() and \
+                proj.filter(proj_name_th=fields[3], proj_semester=1).exists() and\
                 teachers.filter(teacher_name=fields[9]).exists() and teachers.filter(teacher_name=fields[10]).exists() and \
                 teachers.filter(teacher_name=fields[11]).exists() and teachers.filter(teacher_name=fields[12]).exists():
 
-                data_dict["date_id"] = fields[0].replace('/', '')+"0"+str(room.get(room_name=fields[1]).id)
+                data_dict["date_id"] = fields[0].replace('/', '')+str(time.get(time_exam=fields[2]).time_period)+str(room.get(room_name=fields[1]).id)+str(sem)
                 data_dict["room_id"] = str(room.get(room_name=fields[1]).id)
                 data_dict["time_id"] = str(time.get(time_exam=fields[2]).id)
-                data_dict["proj_id"] = str(proj.get(proj_name_th=fields[3]).id)
+                data_dict["proj_id"] = str(proj.get(proj_name_th=fields[3], proj_semester=1).id)
                 data_dict["teacher_group"] = fields[8]
+                data_dict["semester"] = sem
                 
                 lis_id_teacher = [teachers.get(teacher_name=fields[9]).id, teachers.get(teacher_name=fields[10]).id, \
                 teachers.get(teacher_name=fields[11]).id, teachers.get(teacher_name=fields[12]).id]
@@ -105,7 +123,7 @@ def upload_csv(request):
             if not DateExam.objects.filter(id=fields[0]).exists() and fields[1] != "room_id" and fields[1] != "----------" and \
                 room.filter(room_name=fields[1]).exists() and time.filter(time_exam=fields[2]).exists():
                 
-                dict_date["id"] = fields[0].replace('/', '')+"0"+str(room.get(room_name=fields[1]).id)
+                dict_date["id"] = fields[0].replace('/', '')+str(time.get(time_exam=fields[2]).time_period)+str(room.get(room_name=fields[1]).id)+str(sem)
                 dict_date["date_exam"] = fields[0]
                 dict_date["time_period"] = str(time.get(time_exam=fields[2]).time_period)
                 dict_date["room_id"] = str(room.get(room_name=fields[1]).id)
@@ -127,7 +145,7 @@ def upload_csv(request):
                         teacher = Teacher.objects.get(id=id_t)
                         teacher.schedule_teacher.add(sche)
                         teacher.save()
-                    proj.filter(proj_name_th=fields[3]).update(schedule_id_id=sche.id)
+                    proj.filter(proj_name_th=fields[3], proj_semester=1).update(schedule_id=sche.id)
                 else:
                     logging.getLogger("error_logger").error(form.errors.as_json())                                                
             except Exception as e:
@@ -145,59 +163,147 @@ def upload_csv(request):
 # /////////////////////////////////////      old code here    ////////////////////////////////////////////
 # /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-def manageTeacher(major_id, date_input, period_input):
-    list_teachers = []
-    return list_teachers
-
 def approve_teacher(tch_name, date_selected, period_selected):
+    load = Settings.objects.get(id=1).load
     approve_tch = False
 
-    if not Teacher.objects.get(teacher_name=tch_name).schedule_teacher.all().exists():
+    last_name = lastname_tch(tch_name)
+
+    if not Teacher.objects.get(teacher_name__contains=last_name).schedule_teacher.all().exists():
         approve_tch = True
     else:
-        tid_sch = Teacher.objects.get(teacher_name=tch_name).schedule_teacher.all()
-        sche_r = ScheduleRoom.objects.all()
-        chk_schedule = 0;
-        for obj in tid_sch:
-            date_id_check = sche_r.values('date_id_id').get(id=obj.id)['date_id_id']
-            date_exam_chk = DateExam.objects.values('date_exam').get(id=date_id_check)['date_exam']
-            time_period_chk = DateExam.objects.values('time_period').get(id=date_id_check)['time_period']
-            if not (date_exam_chk == date_selected and time_period_chk == int(period_selected)):
-                chk_schedule += 1
-            if chk_schedule == len(tid_sch):
-                approve_tch = True
+        tid_sch = Teacher.objects.get(teacher_name__contains=last_name).schedule_teacher.all()
+        if len(tid_sch) <= load:
+            sche_r = ScheduleRoom.objects.all()
+            chk_schedule = 0;
+            for obj in tid_sch:
+                date_id_check = sche_r.values('date_id_id').get(id=obj.id)['date_id_id']
+                date_exam_chk = DateExam.objects.values('date_exam').get(id=date_id_check)['date_exam']
+                time_period_chk = DateExam.objects.values('time_period').get(id=date_id_check)['time_period']
+                if not (date_exam_chk == date_selected and time_period_chk == int(period_selected)):
+                    chk_schedule += 1
+                if chk_schedule == len(tid_sch):
+                    approve_tch = True
+        else:
+            approve_tch = False
 
     return approve_tch
 
+def level_safezone():
+    levels = Teacher.objects.all().values_list('levels_teacher', flat=True).order_by('levels_teacher')
+    cal_med = statistics.median(levels)
+    sd_value = statistics.stdev(levels)
+    plus_sd1 = Teacher.objects.filter(levels_teacher__lte=cal_med+sd_value).filter(levels_teacher__gte=cal_med)\
+            .values_list('levels_teacher', flat=True).order_by('levels_teacher')
+    minus_sd1 = Teacher.objects.filter(levels_teacher__lte=cal_med).filter(levels_teacher__gte=cal_med-sd_value)\
+            .values_list('levels_teacher', flat=True).order_by('levels_teacher')
+    
+    min_safe = statistics.median(minus_sd1)
+    max_safe = statistics.median(plus_sd1)
+
+    return {'min':min_safe, 'max':max_safe}
+
+def manageTeacher(major_id, date_input, period_input):
+    list_teachers = []
+    temp_tch = []
+    setting = Settings.objects.get(id=1)
+    major = Major.objects.get(id=major_id)
+
+    # tch_projNull = Project.objects.filter(proj_years=this_year(), proj_semester=setting.forms, \
+    #                 proj_major=major.major_name, schedule_id=None).values_list('proj_advisor', flat=True).distinct()
+    
+    proj_null = Project.objects.filter(proj_years=this_year(), proj_semester=setting.forms, \
+                    proj_major=major.major_name, schedule_id=None)
+
+    # for i in tch_projNull:
+    #     if approve_teacher(i, date_input, period_input):
+    #         list_teachers.append(i)
+    #     if len(list_teachers) == 3:
+    #         break
+
+    for i in proj_null:
+        if approve_teacher(i.proj_advisor, date_input, period_input) and i.proj_advisor not in list_teachers:
+            list_teachers.append(i.proj_advisor)
+            temp_tch.append(i.proj_co_advisor)
+        if i.proj_co_advisor != '' and (approve_teacher(i.proj_co_advisor, date_input, period_input) and i.proj_co_advisor not in list_teachers and \
+            not approve_teacher(i.proj_advisor, date_input, period_input)):
+            list_teachers.append(i.proj_co_advisor)
+            temp_tch.append(i.proj_advisor)
+        if len(list_teachers) == 3:
+            break
+
+    safe_zone = level_safezone()
+
+    templis = list(list_teachers)
+    while True:
+        while len(list_teachers) != 4:
+            tch_ran = Teacher.objects.order_by('?').first()
+            check_lastname = True
+            for i in range(len(list_teachers)):
+                last_name = lastname_tch(list_teachers[i])
+                last_name_t = lastname_tch(tch_ran.teacher_name)
+                last_name_co = lastname_tch(temp_tch[i])
+                if last_name == last_name_t and last_name_co == last_name_t:
+                    check_lastname = False
+            if approve_teacher(tch_ran.teacher_name, date_input, period_input) and check_lastname:
+                list_teachers.append(tch_ran.teacher_name)
+        if len(list_teachers) == 4:
+            sum_lev = 0
+            for name in list_teachers:
+                last_name = lastname_tch(name)
+                sum_lev += Teacher.objects.get(teacher_name__contains=last_name).levels_teacher
+            if (sum_lev/4.0) <= safe_zone['max'] and (sum_lev/4.0) >= safe_zone['min']:
+                break
+            else:
+                list_teachers = list(templis)
+
+    return list_teachers
+
 def count_proj(major):
-    # form_setting = Settings.objects.get(id=1).forms
-    return len(Project.objects.filter(proj_years=this_year, schedule_id_id=None, proj_major=major))
+    form_setting = Settings.objects.get(id=1).forms
+    return len(Project.objects.filter(proj_years=this_year(), proj_semester=form_setting, schedule_id=None, proj_major=major))
 
 def prepare_render():
     result = []
     dic = {}
+    sem =Settings.objects.get(id=1).forms
     room = Room.objects.values('room_name')
-    date = DateExam.objects.values('date_exam').distinct()
+    date = DateExam.objects.values('date_exam').filter(id__endswith=str(sem)).distinct()
     date_all = DateExam.objects.all()
     pc_result = [{'bi':count_proj('Business Intelligence'), 'ds':count_proj('Data Science'), 'es':count_proj('Embedded Systems'), \
                 'mu':count_proj('Multimedia'), 'nw':count_proj('Network and Communication'), 'se':count_proj('Software Development')}]
     date_result = [date[i]['date_exam'] for i in range(len(date))]
 
     for i in date_result:
-        period_zero = [0 for i in range(len(room))]
-        period_one = [0 for i in range(len(room))]
+        dic_keep = {}
+        period_zero = ['Available' for i in range(len(room))]
+        period_one = ['Available' for i in range(len(room))]
         tp_date = DateExam.objects.values('time_period').filter(date_exam=i)
         rm_date = DateExam.objects.values('room_id_id').filter(date_exam=i)
-        dic_keep = {}
+        id_date = DateExam.objects.values('id').filter(date_exam=i)
 
         for j in range(len(tp_date)):
             dic_keep[j] = (rm_date[j]['room_id_id']-1, tp_date[j]['time_period'])
 
         for j in range(len(dic_keep)):
-            if dic_keep[j][1] == 0:
-                period_zero[dic_keep[j][0]] = 1
-            else:
-                period_one[dic_keep[j][0]] = 1
+            try:
+                proj_id = ScheduleRoom.objects.filter(date_id_id=id_date[j]['id'], semester=sem)
+                lis_major = [Project.objects.get(id=i.proj_id_id).proj_major for i in proj_id]
+                lis = []
+                test_error = Project.objects.filter(id=proj_id[0].proj_id_id)
+                for obj in proj_id:
+                    type_proj = Project.objects.get(id=obj.proj_id_id)
+                    if type_proj.proj_major+' : '+str(lis_major.count(type_proj.proj_major)) not in lis:
+                        lis.append(type_proj.proj_major+' : '+str(lis_major.count(type_proj.proj_major)))
+                    if dic_keep[j][1] == 0:
+                        period_zero[dic_keep[j][0]] = lis
+                    else:
+                        period_one[dic_keep[j][0]] = lis
+            except Exception as error:
+                if dic_keep[j][1] == 0:
+                    period_zero[dic_keep[j][0]] = 'Error'
+                else:
+                    period_one[dic_keep[j][0]] = 'Error'
         dic[i] = (period_zero, period_one)
     result.append(pc_result)
     result.append(dic)
@@ -216,13 +322,14 @@ def manage_room(request):
     create_schedule = False
     fail_teacher = False
     list_teachers = manageTeacher(major_selected, date_selected, period_selected)
+    sem = Settings.objects.get(id=1).forms
 
     # check date in database and insert
     dataframe_date = pd.DataFrame(list(DateExam.objects.values('date_exam')))
     dataframe_period = pd.DataFrame(list(DateExam.objects.values('time_period')))
     dataframe_room = pd.DataFrame(list(DateExam.objects.values('room_id_id')))
 
-    id_dateexam = str((date_selected+period_selected+room_selected).replace('/',''))
+    id_dateexam = str((date_selected+period_selected+room_selected+str(sem)).replace('/',''))
 
     if not DateExam.objects.filter(id=id_dateexam).exists() and not (list_teachers == [] or len(list_teachers) < 4):
         create_schedule = True
@@ -232,14 +339,15 @@ def manage_room(request):
     # /////////////////////////////////////
 
     # check proj of teacher
-    mobj_name = Major.objects.values('major_name')
+    major = Major.objects.get(id=major_selected)
+
     if create_schedule:
-        proj_tch_advisor = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=this_year, \
+        proj_tch_advisor = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=this_year(), proj_semester=sem, \
                         proj_advisor__in=[list_teachers[0], list_teachers[1], list_teachers[2]], \
-                        schedule_id_id=None, proj_major=mobj_name.get(id=major_selected)['major_name'])))
+                        schedule_id=None, proj_major=major.major_name)))
         for i in range(3):
-            proj_of_teacher = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=this_year, \
-                        proj_advisor=list_teachers[i], schedule_id_id=None, proj_major=mobj_name.get(id=major_selected)['major_name'])))
+            proj_of_teacher = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=this_year(), proj_semester=sem, \
+                        proj_advisor=list_teachers[i], schedule_id=None, proj_major=major.major_name)))
             if not proj_of_teacher.empty:
                 rand_index = randint(0,len(proj_of_teacher)-1)
                 if proj_of_teacher.iloc[rand_index]['id'] not in list_proj_id and len(list_proj_id) < 5:
@@ -249,6 +357,10 @@ def manage_room(request):
                 if proj_tch_advisor.iloc[i]['id'] not in list_proj_id and len(list_proj_id) < 5:
                     list_proj_id.append(proj_tch_advisor.iloc[i]['id'])
     if list_proj_id == []:
+        date = DateExam.objects.get(id=id_dateexam)
+        sche = ScheduleRoom.objects.filter(date_id_id=date.id)
+        for i in sche:
+            Project.objects.filter(id=i.proj_id_id).update(schedule_id=None)
         DateExam.objects.filter(id=id_dateexam).delete()
 
     NoneType = type(None)
@@ -261,14 +373,15 @@ def manage_room(request):
             time_id_condition = 1 if(int(period_selected) == 0) else 6
             if not ScheduleRoom.objects.filter(date_id_id=id_dateexam, time_id_id=i+time_id_condition, room_id_id=int(room_selected)).exists():
                 schedule = ScheduleRoom(teacher_group=max_count+1, room_id_id=int(room_selected), \
-                            date_id_id=id_dateexam, proj_id=list_proj_id[i], time_id_id=i+time_id_condition)
+                            date_id_id=id_dateexam, proj_id_id=list_proj_id[i], time_id_id=i+time_id_condition)
                 schedule.save()
-                Project.objects.filter(id=list_proj_id[i]).update(schedule_id_id=schedule.id)
+                Project.objects.filter(id=list_proj_id[i]).update(schedule_id=schedule.id)
                 for name in list_teachers:
-                    teacher_r = Teacher.objects.get(teacher_name=name)
+                    last_name = lastname_tch(name)
+                    teacher_r = Teacher.objects.get(teacher_name__contains=last_name)
                     teacher_r.schedule_teacher.add(schedule)
                     teacher_r.save()
-                    teacher_r = Teacher.objects.filter(teacher_name=name).update(proj_group_exam=max_count+1)
+                    # teacher_r = Teacher.objects.filter(teacher_name__contains=last_name).update(proj_group_exam=max_count+1)
     pre = prepare_render()
     return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
                     'room_period':pre[1]})
@@ -278,25 +391,33 @@ def table_room(request):
     result_manage = []
     # query teacher_group
 
-    sched_r = ScheduleRoom.objects.all()
-    list_group = list(sched_r.values('teacher_group').distinct())
-    count_teacher, count_len = 0, 0
+    sem = Settings.objects.get(id=1).forms
+    sched_r = ScheduleRoom.objects.filter(semester=str(sem))
+    list_group = list(sched_r.values('teacher_group').filter(semester=str(sem)).distinct())
     for i in list_group:
         dtset_id_sch = sched_r.values('id').filter(teacher_group=i['teacher_group'])
+        count_teacher = 0
+        sum_lv = 0
         for j in range(4):
             id_sch = dtset_id_sch[0]['id']
             tch_obj = list(sched_r.get(id=id_sch).teacher_set.all())[j]
+            sum_lv += tch_obj.levels_teacher
+            count_teacher+=1
+            avg = sum_lv/4.0
             teacher_groups.append({'proj_group_exam': i['teacher_group'], \
                                 'teacher_name': tch_obj.teacher_name, \
-                                'levels_teacher': tch_obj.levels_teacher})
+                                'levels_teacher': tch_obj.levels_teacher, \
+                                'count_group':j+1, \
+                                'avg':avg})
+            if count_proj == 3:
+                sum_lv, avg = 0, 0
 
     # //////////////////////////////////////
 
     # query data to html
-    # schedule_all = pd.read_sql_query(str(ScheduleRoom.objects.all().query), connection)
-    schedule_all = ScheduleRoom.objects.all()
+    schedule_all = ScheduleRoom.objects.filter(semester=str(sem))
     for i in schedule_all:
-        proj_objs = Project.objects.get(schedule_id_id=i.id)
+        proj_objs = Project.objects.get(schedule_id=i.id)
         room_result = Room.objects.values('room_name').get(id=i.room_id_id)['room_name']
         date_result = DateExam.objects.values('date_exam').get(id=i.date_id_id)['date_exam']
         proj_result = proj_objs.proj_name_th
@@ -308,7 +429,8 @@ def table_room(request):
                     'date_exam': date_result, 'proj_name_th': proj_result, 'major_name':major_result, \
                     'time_exam': time_result, 'proj_advisor':advisor_result})
 
-    return render(request,"result_room.html",{'list_result_teacher': teacher_groups, 'ScheduleRoom': result_manage})
+    return render(request,"result_room.html",{'result_teacher': teacher_groups, 'ScheduleRoom': result_manage,\
+             'safezone':level_safezone(), 'proj_act':sem, 'proj_years':this_year()})
 
 def admin_required(login_url=None):
     return user_passes_test(lambda u: u.is_superuser, login_url=login_url)
@@ -316,16 +438,19 @@ def admin_required(login_url=None):
 @login_required
 @admin_required(login_url="login/")
 def manage(request):
+    sem = Settings.objects.get(id=1).forms
+    str_link = "manage.html"
+    if sem == 2:
+        str_link = "manage_sem2.html"
     try:
         reset_selected = int(request.POST.get('reset_gen',None))
         if reset_selected:
-            Project.objects.filter(proj_years=this_year).update(schedule_id_id=None)
-            DateExam.objects.all().delete()
-            Teacher.objects.all().order_by('proj_group_exam').update(proj_group_exam=0)
+            Project.objects.filter(proj_years=this_year(), proj_semester=sem).update(schedule_id=None)
+            DateExam.objects.all().filter(id__endswith=str(sem)).delete()
         pre = prepare_render()
-        return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
-                    'room_period':pre[1]})
+        return render(request,str_link,{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
+                    'room_period':pre[1], 'proj_act':sem, 'proj_years':this_year()})
     except Exception as error:
         pre = prepare_render()
-        return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
-                    'room_period':pre[1]})
+        return render(request,str_link,{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
+                    'room_period':pre[1], 'proj_act':sem, 'proj_years':this_year()})
