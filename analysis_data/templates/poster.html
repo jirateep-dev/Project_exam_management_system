@@ -3,11 +3,11 @@
     <div class="row" style="width: 100%;">
         <div class="container" style="text-align: center"><h1 style="font-size: 6.5em;margin-bottom: 30px;">จัดสอบโปสเตอร์</h1></div>
         <div class="jumbotron col-sm-4" style="margin-left: 15%;padding: 0;">
-            <form action="{% url 'manage_poster' %}" method="post" id="manage_poster">
-                {% csrf_token %}
-                <button type="submit" name="gen_post" value=1 form="manage_poster"\
-                class="btn btn-success" style="width: 100%;height: 80px;"><h2 style="font-size: 3em">สร้างตาราง</h2></button>
-            </form>
+            <!-- <form action="{% url 'manage_poster' %}" method="post" id="manage_poster">
+                {% csrf_token %} -->
+            <button data-toggle="modal" data-target="#gen_poster" \
+             class="btn btn-success" style="width: 100%;height: 80px;"><h2 style="font-size: 3em">สร้างตาราง</h2></button>
+            <!-- </form> -->
         </div>
         <div class="jumbotron col-sm-4" style="padding: 0;">
             <form action="{% url 'manage_poster' %}" method="post" id="manage_poster">
@@ -16,6 +16,84 @@
                 class="btn btn-danger" style="width: 100%;height: 80px;"><h2 style="font-size: 3em">ล้างตาราง</h2></button>
             </form>
         </div>
-    </div> 
+    </div>
+    {% if date != '' %}
+        <div class="panel panel-default">
+            <div class="panel-heading" data-toggle="collapse" href="#table_poster">
+                <h4 class="panel-title">
+                    <a style="font-size: 2em">ตารางสอบโปสเตอร์วันที่ {{date}}</a>
+                </h4>
+            </div>
+        </div>
+        <div id="table_poster" class="panel-collapse collapse in">
+            <table class="table table-hover">
+                <thead>
+                    <label style="margin-left:30%;">SAFE ZONE MIN : </label><label style="margin-left:20px;color: green">{{safezone.min}}</label>
+                    <label style="margin-left:5%;">SAFE ZONE MAX : </label><label style="margin-left:20px;color: red">{{safezone.max}}</label>
+
+                    <tr style="font-size: 1.5em">
+                        <th>ลำดับ</th>
+                        <th>รายชื่อโปรเจค</th>
+                        <th>อาจารย์คนที่ 1</th>
+                        <th>อาจารย์คนที่ 2</th>
+                        <th>อาจารย์คนที่ 3</th>
+                        <th>ค่าเฉลี่ยความเข้มงวด</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for obj in result %} 
+                        <tr style="font-size: 1.1em">
+                            <td class="active">{{obj.id}}</td>
+                            <td class="warning">{{obj.proj_name}}</td>
+                            <td class="info">{{obj.teacher1}}</td>
+                            <td class="active">{{obj.teacher2}}</td>
+                            <td class="warning">{{obj.teacher3}}</td>
+                            <td class="info">{{obj.avg}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="gen_poster" role="dialog">
+        <div class="modal-dialog modal-md">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form action="{% url 'generate_poster' %}" method="POST" id="generate_poster" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <label class="modal-title">สร้างกำหนดการโปสเตอร์</label>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" >
+                            <h2 for="name">เลือกวันที่: </h2>
+                            <input type="text" class="form-control" name="date_selected" style="font-size: 2em"/>
+                        </div>
+                    </div>
+                    {% block javascript %} 
+                        <script type="text/javascript">
+                            $(document).ready(function(){
+                                $('input[name="date_selected"]').datepicker({
+                                    startDate: new Date(),
+                                    singleDatePicker: true,
+                                    showDropdowns: true,
+                                    format: 'dd/mm/yyyy'
+                                    }).datepicker("setDate", new Date());
+                            });
+                        </script>
+                    {% endblock %}
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button type="submit" name="gen_post" value=1 class="btn btn-primary"> 
+                                <span class="glyphicon glyphicon-plus" style="margin-right:5px;"></span>สร้าง </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

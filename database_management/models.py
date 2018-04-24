@@ -50,6 +50,7 @@ class DateExam(models.Model):
 
 class Project(models.Model):
     schedule_id = models.IntegerField(blank=True, null=True)
+    sche_post_id = models.IntegerField(blank=True, null=True)
     proj_years = models.IntegerField(default=0)
     proj_semester = models.IntegerField(default=1)
     proj_name_th = models.CharField(max_length=1024)
@@ -75,7 +76,15 @@ class ScheduleRoom(models.Model):
     objects = models.Manager()
 
     class Meta:
-        verbose_name_plural = 'ตารางกำหนดการ'
+        verbose_name_plural = 'ตารางกำหนดการโปรเจค'
+
+class SchedulePoster(models.Model):
+    date_post = models.CharField(max_length=256)
+    proj_id = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
+    objects = models.Manager()
+
+    class Meta:
+        verbose_name_plural = 'ตารางกำหนดการโปสเตอร์'
 
 class ScoreProj(models.Model):
     proj_id = models.ForeignKey(Project, on_delete=models.CASCADE)
@@ -131,6 +140,7 @@ class Teacher(models.Model):
     score_advisor = models.ManyToManyField(ScoreAdvisor)
     major_teacher = models.ManyToManyField(Major)
     schedule_teacher = models.ManyToManyField(ScheduleRoom)
+    schepost_teacher = models.ManyToManyField(SchedulePoster)
     objects = models.Manager()
 
     class Meta:
@@ -155,7 +165,7 @@ class Student(models.Model):
 
 class Settings(models.Model):
     load = models.IntegerField(default=8)
-    load_post = models.IntegerField(default=8)
+    load_post = models.IntegerField(default=6)
     activate = models.IntegerField(default=1)
     forms = models.IntegerField(default=1)
     objects = models.Manager()
