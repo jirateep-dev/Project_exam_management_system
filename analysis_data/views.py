@@ -31,7 +31,7 @@ def lastname_tch(tch_name):
 
 def export_csv(request):
     setting = Settings.objects.get(id=1)
-    sc = ScheduleRoom.objects.all()
+    sc = ScheduleRoom.objects.filter(semester=setting.forms)
     proj = Project.objects.filter(proj_years=this_year(), proj_semester=setting.forms)
     teachers = Teacher.objects.all()
     room = Room.objects.all()
