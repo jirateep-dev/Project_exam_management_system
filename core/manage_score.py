@@ -21,6 +21,7 @@ import logging
 LIST_COL = ['สื่อการนำเสนอ','การนำเสนอ','การตอบคำถาม','รายงาน','การค้นคว้า','การวิเคราะห์และออกแบบ','ปริมาณงาน','ความยากง่าย','คุณภาพของงาน']
 LIST_COL_AD = ['การพัฒนาโครงงานตามวัตถุประสงค์','การปฏิบัติได้ตรงตามแผนที่วางไว้','การเลือกทฤษฏีและเครื่องมือ','การเข้าพบอาจารย์ที่ปรึกษา',\
             'การปรับปรุงแก้ไขรายงาน','คุณภาพของรายงาน','คุณภาพของโครงงาน']
+LIST_COL_PO = ['การตรงต่อเวลา','บุคลิกภาพและการแต่งกาย','ความชัดเจนในการอธิบาย','ความชัดเจนในการตอบคำถาม','ความชัดเจนของสื่อ','คุณภาพของโครงงาน']
 
 def this_year():
     return Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
@@ -36,25 +37,31 @@ def export_forms(request):
     teachers = Teacher.objects.all()
     lis_result1 = [['คะแนนสอบโปรเจคภาคเรียนที่ '+str(sem)+' ปีการศึกษา '+str(this_year())], []]
     lis_result2 = [['คะแนนอาจารย์ที่ปรึกษาภาคเรียนที่ '+str(sem)+' ปีการศึกษา '+str(this_year())], []]
+    lis_result3 = [['คะแนนสอบโปสเตอร์ภาคเรียนที่ '+str(sem)+' ปีการศึกษา '+str(this_year())], []]
     lis_line2 = ['************','************','************','************','************','************','************',\
                 '************','************','************','************']
 
     for tch in teachers:
-        rel_tch = tch.schedule_teacher.all()
-        split_name = tch.teacher_name.split(' ')
-        last_name = split_name[len(split_name)-1]
+        rel_tch = tch.schedule_teacher.filter(semester=sem)
+        rel_tch_post = tch.schepost_teacher.all()
+        last_name = lastname_tch(tch.teacher_name)
         lis_sub1 = []
         lis_sub2 = []
+        lis_sub3 = []
         
         for sc in rel_tch:
             proj = Project.objects.get(id=sc.proj_id_id)
-            advisor = proj.proj_advisor
-            split_ad = advisor.split(' ')
-            last_name2 = split_ad[len(split_ad)-1]
+            last_name2 = lastname_tch(proj.proj_advisor)
             if proj.proj_semester == sem and last_name != last_name2:
                 lis_sub1.append([proj.proj_name_th, proj.proj_name_en])
             if proj.proj_semester == sem and last_name == last_name2:
                 lis_sub2.append([proj.proj_name_th, proj.proj_name_en])
+        
+        for sc in rel_tch_post:
+            proj = Project.objects.filter(id=sc.proj_id_id, proj_semester=2)
+            if proj.exists():
+                lis_sub3.append([proj[0].proj_name_th, proj[0].proj_name_en])
+
         if lis_sub1 != []:
             lis_sub1 = [['กรรมการคุมสอบ', tch.teacher_name],[], ['รายชื่อโครงงานภาษาไทย', 'รายชื่อโครงงานภาษาอังกฤษ']+LIST_COL]+lis_sub1
             lis_sub1.append(lis_line2)
@@ -63,11 +70,17 @@ def export_forms(request):
             lis_sub2 = [['อาจารย์ที่ปรึกษา', tch.teacher_name],[], ['รายชื่อโครงงานภาษาไทย', 'รายชื่อโครงงานภาษาอังกฤษ']+LIST_COL_AD]+lis_sub2
             lis_sub2.append(lis_line2)
             lis_sub2.append(lis_line2)
+        if lis_sub3 != []:
+            lis_sub3 = [['อาจารย์ที่ปรึกษา', tch.teacher_name],[], ['รายชื่อโครงงานภาษาไทย', 'รายชื่อโครงงานภาษาอังกฤษ']+LIST_COL_PO]+lis_sub3
+            lis_sub3.append(lis_line2)
+            lis_sub3.append(lis_line2)
         
         for i in lis_sub1:
             lis_result1.append(i)
         for i in lis_sub2:
             lis_result2.append(i)
+        for i in lis_sub3:
+            lis_result3.append(i)
 
     with open('form_score_proj.csv','w', newline='', encoding='utf-8-sig') as new_file:
         csv_writer = csv.writer(new_file, delimiter=',')
@@ -79,6 +92,11 @@ def export_forms(request):
         csv_writer.writerows(lis_result2)
     new_file.closed
 
+    with open('form_score_poster.csv','w', newline='', encoding='utf-8-sig') as new_file:
+        csv_writer = csv.writer(new_file, delimiter=',')
+        csv_writer.writerows(lis_result3)
+    new_file.closed
+
     in_memory = BytesIO()
     with ZipFile(in_memory, "a") as zip:
 
@@ -86,6 +104,8 @@ def export_forms(request):
             zip.writestr("form_score_proj.csv", form_sproj.read())
         with open('form_score_advisor.csv', 'rb') as form_sads:
             zip.writestr("form_score_advisor.csv", form_sads.read())
+        with open('form_score_poster.csv', 'rb') as form_spost:
+            zip.writestr("form_score_poster.csv", form_spost.read())
         
         # fix for Linux zip files read in Windows
         for file in zip.filelist:
@@ -130,6 +150,8 @@ def import_score(request):
                 ready = 0
             if "คะแนนสอบโปรเจค" in fields[0] and count_line == 0:
                 form_score = 1
+            if "คะแนนสอบโปสเตอร์" in fields[0] and count_line == 0:
+                form_score = 2
             if fields[1] != '' or '*' not in fields[1]:
                 if Teacher.objects.filter(teacher_name=fields[1]).exists():
                     tch_name = fields[1]
@@ -150,12 +172,20 @@ def import_score(request):
                         tch.save()
                     if not tch.score_advisor.filter(proj_id_id=proj.id).exists() and \
                         (lastname_tch(tch.teacher_name) == lastname_tch(proj.proj_advisor) or \
-                        lastname_tch(tch.teacher_name) == lastname_tch(proj.proj_co_advisor)) and form_score != 1:
+                        lastname_tch(tch.teacher_name) == lastname_tch(proj.proj_co_advisor)) and form_score == 0:
                         score_ad = ScoreAdvisor(proj_id_id=proj.id, propose=fields[2], planning=fields[3], tool=fields[4],\
                                         advice=fields[5], improve=fields[6], quality_report=fields[7], \
                                         quality_project=fields[8])
                         score_ad.save()
                         tch.score_advisor.add(score_ad)
+                        tch.save()
+                    if not tch.score_posters.filter(proj_id_id=proj.id).exists() and \
+                        lastname_tch(tch.teacher_name) != lastname_tch(proj.proj_advisor) and \
+                        lastname_tch(tch.teacher_name) != lastname_tch(proj.proj_co_advisor) and form_score == 2:
+                        score_post = ScorePoster(proj_id_id=proj.id, time_spo=fields[2], character_spo=fields[3], presentation_spo=fields[4],\
+                                        question_spo=fields[5], media_spo=fields[6], quality_spo=fields[7])
+                        score_post.save()
+                        tch.score_posters.add(score_post)
                         tch.save()
             
             count_line += 1
@@ -173,8 +203,11 @@ def reset_score(request):
     if reset_types == '1':
         for proj in projs:
             ScoreProj.objects.filter(proj_id_id=proj.id).delete()
-    else:
+    if reset_types == '2':
         for proj in projs:
             ScoreAdvisor.objects.filter(proj_id_id=proj.id).delete()
+    if reset_types == '3':
+        for proj in projs:
+            ScorePoster.objects.filter(proj_id_id=proj.id).delete()
 
     return HttpResponseRedirect(reverse('result_sem1'))

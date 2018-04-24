@@ -84,35 +84,36 @@ def generate_poster(request):
     safe_zone = level_safezone()
     load_set = Settings.objects.get(id=1).load_post
 
-    for new in projs:
-        old_tch = []
-        for old in projs_sem1:
-            if new.proj_name_th == old.proj_name_th:
-                for t in teachers:
-                    if t.schedule_teacher.filter(proj_id_id=old.id).exists():
-                        old_tch.append(t.teacher_name)
-        while True:
-            new_tch = []
-            while len(new_tch) != 3:
-                tch_ran = Teacher.objects.order_by('?').first()
-                load = len(Teacher.objects.get(teacher_name=tch_ran.teacher_name).schepost_teacher.all())
-                if tch_ran.teacher_name not in old_tch and load <= load_set:
-                    new_tch.append(tch_ran.teacher_name)
-            sum_lev = 0
-            for name in new_tch:
-                last_name = lastname_tch(name)
-                sum_lev += Teacher.objects.get(teacher_name__contains=last_name).levels_teacher
-            if (sum_lev/3.0) <= safe_zone['max'] and (sum_lev/3.0) >= safe_zone['min']:
-                break
-        if len(new_tch) == 3:
-            schedule = SchedulePoster(date_post=date_selected, proj_id_id=new.id)
-            schedule.save()
-            Project.objects.filter(id=new.id).update(sche_post_id=schedule.id)
-            for name in new_tch:
-                last_name = lastname_tch(name)
-                teacher_r = Teacher.objects.get(teacher_name__contains=last_name)
-                teacher_r.schepost_teacher.add(schedule)
-                teacher_r.save()
+    if len(projs) != 0:
+        for new in projs:
+            old_tch = []
+            for old in projs_sem1:
+                if new.proj_name_th == old.proj_name_th:
+                    for t in teachers:
+                        if t.schedule_teacher.filter(proj_id_id=old.id).exists():
+                            old_tch.append(t.teacher_name)
+            while True:
+                new_tch = []
+                while len(new_tch) != 3:
+                    tch_ran = Teacher.objects.order_by('?').first()
+                    load = len(Teacher.objects.get(teacher_name=tch_ran.teacher_name).schepost_teacher.all())
+                    if tch_ran.teacher_name not in new_tch and tch_ran.teacher_name not in old_tch and load <= load_set:
+                        new_tch.append(tch_ran.teacher_name)
+                sum_lev = 0
+                for name in new_tch:
+                    last_name = lastname_tch(name)
+                    sum_lev += Teacher.objects.get(teacher_name__contains=last_name).levels_teacher
+                if (sum_lev/3.0) <= safe_zone['max'] and (sum_lev/3.0) >= safe_zone['min']:
+                    break
+            if len(new_tch) == 3:
+                schedule = SchedulePoster(date_post=date_selected, proj_id_id=new.id)
+                schedule.save()
+                Project.objects.filter(id=new.id).update(sche_post_id=schedule.id)
+                for name in new_tch:
+                    last_name = lastname_tch(name)
+                    teacher_r = Teacher.objects.get(teacher_name__contains=last_name)
+                    teacher_r.schepost_teacher.add(schedule)
+                    teacher_r.save()
     return HttpResponseRedirect(reverse('manage_poster'))
 def manage_poster(request):
     re_post = request.POST.get('re_post',None)

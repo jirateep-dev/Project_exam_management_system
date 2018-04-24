@@ -408,20 +408,22 @@ def result_sem1(request):
     info_setting = Settings.objects.get(id=1)
     project = Project.objects.filter(proj_years=this_year(), proj_semester=info_setting.forms)
     lis_stu = []
+    max_sc = 220
 
     for num in range(len(project)):
         if info_setting.forms == 1:
             stu = Student.objects.filter(proj1_id_id=project[num].id)
+            max_sc = 150
         else:
             stu = Student.objects.filter(proj2_id_id=project[num].id)
 
         # calculate score project (percentage)
         if info_setting.forms == 1:
             test = ScoreProj.objects.annotate(result_scoreproj = ((F('presentation')+F('presentation_media')+F('question'))*90/100) + \
-                (F('report')*90/100) + ((F('discover')+F('analysis'))*70/100) + ((F('quantity')+F('levels'))*90/100)).filter(proj_id_id=project[num].id)
+                (F('report')*90/100) + ((F('discover')+F('analysis'))*70/100) + ((F('quantity')+F('levels'))*90/100)*0.4).filter(proj_id_id=project[num].id)
         else:
-            test = ScoreProj.objects.annotate(result_scoreproj = ((F('presentation')+F('presentation_media')+F('question'))*80/100) + \
-                (F('report')*80/100) + ((F('discover')+F('analysis'))*70/100) + ((F('quantity')+F('levels')+F('quality'))*70/100)).filter(proj_id_id=project[num].id)
+            test = ScoreProj.objects.annotate(result_scoreproj = ((F('presentation')+F('presentation_media')+F('question'))*92/100) + \
+                (F('report')*92/100) + ((F('discover')+F('analysis'))*88/100) + ((F('quantity')+F('levels')+F('quality'))*88/100)*0.6).filter(proj_id_id=project[num].id)
         avg_scorep = 0
         for i in test:
             avg_scorep += i.result_scoreproj
@@ -429,20 +431,20 @@ def result_sem1(request):
             avg_scorep = avg_scorep / len(test)
 
         # calculate score advisor (percentage)
-        test = ScoreAdvisor.objects.annotate(result_scoreproj = (F('propose')+F('planning')+F('tool')+\
-            F('advice')+F('improve')+F('quality_report')+F('quality_project'))*60/100).filter(proj_id_id=project[num].id)
+        test = ScoreAdvisor.objects.annotate(result_score_advicsor = (F('propose')+F('planning')+F('tool')+\
+            F('advice')+F('improve')+F('quality_report')+F('quality_project'))*0.5714).filter(proj_id_id=project[num].id)
         avg_scoread = 0
         for i in test:
-            avg_scoread += i.result_scoreproj
+            avg_scoread += i.result_score_advicsor
         if len(test) != 0:
             avg_scoread = avg_scoread / len(test)
 
         # calculate score poster (percentage)
-        test = ScorePoster.objects.annotate(result_scoreproj = (F('time_spo')+F('character_spo')+F('presentation_spo')+\
-            F('question_spo')+F('media_spo')+F('quality_spo'))*80/100).filter(proj_id_id=project[num].id)
+        test = ScorePoster.objects.annotate(result_scorepost = ((F('time_spo')+F('character_spo')+F('presentation_spo')+\
+            F('question_spo')+F('media_spo')+F('quality_spo'))*0.33)).filter(proj_id_id=project[num].id)
         avg_scorepo = 0
         for i in test:
-            avg_scorepo += i.result_scoreproj
+            avg_scorepo += i.result_scorepost
         if len(test) != 0:
             avg_scorepo = avg_scorepo / len(test)
 
