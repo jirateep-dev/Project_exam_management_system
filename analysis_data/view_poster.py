@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse,  HttpResponseRedirect
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.contrib import messages
 from .forms import *
@@ -114,7 +115,7 @@ def generate_poster(request):
                     teacher_r = Teacher.objects.get(teacher_name__contains=last_name)
                     teacher_r.schepost_teacher.add(schedule)
                     teacher_r.save()
-    return HttpResponseRedirect(reverse('manage_poster'))
+    return redirect('manage_poster')
 def manage_poster(request):
     re_post = request.POST.get('re_post',None)
     proj2 = Project.objects.filter(proj_years=this_year(), proj_semester=2)

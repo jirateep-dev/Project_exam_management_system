@@ -79,14 +79,14 @@ def export_csv(request):
 def upload_csv(request):
     # if not GET, then proceed
     try:
+        sem = Settings.objects.get(id=1).forms
         csv_file = request.FILES["csv_file"]
-        Project.objects.filter(proj_years=this_year()).update(schedule_id=None)
-        DateExam.objects.all().delete()
+        Project.objects.filter(proj_years=this_year(), proj_semester=sem).update(schedule_id=None)
+        DateExam.objects.all().filter(id__endswith=str(sem)).delete()
         room = Room.objects.all()
         time = TimeExam.objects.all()
         proj = Project.objects.all()
         teachers = Teacher.objects.all()
-        sem = Settings.objects.get(id=1).forms
         
         if not csv_file.name.endswith('.csv'):
             messages.error(request,'File is not CSV type')
@@ -106,14 +106,14 @@ def upload_csv(request):
             data_dict = {}
             dict_date = {}
             if room.filter(room_name=fields[1]).exists() and time.filter(time_exam=fields[2]).exists() and \
-                proj.filter(proj_name_th=fields[3], proj_semester=1).exists() and\
+                proj.filter(proj_name_th=fields[3], proj_years=this_year(), proj_semester=str(sem)).exists() and\
                 teachers.filter(teacher_name=fields[9]).exists() and teachers.filter(teacher_name=fields[10]).exists() and \
                 teachers.filter(teacher_name=fields[11]).exists() and teachers.filter(teacher_name=fields[12]).exists():
 
                 data_dict["date_id"] = fields[0].replace('/', '')+str(time.get(time_exam=fields[2]).time_period)+str(room.get(room_name=fields[1]).id)+str(sem)
                 data_dict["room_id"] = str(room.get(room_name=fields[1]).id)
                 data_dict["time_id"] = str(time.get(time_exam=fields[2]).id)
-                data_dict["proj_id"] = str(proj.get(proj_name_th=fields[3], proj_semester=1).id)
+                data_dict["proj_id"] = str(proj.get(proj_name_th=fields[3], proj_semester=str(sem)).id)
                 data_dict["teacher_group"] = fields[8]
                 data_dict["semester"] = sem
                 
@@ -145,7 +145,7 @@ def upload_csv(request):
                         teacher = Teacher.objects.get(id=id_t)
                         teacher.schedule_teacher.add(sche)
                         teacher.save()
-                    proj.filter(proj_name_th=fields[3], proj_semester=1).update(schedule_id=sche.id)
+                    proj.filter(proj_name_th=fields[3], proj_semester=str(sem)).update(schedule_id=sche.id)
                 else:
                     logging.getLogger("error_logger").error(form.errors.as_json())                                                
             except Exception as e:
@@ -157,7 +157,7 @@ def upload_csv(request):
         messages.error(request,"Unable to upload file. "+repr(e))
         return HttpResponseRedirect(reverse("manage"))
  
-    return render(request,"upload_csv.html")
+    return render(request,"upload_csv.html", {'proj_act':sem})
 
 # /////////////////////////////////////////////////////////////////////////////////////////////////////////
 # /////////////////////////////////////      old code here    ////////////////////////////////////////////
