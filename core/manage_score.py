@@ -51,10 +51,11 @@ def export_forms(request):
         
         for sc in rel_tch:
             proj = Project.objects.get(id=sc.proj_id_id)
-            last_name2 = lastname_tch(proj.proj_advisor)
-            if proj.proj_semester == sem and last_name != last_name2:
+            last_name_ad = lastname_tch(proj.proj_advisor)
+            last_name_co = lastname_tch(proj.proj_co_advisor)
+            if proj.proj_semester == sem and last_name != last_name_ad and last_name!= last_name_co:
                 lis_sub1.append([proj.proj_name_th, proj.proj_name_en])
-            if proj.proj_semester == sem and last_name == last_name2:
+            if proj.proj_semester == sem and (last_name == last_name_ad or last_name == last_name_co):
                 lis_sub2.append([proj.proj_name_th, proj.proj_name_en])
         
         for sc in rel_tch_post:
@@ -71,7 +72,7 @@ def export_forms(request):
             lis_sub2.append(lis_line2)
             lis_sub2.append(lis_line2)
         if lis_sub3 != []:
-            lis_sub3 = [['อาจารย์ที่ปรึกษา', tch.teacher_name],[], ['รายชื่อโครงงานภาษาไทย', 'รายชื่อโครงงานภาษาอังกฤษ']+LIST_COL_PO]+lis_sub3
+            lis_sub3 = [['กรรมการสอบโปสเตอร์', tch.teacher_name],[], ['รายชื่อโครงงานภาษาไทย', 'รายชื่อโครงงานภาษาอังกฤษ']+LIST_COL_PO]+lis_sub3
             lis_sub3.append(lis_line2)
             lis_sub3.append(lis_line2)
         
@@ -92,10 +93,11 @@ def export_forms(request):
         csv_writer.writerows(lis_result2)
     new_file.closed
 
-    with open('form_score_poster.csv','w', newline='', encoding='utf-8-sig') as new_file:
-        csv_writer = csv.writer(new_file, delimiter=',')
-        csv_writer.writerows(lis_result3)
-    new_file.closed
+    if sem == 2:
+        with open('form_score_poster.csv','w', newline='', encoding='utf-8-sig') as new_file:
+            csv_writer = csv.writer(new_file, delimiter=',')
+            csv_writer.writerows(lis_result3)
+        new_file.closed
 
     in_memory = BytesIO()
     with ZipFile(in_memory, "a") as zip:
@@ -104,8 +106,9 @@ def export_forms(request):
             zip.writestr("form_score_proj.csv", form_sproj.read())
         with open('form_score_advisor.csv', 'rb') as form_sads:
             zip.writestr("form_score_advisor.csv", form_sads.read())
-        with open('form_score_poster.csv', 'rb') as form_spost:
-            zip.writestr("form_score_poster.csv", form_spost.read())
+        if sem == 2:
+            with open('form_score_poster.csv', 'rb') as form_spost:
+                zip.writestr("form_score_poster.csv", form_spost.read())
         
         # fix for Linux zip files read in Windows
         for file in zip.filelist:
@@ -114,7 +117,7 @@ def export_forms(request):
         zip.close()
 
         response = HttpResponse(content_type="application/x-zip-compressed")
-        response["Content-Disposition"] = "attachment; filename=score.zip"
+        response["Content-Disposition"] = "attachment; filename=score_sem"+str(sem)+".zip"
         
         in_memory.seek(0)    
         response.write(in_memory.read())
