@@ -242,7 +242,9 @@ def manageTeacher(major_id, date_input, period_input):
             for i in range(len(list_teachers)):
                 last_name = lastname_tch(list_teachers[i])
                 last_name_t = lastname_tch(tch_ran.teacher_name)
-                last_name_co = lastname_tch(temp_tch[i])
+                last_name_co = ''
+                if i < len(templis):
+                    last_name_co = lastname_tch(temp_tch[i])
                 if last_name == last_name_t and last_name_co == last_name_t:
                     check_lastname = False
             if approve_teacher(tch_ran.teacher_name, date_input, period_input) and check_lastname:
