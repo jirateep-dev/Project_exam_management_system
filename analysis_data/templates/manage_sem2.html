@@ -99,12 +99,40 @@
     <hr>
     <form action="{% url 'manage' %}" method="POST" id="reset_form" style="margin-left: 100px;padding-bottom: 50px;">
         {% csrf_token %}
+        <div class='col-md-5'>
+            <button class="btn btn-info" data-toggle="collapse" href="#table_projs" name="projs"><h4 style="font-size: 2em">โครงงานที่ยังไม่ถูกจัด</h4></button>
+        </div>
         <div class="row" style="margin-left: 90%;margin-top: 30px">
             <div class='col-md-5'>
                 <button type="submit" class="btn btn-danger" form="reset_form" name="reset_gen" value="1"><h4 style="font-size: 2em">Reset</h4></button>
             </div>
         </div>
     </form>
+
+    <div id="table_projs" class="panel-collapse collapse ">
+        <table class="table table-hover">
+            <thead>
+                <tr style="font-size: 1.5em">
+                    <th>ปีการศึกษา</th>
+                    <th>ภาคเรียนที่</th>
+                    <th>รายชื่อโปรเจค</th>
+                    <th>อาจารย์ที่ปรึกษา</th>
+                    <th>อาจารย์ที่ปรึกษาร่วม</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for proj in proj_null %} 
+                    <tr style="font-size: 1.1em">
+                        <td class="active">{{proj.proj_years}}</td>
+                        <td class="warning">{{proj.proj_semester}}</td>
+                        <td class="info">{{proj.proj_name_th}}</td>
+                        <td class="danger">{{proj.proj_advisor}}</td>
+                        <td class="danger">{{proj.proj_co_advisor}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 </div>
 {% endblock %}

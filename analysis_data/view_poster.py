@@ -83,7 +83,7 @@ def generate_poster(request):
     date_selected = request.POST.get('date_selected',None)
 
     teachers = Teacher.objects.all()
-    projs_sem1 = Project.objects.filter(proj_years=this_year(), proj_semester=1).filter(~Q(schedule_id=None))
+    projs_sem2 = Project.objects.filter(proj_years=this_year(), proj_semester=2).filter(~Q(schedule_id=None))
     projs = Project.objects.filter(proj_years=this_year(), proj_semester=2, sche_post_id=None)
     sche = ScheduleRoom.objects.filter(semester=1)
     safe_zone = level_safezone()
@@ -92,7 +92,7 @@ def generate_poster(request):
     if len(projs) != 0:
         for new in projs:
             old_tch = []
-            for old in projs_sem1:
+            for old in projs_sem2:
                 if new.proj_name_th == old.proj_name_th:
                     for t in teachers:
                         if t.schedule_teacher.filter(proj_id_id=old.id).exists():
@@ -125,7 +125,7 @@ def generate_poster(request):
 def manage_poster(request):
     re_post = request.POST.get('re_post',None)
     proj2 = Project.objects.filter(proj_years=this_year(), proj_semester=2)
-
+    proj2_null = Project.objects.filter(proj_years=this_year(), proj_semester=2, schedule_id=None)
     if re_post:
         for i in proj2:
             if SchedulePoster.objects.filter(proj_id_id=i.id).exists():
@@ -141,4 +141,4 @@ def manage_poster(request):
         result = prepare_render()
     
     safe_zone = level_safezone()
-    return render(request,"poster.html", {'proj_act':sem, 'date':date_post, 'result':result, 'safezone':safe_zone})
+    return render(request,"poster.html", {'proj_act':sem, 'date':date_post, 'result':result, 'safezone':safe_zone, 'proj2_null':proj2_null})
