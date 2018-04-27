@@ -224,11 +224,9 @@ def manageTeacher(major_id, date_input, period_input):
     for i in proj_null:
         if approve_teacher(i.proj_advisor, date_input, period_input) and i.proj_advisor not in list_teachers:
             list_teachers.append(i.proj_advisor)
-            temp_tch.append(i.proj_co_advisor)
         if i.proj_co_advisor != '' and (approve_teacher(i.proj_co_advisor, date_input, period_input) and i.proj_co_advisor not in list_teachers and \
             not approve_teacher(i.proj_advisor, date_input, period_input)):
             list_teachers.append(i.proj_co_advisor)
-            temp_tch.append(i.proj_advisor)
         if len(list_teachers) == 3:
             break
 
@@ -242,10 +240,10 @@ def manageTeacher(major_id, date_input, period_input):
             for i in range(len(list_teachers)):
                 last_name = lastname_tch(list_teachers[i])
                 last_name_t = lastname_tch(tch_ran.teacher_name)
-                last_name_co = ''
-                if i < len(templis):
-                    last_name_co = lastname_tch(temp_tch[i])
-                if last_name == last_name_t and last_name_co == last_name_t:
+                # last_name_co = ''
+                # if i < len(templis):
+                #     last_name_co = lastname_tch(temp_tch[i])
+                if last_name == last_name_t:
                     check_lastname = False
             if approve_teacher(tch_ran.teacher_name, date_input, period_input) and check_lastname:
                 list_teachers.append(tch_ran.teacher_name)
@@ -307,8 +305,12 @@ def prepare_render():
                 else:
                     period_one[dic_keep[j][0]] = 'Error'
         dic[i] = (period_zero, period_one)
+
+    proj_null = Project.objects.filter(proj_years=this_year(), proj_semester=sem, schedule_id=None)
+
     result.append(pc_result)
     result.append(dic)
+    result.append(proj_null)
 
     return result
 
@@ -449,10 +451,16 @@ def manage(request):
         if reset_selected:
             Project.objects.filter(proj_years=this_year(), proj_semester=sem).update(schedule_id=None)
             DateExam.objects.all().filter(id__endswith=str(sem)).delete()
+            projs = Project.objects.filter(proj_years=this_year(), proj_semester=sem)
+            for proj in projs:
+                ScoreProj.objects.filter(proj_id_id=proj.id).delete()
+                ScoreAdvisor.objects.filter(proj_id_id=proj.id).delete()
+                if sem == 2:
+                    ScorePoster.objects.filter(proj_id_id=proj.id).delete()
         pre = prepare_render()
         return render(request,str_link,{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
-                    'room_period':pre[1], 'proj_act':sem, 'proj_years':this_year()})
+                    'room_period':pre[1], 'proj_null':pre[2], 'proj_act':sem, 'proj_years':this_year()})
     except Exception as error:
         pre = prepare_render()
         return render(request,str_link,{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
-                    'room_period':pre[1], 'proj_act':sem, 'proj_years':this_year()})
+                    'room_period':pre[1], 'proj_null':pre[2], 'proj_act':sem, 'proj_years':this_year()})

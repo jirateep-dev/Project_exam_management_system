@@ -23,6 +23,9 @@ LIST_COL_AD = ['การพัฒนาโครงงานตามวัต�
             'การปรับปรุงแก้ไขรายงาน','คุณภาพของรายงาน','คุณภาพของโครงงาน']
 LIST_COL_PO = ['การตรงต่อเวลา','บุคลิกภาพและการแต่งกาย','ความชัดเจนในการอธิบาย','ความชัดเจนในการตอบคำถาม','ความชัดเจนของสื่อ','คุณภาพของโครงงาน']
 
+def admin_required(login_url=None):
+    return user_passes_test(lambda u: u.is_superuser, login_url=login_url)
+
 def this_year():
     return Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
 
@@ -31,6 +34,7 @@ def lastname_tch(tch_name):
     last_name = split_name[len(split_name)-1]
     return last_name
 
+@admin_required(login_url="login/")
 def export_forms(request):
     sem = Settings.objects.get(id=1).forms
     schedule = ScheduleRoom.objects.all()
@@ -126,6 +130,7 @@ def export_forms(request):
 
     return HttpResponseRedirect(reverse('result_sem1'))
 
+@admin_required(login_url="login/")
 def import_score(request):
     sem = Settings.objects.get(id=1).forms
     files = request.FILES["score_file"]
@@ -199,6 +204,7 @@ def import_score(request):
 
     return HttpResponseRedirect(reverse('result_sem1'))
 
+@admin_required(login_url="login/")
 def reset_score(request):
     reset_types = request.POST.get("reset_types", None)
     sem = Settings.objects.get(id=1).forms

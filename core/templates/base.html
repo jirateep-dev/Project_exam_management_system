@@ -24,11 +24,14 @@
         <h3>
             <ul class="nav nav-tabs" id="actived" style="background: #353b48;">
                 <li><a href="/scoreproj" style="color: #ffffff;">คะแนนโปรเจค</a></li>
-                {% if proj_act == 2 %}
+                <!-- {% if proj_act == 2 %} -->
                 <!-- <li><a href="/scoreposter" style="color: #ffffff;">คะแนนโปสเตอร์</a></li> -->
+                <!-- <li><a href="/manage/manage_poster" style="color: #ffffff;">จัดการสอบโปสเตอร์</a></li>
+                {% endif %} -->
+                {% if user.is_superuser %}
+                {% if proj_act == 2 %}
                 <li><a href="/manage/manage_poster" style="color: #ffffff;">จัดการสอบโปสเตอร์</a></li>
                 {% endif %}
-                {% if user.is_superuser %}
                 <li><a href="/manage" style="color: #ffffff;">จัดห้องสอบ</a></li>
                 <li><a href="/manage/table_room" style="color: #ffffff;">ตารางการจัดห้องสอบ</a></li>
                 <li><a href="/result_sem1" style="color: #ffffff;">ผลคะแนนภาคเรียนที่ {{proj_act}}</a></li>

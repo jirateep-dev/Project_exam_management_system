@@ -22,6 +22,9 @@ from random import randint
 import statistics
 import logging
 
+def admin_required(login_url=None):
+    return user_passes_test(lambda u: u.is_superuser, login_url=login_url)
+
 def this_year():
     return Project.objects.all().aggregate(Max('proj_years'))['proj_years__max']
 
@@ -75,6 +78,7 @@ def prepare_render():
 
     return result
 
+@admin_required(login_url="login/")
 def generate_poster(request):
     date_selected = request.POST.get('date_selected',None)
 
@@ -116,6 +120,8 @@ def generate_poster(request):
                     teacher_r.schepost_teacher.add(schedule)
                     teacher_r.save()
     return redirect('manage_poster')
+
+@admin_required(login_url="login/")
 def manage_poster(request):
     re_post = request.POST.get('re_post',None)
     proj2 = Project.objects.filter(proj_years=this_year(), proj_semester=2)

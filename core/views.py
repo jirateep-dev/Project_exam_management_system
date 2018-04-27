@@ -375,7 +375,9 @@ def scoreproj(request):
         if type(proj_selected) is not type(None):
             proj = Project.objects.get(proj_name_th=proj_selected, proj_semester=form_setting)
 
-            if teacher_sp.teacher_name == proj.proj_advisor:
+            lname_tch = lastname_tch(teacher_sp.teacher_name)
+            lname_adv = lastname_tch(proj.proj_advisor)
+            if lname_tch == lname_adv:
                 for i in range(len(LIST_COL_AD)):
                     lis_select.append('select_option'+str(i))
                 return render(request, "scoreadvisor.html", {'Projectset':proj, 'column_name':LIST_COL_AD,\
