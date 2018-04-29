@@ -58,7 +58,7 @@ h1,h2,h3,h4,p,a,label,td,span,option,input{
 	 }
 }
 
-@media screen and (max-width: 576px){
+@media screen and (max-width: 992px){
     h1{
         font-size: 1.8em !important;
     }
@@ -79,6 +79,9 @@ h1,h2,h3,h4,p,a,label,td,span,option,input{
     }
     label{
         font-size: 1.4em !important;
+    }
+    table{
+        width: auto !important;
     }
     th{
         margin: 0 !important;
@@ -195,5 +198,8 @@ h1,h2,h3,h4,p,a,label,td,span,option,input{
     }
     div.row.btn-bottom{
         margin-left: 60% !important; 
+    }
+    table.table.table-hover{
+        width: 100% !important;
     }
 }
