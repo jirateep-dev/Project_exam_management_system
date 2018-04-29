@@ -262,3 +262,77 @@ form button:hover {
   }
 }
 
+@media screen and (max-width: 576px){
+  h1{
+      font-size: 2em !important;
+  }
+  h3{
+    font-size: 1.5em !important;
+  }
+  .title{
+    font-size: 1.5em !important;
+  }
+  .fieldWrapper{
+    font-size: 0.5em !important;
+  }
+  #btn_login{
+    font-size: 0.5em !important;
+  }
+  form{
+    height: 70%;
+  }
+  a{
+      font-size: 0.5em;
+  }
+  label{
+      font-size: 1.5em;
+  }
+  td{
+      font-size: 0.5em;
+  }
+  span{
+      font-size: 0.2em;
+  }
+  .jumbotron p{
+      font-size: 0.5em !important;
+  }
+}
+
+@media screen and (min-width: 577px) and (max-width: 992px){
+  a{
+      font-size: 1.3em;
+  }
+  label{
+      font-size: 2.5em;
+  }
+  td{
+      font-size: 1.5em;
+  }
+  span{
+      font-size: 1.2em;
+  }
+  .jumbotron p{
+      font-size: 2.5em !important;
+  }
+
+}
+
+@media screen and (min-width: 993px) and (max-width: 1200px){
+  a{
+      font-size: 1.3em;
+  }
+  label{
+      font-size: 2.5em;
+  }
+  td{
+      font-size: 1.5em;
+  }
+  span{
+      font-size: 1.2em;
+  }
+  .jumbotron p{
+      font-size: 2.5em !important;
+  }
+
+}
+

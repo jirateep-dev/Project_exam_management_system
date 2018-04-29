@@ -115,7 +115,7 @@
                 </tr>
             {% endfor %}
         </table>
-        <form action="{% url 'manage_room' %}" method="POST" id="generate_form" style="margin-left: 100px;margin-top: 260px">
+        <form action="{% url 'manage_room' %}" method="POST" id="generate_form" style="margin-left: 10%;margin-top: 26%">
             {% csrf_token %}
             <div class='col-md-5'>
                 <div class="form-group">
@@ -167,12 +167,12 @@
         </form>
     </div>
     <hr style="margin-top: 5%;">
-    <form action="{% url 'manage' %}" method="POST" id="reset_form" style="margin-left: 100px;padding-bottom: 50px;">
+    <form action="{% url 'manage' %}" method="POST" id="reset_form" style="margin-left: 10%;padding-bottom: 5%;">
         {% csrf_token %}
         <div class='col-md-5'>
             <button class="btn btn-info" data-toggle="collapse" href="#table_projs" name="projs"><h4 style="font-size: 2em">โครงงานที่ยังไม่ถูกจัด</h4></button>
         </div>
-        <div class="row" style="margin-left: 70%;margin-top: 30px">
+        <div class="row" style="margin-left: 70%;margin-top: 3%">
             <div class='col-md-5'>
                 <button type="submit" class="btn btn-danger" form="reset_form" name="reset_gen" value="1"><h4 style="font-size: 2em">ล้างข้อมูล</h4></button>
             </div>
