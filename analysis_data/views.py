@@ -444,6 +444,7 @@ def admin_required(login_url=None):
 def manage(request):
     sem = Settings.objects.get(id=1).forms
     str_link = "manage.html"
+        
     if sem == 2:
         str_link = "manage_sem2.html"
     try:
@@ -452,11 +453,16 @@ def manage(request):
             Project.objects.filter(proj_years=this_year(), proj_semester=sem).update(schedule_id=None)
             DateExam.objects.all().filter(id__endswith=str(sem)).delete()
             projs = Project.objects.filter(proj_years=this_year(), proj_semester=sem)
+            proj2 = Project.objects.filter(proj_years=this_year(), proj_semester=2)
             for proj in projs:
                 ScoreProj.objects.filter(proj_id_id=proj.id).delete()
                 ScoreAdvisor.objects.filter(proj_id_id=proj.id).delete()
                 if sem == 2:
                     ScorePoster.objects.filter(proj_id_id=proj.id).delete()
+                    for i in proj2:
+                        if SchedulePoster.objects.filter(proj_id_id=i.id).exists():
+                            SchedulePoster.objects.filter(proj_id_id=i.id).delete()
+                            Project.objects.filter(id=i.id).update(sche_post_id=None)
         pre = prepare_render()
         return render(request,str_link,{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
                     'room_period':pre[1], 'proj_null':pre[2], 'proj_act':sem, 'proj_years':this_year()})

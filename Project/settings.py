@@ -97,6 +97,7 @@ LOGGING = {
 # Application definition
 
 INSTALLED_APPS = [
+    'django_prometheus',
     'core',
     'database_management',
     'analysis_data',
@@ -110,6 +111,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -117,9 +119,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'DjangoLibrary.middleware.AutologinAuthenticationMiddleware',
-    # 'DjangoLibrary.middleware.FactoryBoyMiddleware',
-    # 'DjangoLibrary.middleware.QuerySetMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'Project.urls'
@@ -158,12 +158,18 @@ WSGI_APPLICATION = 'Project.wsgi.application'
 # }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', 
+        'ENGINE': 'django_prometheus.db.backends.mysql', 
         'NAME': 'senior_db',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': '127.0.0.1',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
+    }
+}
+CACHES = {
+    'default': {
+        'BACKEND': 'django_prometheus.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/var/tmp/django_cache',
     }
 }
 MYSQL_ROOT_PASSWORD = 'root'

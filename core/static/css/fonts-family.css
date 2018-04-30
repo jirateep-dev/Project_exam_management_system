@@ -27,6 +27,9 @@ h1,h2,h3,h4,p,a,label,td,span,option,input{
 	src: url('../fonts/Fontcraft ver 2.03.otf') format('opentype');
 }
 @media screen and (max-width: 1200px){
+    .glyphicon.glyphicon-wrench, .glyphicon.glyphicon-log-out{
+        font-size: 0.8em !important;
+    }
 	.navbar-header {
         float: none;
      }

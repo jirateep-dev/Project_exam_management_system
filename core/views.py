@@ -454,11 +454,11 @@ def result_sem1(request):
             if info_setting.forms == 1:
                 lis_stu.append([i.student_id, i.student_name, project[num].proj_name_th, "%.2f" %avg_scorep, "%.2f" %avg_scoread, \
                 format_html("<button name="'"detail"'" type="'"submit"'" class="'"btn btn-success"'" \
-                form="'"detail_score"'" value="+project[num].proj_name_th+"><h4 style="'"font-size: 1.7em;"'">ดูรายละเอียด</h4></button>")])
+                form="'"detail_score"'" value='"+project[num].proj_name_th+"'><h4 style="'"font-size: 1.7em;"'">ดูรายละเอียด</h4></button>")])
             else:
                 lis_stu.append([i.student_id, i.student_name, project[num].proj_name_th, "%.2f" %avg_scorep, "%.2f" %avg_scorepo, "%.2f" %avg_scoread, \
                 format_html("<button name="'"detail"'" type="'"submit"'" class="'"btn btn-success"'" \
-                form="'"detail_score"'" value="+project[num].proj_name_th+"><h4 style="'"font-size: 1.7em;"'">ดูรายละเอียด</h4></button>")])
+                form="'"detail_score"'" value='"+project[num].proj_name_th+"'><h4 style="'"font-size: 1.7em;"'">ดูรายละเอียด</h4></button>")])
 
     if info_setting.forms == 2:
         return render(request,"result_score.html", {'proj_act':info_setting.forms, 'this_year':this_year(), \
@@ -493,7 +493,7 @@ def detail_score(request):
                     t_ad_name = i.teacher_name
                     result_spost.append([t_ad_name, sc_post.time_spo, sc_post.character_spo, sc_post.presentation_spo,\
                     sc_post.question_spo, sc_post.media_spo, sc_post.quality_spo])
-    except Exception:
+    except Exception as e:
         return render(request, "detail_score.html", {'this_year':this_year(), 'proj_name':proj_name, 'col_de':LIST_COL_DE[0],\
          'result':[["Error :", "please generate schedule_poster and then generate form_score again"]],\
           'result1':[["Error :", "please generate schedule_poster and then generate form_score again"]],\
@@ -530,9 +530,15 @@ def update_scoreproj(request):
 
         
         if not teacher_sp.score_projs.filter(proj_id_id=proj.id).exists() and lastname_tch(teacher_sp.teacher_name) != lastname_tch(proj.proj_advisor):
-            score_proj = ScoreProj(proj_id_id=proj.id, presentation=lis_selected[0], question=lis_selected[1], report=lis_selected[2],\
-                            presentation_media=lis_selected[3], discover=lis_selected[4], analysis=lis_selected[5], \
-                            quantity=lis_selected[6], levels=lis_selected[7])
+            if info_setting.forms == 1:
+                score_proj = ScoreProj(proj_id_id=proj.id, presentation=lis_selected[0], question=lis_selected[1], report=lis_selected[2],\
+                                presentation_media=lis_selected[3], discover=lis_selected[4], analysis=lis_selected[5], \
+                                quantity=lis_selected[6], levels=lis_selected[7])
+            else:
+                score_proj = ScoreProj(proj_id_id=proj.id, presentation=lis_selected[0], question=lis_selected[1], report=lis_selected[2],\
+                                presentation_media=lis_selected[3], discover=lis_selected[4], analysis=lis_selected[5], \
+                                quantity=lis_selected[6], levels=lis_selected[7], quality=lis_selected[8])
+            
             score_proj.save()
             teacher_sp.score_projs.add(score_proj)
             teacher_sp.save()
