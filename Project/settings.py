@@ -97,7 +97,7 @@ LOGGING = {
 # Application definition
 
 INSTALLED_APPS = [
-    'django_prometheus',
+    # 'django_prometheus',
     'core',
     'database_management',
     'analysis_data',
@@ -111,7 +111,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django_prometheus.middleware.PrometheusBeforeMiddleware',
+    # 'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -119,7 +119,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_prometheus.middleware.PrometheusAfterMiddleware',
+    # 'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'Project.urls'
@@ -158,7 +158,8 @@ WSGI_APPLICATION = 'Project.wsgi.application'
 # }
 DATABASES = {
     'default': {
-        'ENGINE': 'django_prometheus.db.backends.mysql', 
+        # 'ENGINE': 'django_prometheus.db.backends.mysql', 
+        'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'senior_db',
         'USER': 'root',
         'PASSWORD': 'root',
@@ -166,12 +167,12 @@ DATABASES = {
         'PORT': '3306',
     }
 }
-CACHES = {
-    'default': {
-        'BACKEND': 'django_prometheus.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/var/tmp/django_cache',
-    }
-}
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django_prometheus.cache.backends.filebased.FileBasedCache',
+#         'LOCATION': '/var/tmp/django_cache',
+#     }
+# }
 MYSQL_ROOT_PASSWORD = 'root'
 
 # DATABASES = {

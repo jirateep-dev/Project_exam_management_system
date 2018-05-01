@@ -45,7 +45,7 @@ Generate room
   Select From List By Label     xpath=//select[@name="room_selected"]     ${room}
   Select From List By Value     xpath=//select[@name="period_selected"]    ${period}
   Select From List By Label     xpath=//select[@name="major_selected"]    ${major}
-  Click button                  Generate
+  Click button                  สร้างตาราง
 
 *** Test Cases ***
 
@@ -60,7 +60,7 @@ visit manage_page before create schedule room
   Sleep    		${ONESECOND}
 
 create schedule room
-  Click button 						      Reset
+  Click button 						      ล้างข้อมูล
 
   Generate room      ${DATE1}      M03      0      Software Development
   Generate room      ${DATE1}      M04      0      Software Development

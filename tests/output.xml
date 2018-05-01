@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 3.0.3 (Python 3.6.4 on win32)" generated="20180428 00:29:24.085">
-<suite id="s1" name="Senior Test" source="F:\Senior_proj\Project\tests\senior_test.robot">
+<robot generator="Robot 3.0.3 (Python 3.6.4 on win32)" generated="20180501 15:58:53.164">
+<suite id="s1" name="Schedule Room" source="F:\Senior_proj\Project\tests\Schedule_Room.robot">
 <kw name="Start Django and open Browser" type="setup">
 <kw name="Open Browser" library="Selenium2Library">
 <doc>Opens a new browser instance to the given ``url``.</doc>
@@ -8,14 +8,14 @@
 <arg>${SERVER}</arg>
 <arg>${BROWSER}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:24.290" level="INFO">Opening browser 'Chrome' to base url 'http://127.0.0.1:8000/'.</msg>
-<status status="PASS" starttime="20180428 00:29:24.290" endtime="20180428 00:29:28.866"></status>
+<msg timestamp="20180501 15:58:53.307" level="INFO">Opening browser 'Chrome' to base url 'http://127.0.0.1:8000/'.</msg>
+<status status="PASS" starttime="20180501 15:58:53.307" endtime="20180501 15:58:57.895"></status>
 </kw>
 <kw name="Maximize Browser Window" library="Selenium2Library">
 <doc>Maximizes current browser window.</doc>
-<status status="PASS" starttime="20180428 00:29:28.866" endtime="20180428 00:29:30.002"></status>
+<status status="PASS" starttime="20180501 15:58:57.895" endtime="20180501 15:58:59.014"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:24.290" endtime="20180428 00:29:30.003"></status>
+<status status="PASS" starttime="20180501 15:58:53.307" endtime="20180501 15:58:59.014"></status>
 </kw>
 <test id="s1-t1" name="As a visitor I can visit the django default page">
 <kw name="Input Text" library="Selenium2Library">
@@ -24,8 +24,8 @@
 <arg>name=username</arg>
 <arg>${USER}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:30.011" level="INFO">Typing text 'bundit' into text field 'name=username'.</msg>
-<status status="PASS" starttime="20180428 00:29:30.009" endtime="20180428 00:29:30.216"></status>
+<msg timestamp="20180501 15:58:59.020" level="INFO">Typing text 'bundit' into text field 'name=username'.</msg>
+<status status="PASS" starttime="20180501 15:58:59.018" endtime="20180501 15:58:59.220"></status>
 </kw>
 <kw name="Input Text" library="Selenium2Library">
 <doc>Types the given ``text`` into text field identified by ``locator``.</doc>
@@ -33,26 +33,26 @@
 <arg>name=password</arg>
 <arg>${PASS}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:30.219" level="INFO">Typing text 'ad123456' into text field 'name=password'.</msg>
-<status status="PASS" starttime="20180428 00:29:30.218" endtime="20180428 00:29:30.356"></status>
+<msg timestamp="20180501 15:58:59.221" level="INFO">Typing text 'ad123456' into text field 'name=password'.</msg>
+<status status="PASS" starttime="20180501 15:58:59.221" endtime="20180501 15:58:59.360"></status>
 </kw>
 <kw name="Click Element" library="Selenium2Library">
 <doc>Click element identified by ``locator``.</doc>
 <arguments>
 <arg>id=btn_login</arg>
 </arguments>
-<msg timestamp="20180428 00:29:30.357" level="INFO">Clicking element 'id=btn_login'.</msg>
-<status status="PASS" starttime="20180428 00:29:30.356" endtime="20180428 00:29:34.264"></status>
+<msg timestamp="20180501 15:58:59.361" level="INFO">Clicking element 'id=btn_login'.</msg>
+<status status="PASS" starttime="20180501 15:58:59.361" endtime="20180501 15:59:02.226"></status>
 </kw>
 <kw name="Sleep" library="BuiltIn">
 <doc>Pauses the test executed for the given time.</doc>
 <arguments>
 <arg>${ONESECOND}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:35.276" level="INFO">Slept 1 second</msg>
-<status status="PASS" starttime="20180428 00:29:34.265" endtime="20180428 00:29:35.276"></status>
+<msg timestamp="20180501 15:59:03.243" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20180501 15:59:02.227" endtime="20180501 15:59:03.243"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:30.004" endtime="20180428 00:29:35.276" critical="yes"></status>
+<status status="PASS" starttime="20180501 15:58:59.014" endtime="20180501 15:59:03.243" critical="yes"></status>
 </test>
 <test id="s1-t2" name="visit manage_page before create schedule room">
 <kw name="Click Link" library="Selenium2Library">
@@ -60,18 +60,18 @@
 <arguments>
 <arg>link=จัดห้องสอบ</arg>
 </arguments>
-<msg timestamp="20180428 00:29:35.276" level="INFO">Clicking link 'link=จัดห้องสอบ'.</msg>
-<status status="PASS" starttime="20180428 00:29:35.276" endtime="20180428 00:29:35.666"></status>
+<msg timestamp="20180501 15:59:03.243" level="INFO">Clicking link 'link=จัดห้องสอบ'.</msg>
+<status status="PASS" starttime="20180501 15:59:03.243" endtime="20180501 15:59:03.669"></status>
 </kw>
 <kw name="Sleep" library="BuiltIn">
 <doc>Pauses the test executed for the given time.</doc>
 <arguments>
 <arg>${ONESECOND}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:36.674" level="INFO">Slept 1 second</msg>
-<status status="PASS" starttime="20180428 00:29:35.666" endtime="20180428 00:29:36.674"></status>
+<msg timestamp="20180501 15:59:04.685" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20180501 15:59:03.669" endtime="20180501 15:59:04.685"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:35.276" endtime="20180428 00:29:36.674" critical="yes"></status>
+<status status="PASS" starttime="20180501 15:59:03.243" endtime="20180501 15:59:04.685" critical="yes"></status>
 </test>
 <test id="s1-t3" name="create schedule room">
 <kw name="Click Button" library="Selenium2Library">
@@ -79,8 +79,8 @@
 <arguments>
 <arg>ล้างข้อมูล</arg>
 </arguments>
-<msg timestamp="20180428 00:29:36.674" level="INFO">Clicking button 'ล้างข้อมูล'.</msg>
-<status status="PASS" starttime="20180428 00:29:36.674" endtime="20180428 00:29:37.136"></status>
+<msg timestamp="20180501 15:59:04.685" level="INFO">Clicking button 'ล้างข้อมูล'.</msg>
+<status status="PASS" starttime="20180501 15:59:04.685" endtime="20180501 15:59:05.096"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -94,14 +94,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:37.138" endtime="20180428 00:29:37.188"></status>
+<status status="PASS" starttime="20180501 15:59:05.097" endtime="20180501 15:59:05.143"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:37.188" endtime="20180428 00:29:37.229"></status>
+<status status="PASS" starttime="20180501 15:59:05.144" endtime="20180501 15:59:05.180"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -109,7 +109,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:37.229" endtime="20180428 00:29:37.382"></status>
+<status status="PASS" starttime="20180501 15:59:05.180" endtime="20180501 15:59:05.327"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -117,8 +117,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:37.383" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M03.</msg>
-<status status="PASS" starttime="20180428 00:29:37.383" endtime="20180428 00:29:37.461"></status>
+<msg timestamp="20180501 15:59:05.328" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M03.</msg>
+<status status="PASS" starttime="20180501 15:59:05.327" endtime="20180501 15:59:05.394"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -126,8 +126,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:37.461" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
-<status status="PASS" starttime="20180428 00:29:37.461" endtime="20180428 00:29:37.524"></status>
+<msg timestamp="20180501 15:59:05.395" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
+<status status="PASS" starttime="20180501 15:59:05.394" endtime="20180501 15:59:05.434"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -135,18 +135,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:37.524" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Software Development.</msg>
-<status status="PASS" starttime="20180428 00:29:37.524" endtime="20180428 00:29:37.622"></status>
+<msg timestamp="20180501 15:59:05.434" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Software Development.</msg>
+<status status="PASS" starttime="20180501 15:59:05.434" endtime="20180501 15:59:05.526"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:29:37.623" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:29:37.623" endtime="20180428 00:29:38.348"></status>
+<msg timestamp="20180501 15:59:05.527" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:05.527" endtime="20180501 15:59:06.176"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:37.137" endtime="20180428 00:29:38.349"></status>
+<status status="PASS" starttime="20180501 15:59:05.097" endtime="20180501 15:59:06.176"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -160,14 +160,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:38.350" endtime="20180428 00:29:38.397"></status>
+<status status="PASS" starttime="20180501 15:59:06.179" endtime="20180501 15:59:06.213"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:38.397" endtime="20180428 00:29:38.442"></status>
+<status status="PASS" starttime="20180501 15:59:06.213" endtime="20180501 15:59:06.262"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -175,7 +175,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:38.443" endtime="20180428 00:29:38.602"></status>
+<status status="PASS" starttime="20180501 15:59:06.263" endtime="20180501 15:59:06.392"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -183,8 +183,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:38.605" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M04.</msg>
-<status status="PASS" starttime="20180428 00:29:38.604" endtime="20180428 00:29:38.715"></status>
+<msg timestamp="20180501 15:59:06.393" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M04.</msg>
+<status status="PASS" starttime="20180501 15:59:06.393" endtime="20180501 15:59:06.475"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -192,8 +192,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:38.716" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
-<status status="PASS" starttime="20180428 00:29:38.715" endtime="20180428 00:29:38.791"></status>
+<msg timestamp="20180501 15:59:06.477" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
+<status status="PASS" starttime="20180501 15:59:06.476" endtime="20180501 15:59:06.537"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -201,18 +201,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:38.791" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Software Development.</msg>
-<status status="PASS" starttime="20180428 00:29:38.791" endtime="20180428 00:29:38.902"></status>
+<msg timestamp="20180501 15:59:06.538" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Software Development.</msg>
+<status status="PASS" starttime="20180501 15:59:06.538" endtime="20180501 15:59:06.635"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:29:38.903" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:29:38.903" endtime="20180428 00:29:39.592"></status>
+<msg timestamp="20180501 15:59:06.636" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:06.635" endtime="20180501 15:59:07.275"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:38.349" endtime="20180428 00:29:39.593"></status>
+<status status="PASS" starttime="20180501 15:59:06.177" endtime="20180501 15:59:07.275"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -226,14 +226,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:39.594" endtime="20180428 00:29:39.633"></status>
+<status status="PASS" starttime="20180501 15:59:07.277" endtime="20180501 15:59:07.309"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:39.633" endtime="20180428 00:29:39.678"></status>
+<status status="PASS" starttime="20180501 15:59:07.309" endtime="20180501 15:59:07.342"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -241,7 +241,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:39.678" endtime="20180428 00:29:39.891"></status>
+<status status="PASS" starttime="20180501 15:59:07.342" endtime="20180501 15:59:07.487"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -249,8 +249,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:39.892" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M03.</msg>
-<status status="PASS" starttime="20180428 00:29:39.892" endtime="20180428 00:29:39.959"></status>
+<msg timestamp="20180501 15:59:07.488" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M03.</msg>
+<status status="PASS" starttime="20180501 15:59:07.487" endtime="20180501 15:59:07.540"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -258,8 +258,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:39.959" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 1.</msg>
-<status status="PASS" starttime="20180428 00:29:39.959" endtime="20180428 00:29:40.047"></status>
+<msg timestamp="20180501 15:59:07.541" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 1.</msg>
+<status status="PASS" starttime="20180501 15:59:07.540" endtime="20180501 15:59:07.614"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -267,18 +267,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:40.048" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Software Development.</msg>
-<status status="PASS" starttime="20180428 00:29:40.048" endtime="20180428 00:29:40.144"></status>
+<msg timestamp="20180501 15:59:07.614" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Software Development.</msg>
+<status status="PASS" starttime="20180501 15:59:07.614" endtime="20180501 15:59:07.701"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:29:40.145" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:29:40.145" endtime="20180428 00:29:40.919"></status>
+<msg timestamp="20180501 15:59:07.701" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:07.701" endtime="20180501 15:59:08.339"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:39.594" endtime="20180428 00:29:40.919"></status>
+<status status="PASS" starttime="20180501 15:59:07.276" endtime="20180501 15:59:08.339"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -292,14 +292,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:40.921" endtime="20180428 00:29:40.959"></status>
+<status status="PASS" starttime="20180501 15:59:08.341" endtime="20180501 15:59:08.373"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:40.960" endtime="20180428 00:29:41.001"></status>
+<status status="PASS" starttime="20180501 15:59:08.373" endtime="20180501 15:59:08.409"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -307,7 +307,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:41.002" endtime="20180428 00:29:41.177"></status>
+<status status="PASS" starttime="20180501 15:59:08.409" endtime="20180501 15:59:08.549"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -315,8 +315,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:41.178" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M04.</msg>
-<status status="PASS" starttime="20180428 00:29:41.178" endtime="20180428 00:29:41.282"></status>
+<msg timestamp="20180501 15:59:08.550" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M04.</msg>
+<status status="PASS" starttime="20180501 15:59:08.550" endtime="20180501 15:59:08.622"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -324,8 +324,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:41.283" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 1.</msg>
-<status status="PASS" starttime="20180428 00:29:41.282" endtime="20180428 00:29:41.402"></status>
+<msg timestamp="20180501 15:59:08.623" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 1.</msg>
+<status status="PASS" starttime="20180501 15:59:08.623" endtime="20180501 15:59:08.716"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -333,18 +333,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:41.403" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Software Development.</msg>
-<status status="PASS" starttime="20180428 00:29:41.403" endtime="20180428 00:29:41.514"></status>
+<msg timestamp="20180501 15:59:08.717" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Software Development.</msg>
+<status status="PASS" starttime="20180501 15:59:08.716" endtime="20180501 15:59:08.810"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:29:41.516" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:29:41.515" endtime="20180428 00:29:42.310"></status>
+<msg timestamp="20180501 15:59:08.811" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:08.810" endtime="20180501 15:59:09.457"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:40.920" endtime="20180428 00:29:42.310"></status>
+<status status="PASS" starttime="20180501 15:59:08.340" endtime="20180501 15:59:09.457"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -358,14 +358,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:42.316" endtime="20180428 00:29:42.354"></status>
+<status status="PASS" starttime="20180501 15:59:09.459" endtime="20180501 15:59:09.502"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:42.354" endtime="20180428 00:29:42.401"></status>
+<status status="PASS" starttime="20180501 15:59:09.502" endtime="20180501 15:59:09.549"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -373,7 +373,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:42.402" endtime="20180428 00:29:42.573"></status>
+<status status="PASS" starttime="20180501 15:59:09.550" endtime="20180501 15:59:09.727"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -381,8 +381,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:42.574" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M21.</msg>
-<status status="PASS" starttime="20180428 00:29:42.573" endtime="20180428 00:29:42.680"></status>
+<msg timestamp="20180501 15:59:09.728" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M21.</msg>
+<status status="PASS" starttime="20180501 15:59:09.727" endtime="20180501 15:59:09.806"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -390,8 +390,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:42.681" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
-<status status="PASS" starttime="20180428 00:29:42.681" endtime="20180428 00:29:42.753"></status>
+<msg timestamp="20180501 15:59:09.807" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
+<status status="PASS" starttime="20180501 15:59:09.807" endtime="20180501 15:59:09.868"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -399,18 +399,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:42.754" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Multimedia.</msg>
-<status status="PASS" starttime="20180428 00:29:42.753" endtime="20180428 00:29:42.866"></status>
+<msg timestamp="20180501 15:59:09.869" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Multimedia.</msg>
+<status status="PASS" starttime="20180501 15:59:09.868" endtime="20180501 15:59:09.971"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:29:42.867" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:29:42.867" endtime="20180428 00:29:43.573"></status>
+<msg timestamp="20180501 15:59:09.971" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:09.971" endtime="20180501 15:59:10.590"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:42.313" endtime="20180428 00:29:43.573"></status>
+<status status="PASS" starttime="20180501 15:59:09.458" endtime="20180501 15:59:10.590"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -424,14 +424,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:43.574" endtime="20180428 00:29:43.612"></status>
+<status status="PASS" starttime="20180501 15:59:10.595" endtime="20180501 15:59:10.626"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:43.613" endtime="20180428 00:29:43.657"></status>
+<status status="PASS" starttime="20180501 15:59:10.626" endtime="20180501 15:59:10.664"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -439,7 +439,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:43.657" endtime="20180428 00:29:43.836"></status>
+<status status="PASS" starttime="20180501 15:59:10.664" endtime="20180501 15:59:10.821"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -447,8 +447,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:43.837" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M21.</msg>
-<status status="PASS" starttime="20180428 00:29:43.836" endtime="20180428 00:29:43.956"></status>
+<msg timestamp="20180501 15:59:10.822" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M21.</msg>
+<status status="PASS" starttime="20180501 15:59:10.822" endtime="20180501 15:59:10.905"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -456,8 +456,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:43.956" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 1.</msg>
-<status status="PASS" starttime="20180428 00:29:43.956" endtime="20180428 00:29:44.075"></status>
+<msg timestamp="20180501 15:59:10.905" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 1.</msg>
+<status status="PASS" starttime="20180501 15:59:10.905" endtime="20180501 15:59:11.016"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -465,18 +465,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:44.076" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Multimedia.</msg>
-<status status="PASS" starttime="20180428 00:29:44.075" endtime="20180428 00:29:44.196"></status>
+<msg timestamp="20180501 15:59:11.017" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Multimedia.</msg>
+<status status="PASS" starttime="20180501 15:59:11.016" endtime="20180501 15:59:11.113"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:29:44.197" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:29:44.197" endtime="20180428 00:29:44.881"></status>
+<msg timestamp="20180501 15:59:11.114" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:11.114" endtime="20180501 15:59:11.798"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:43.573" endtime="20180428 00:29:44.881"></status>
+<status status="PASS" starttime="20180501 15:59:10.592" endtime="20180501 15:59:11.798"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -490,14 +490,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:44.883" endtime="20180428 00:29:44.923"></status>
+<status status="PASS" starttime="20180501 15:59:11.799" endtime="20180501 15:59:11.832"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:44.923" endtime="20180428 00:29:44.974"></status>
+<status status="PASS" starttime="20180501 15:59:11.832" endtime="20180501 15:59:11.867"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -505,7 +505,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:44.974" endtime="20180428 00:29:45.130"></status>
+<status status="PASS" starttime="20180501 15:59:11.867" endtime="20180501 15:59:12.047"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -513,8 +513,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:45.131" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M22.</msg>
-<status status="PASS" starttime="20180428 00:29:45.130" endtime="20180428 00:29:45.208"></status>
+<msg timestamp="20180501 15:59:12.048" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M22.</msg>
+<status status="PASS" starttime="20180501 15:59:12.048" endtime="20180501 15:59:12.152"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -522,8 +522,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:45.208" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
-<status status="PASS" starttime="20180428 00:29:45.208" endtime="20180428 00:29:45.265"></status>
+<msg timestamp="20180501 15:59:12.153" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
+<status status="PASS" starttime="20180501 15:59:12.152" endtime="20180501 15:59:12.219"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -531,18 +531,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:45.266" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Network and Communication.</msg>
-<status status="PASS" starttime="20180428 00:29:45.266" endtime="20180428 00:29:45.364"></status>
+<msg timestamp="20180501 15:59:12.220" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Network and Communication.</msg>
+<status status="PASS" starttime="20180501 15:59:12.219" endtime="20180501 15:59:12.334"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:29:45.365" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:29:45.365" endtime="20180428 00:29:46.028"></status>
+<msg timestamp="20180501 15:59:12.334" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:12.334" endtime="20180501 15:59:13.135"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:44.882" endtime="20180428 00:29:46.028"></status>
+<status status="PASS" starttime="20180501 15:59:11.799" endtime="20180501 15:59:13.135"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -556,14 +556,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:46.030" endtime="20180428 00:29:46.066"></status>
+<status status="PASS" starttime="20180501 15:59:13.137" endtime="20180501 15:59:13.171"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:46.067" endtime="20180428 00:29:46.099"></status>
+<status status="PASS" starttime="20180501 15:59:13.171" endtime="20180501 15:59:13.203"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -571,7 +571,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:46.099" endtime="20180428 00:29:46.234"></status>
+<status status="PASS" starttime="20180501 15:59:13.203" endtime="20180501 15:59:13.348"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -579,8 +579,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:46.235" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M23.</msg>
-<status status="PASS" starttime="20180428 00:29:46.234" endtime="20180428 00:29:46.316"></status>
+<msg timestamp="20180501 15:59:13.349" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M23.</msg>
+<status status="PASS" starttime="20180501 15:59:13.348" endtime="20180501 15:59:13.427"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -588,8 +588,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:46.317" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
-<status status="PASS" starttime="20180428 00:29:46.317" endtime="20180428 00:29:46.370"></status>
+<msg timestamp="20180501 15:59:13.428" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
+<status status="PASS" starttime="20180501 15:59:13.427" endtime="20180501 15:59:13.494"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -597,18 +597,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:46.371" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Data Science.</msg>
-<status status="PASS" starttime="20180428 00:29:46.370" endtime="20180428 00:29:46.459"></status>
+<msg timestamp="20180501 15:59:13.495" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Data Science.</msg>
+<status status="PASS" starttime="20180501 15:59:13.494" endtime="20180501 15:59:13.619"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:29:46.460" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:29:46.459" endtime="20180428 00:29:47.133"></status>
+<msg timestamp="20180501 15:59:13.620" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:13.619" endtime="20180501 15:59:14.415"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:46.029" endtime="20180428 00:29:47.134"></status>
+<status status="PASS" starttime="20180501 15:59:13.136" endtime="20180501 15:59:14.415"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -622,14 +622,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:47.135" endtime="20180428 00:29:47.178"></status>
+<status status="PASS" starttime="20180501 15:59:14.417" endtime="20180501 15:59:14.468"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:47.178" endtime="20180428 00:29:47.211"></status>
+<status status="PASS" starttime="20180501 15:59:14.469" endtime="20180501 15:59:14.512"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -637,7 +637,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:47.211" endtime="20180428 00:29:47.349"></status>
+<status status="PASS" starttime="20180501 15:59:14.513" endtime="20180501 15:59:14.680"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -645,8 +645,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:47.349" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M03.</msg>
-<status status="PASS" starttime="20180428 00:29:47.349" endtime="20180428 00:29:47.386"></status>
+<msg timestamp="20180501 15:59:14.681" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M03.</msg>
+<status status="PASS" starttime="20180501 15:59:14.680" endtime="20180501 15:59:14.740"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -654,8 +654,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:47.386" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
-<status status="PASS" starttime="20180428 00:29:47.386" endtime="20180428 00:29:47.435"></status>
+<msg timestamp="20180501 15:59:14.741" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
+<status status="PASS" starttime="20180501 15:59:14.741" endtime="20180501 15:59:14.792"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -663,18 +663,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:47.436" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Business Intelligence.</msg>
-<status status="PASS" starttime="20180428 00:29:47.435" endtime="20180428 00:29:47.474"></status>
+<msg timestamp="20180501 15:59:14.793" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Business Intelligence.</msg>
+<status status="PASS" starttime="20180501 15:59:14.792" endtime="20180501 15:59:14.843"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:29:47.475" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:29:47.474" endtime="20180428 00:29:48.022"></status>
+<msg timestamp="20180501 15:59:14.843" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:14.843" endtime="20180501 15:59:16.014"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:47.135" endtime="20180428 00:29:48.023"></status>
+<status status="PASS" starttime="20180501 15:59:14.416" endtime="20180501 15:59:16.015"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -688,14 +688,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:48.024" endtime="20180428 00:29:48.072"></status>
+<status status="PASS" starttime="20180501 15:59:16.018" endtime="20180501 15:59:16.054"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:48.072" endtime="20180428 00:29:48.111"></status>
+<status status="PASS" starttime="20180501 15:59:16.054" endtime="20180501 15:59:16.096"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -703,7 +703,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:48.112" endtime="20180428 00:29:48.251"></status>
+<status status="PASS" starttime="20180501 15:59:16.096" endtime="20180501 15:59:16.244"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -711,8 +711,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:48.252" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M03.</msg>
-<status status="PASS" starttime="20180428 00:29:48.251" endtime="20180428 00:29:48.303"></status>
+<msg timestamp="20180501 15:59:16.244" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M03.</msg>
+<status status="PASS" starttime="20180501 15:59:16.244" endtime="20180501 15:59:16.305"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -720,8 +720,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:48.303" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 1.</msg>
-<status status="PASS" starttime="20180428 00:29:48.303" endtime="20180428 00:29:48.380"></status>
+<msg timestamp="20180501 15:59:16.305" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 1.</msg>
+<status status="PASS" starttime="20180501 15:59:16.305" endtime="20180501 15:59:16.372"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -729,18 +729,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:48.381" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Business Intelligence.</msg>
-<status status="PASS" starttime="20180428 00:29:48.380" endtime="20180428 00:29:48.426"></status>
+<msg timestamp="20180501 15:59:16.372" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Business Intelligence.</msg>
+<status status="PASS" starttime="20180501 15:59:16.372" endtime="20180501 15:59:16.420"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:29:48.427" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:29:48.427" endtime="20180428 00:29:48.919"></status>
+<msg timestamp="20180501 15:59:16.421" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:16.420" endtime="20180501 15:59:16.805"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:48.023" endtime="20180428 00:29:48.920"></status>
+<status status="PASS" starttime="20180501 15:59:16.016" endtime="20180501 15:59:16.805"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -754,14 +754,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:48.923" endtime="20180428 00:29:48.949"></status>
+<status status="PASS" starttime="20180501 15:59:16.807" endtime="20180501 15:59:16.841"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:48.949" endtime="20180428 00:29:48.979"></status>
+<status status="PASS" starttime="20180501 15:59:16.841" endtime="20180501 15:59:16.877"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -769,7 +769,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:48.979" endtime="20180428 00:29:49.095"></status>
+<status status="PASS" starttime="20180501 15:59:16.877" endtime="20180501 15:59:17.012"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -777,8 +777,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:49.095" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M04.</msg>
-<status status="PASS" starttime="20180428 00:29:49.095" endtime="20180428 00:29:49.169"></status>
+<msg timestamp="20180501 15:59:17.012" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M04.</msg>
+<status status="PASS" starttime="20180501 15:59:17.012" endtime="20180501 15:59:17.094"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -786,8 +786,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:49.170" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 1.</msg>
-<status status="PASS" starttime="20180428 00:29:49.170" endtime="20180428 00:29:49.242"></status>
+<msg timestamp="20180501 15:59:17.095" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 1.</msg>
+<status status="PASS" starttime="20180501 15:59:17.094" endtime="20180501 15:59:17.175"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -795,18 +795,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:49.243" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Embedded Systems.</msg>
-<status status="PASS" starttime="20180428 00:29:49.243" endtime="20180428 00:29:49.318"></status>
+<msg timestamp="20180501 15:59:17.176" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Embedded Systems.</msg>
+<status status="PASS" starttime="20180501 15:59:17.175" endtime="20180501 15:59:17.264"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:29:49.319" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:29:49.319" endtime="20180428 00:29:49.953"></status>
+<msg timestamp="20180501 15:59:17.264" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:17.264" endtime="20180501 15:59:17.903"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:48.922" endtime="20180428 00:29:49.954"></status>
+<status status="PASS" starttime="20180501 15:59:16.806" endtime="20180501 15:59:17.904"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -820,14 +820,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:49.960" endtime="20180428 00:29:49.990"></status>
+<status status="PASS" starttime="20180501 15:59:17.905" endtime="20180501 15:59:17.932"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:49.991" endtime="20180428 00:29:50.039"></status>
+<status status="PASS" starttime="20180501 15:59:17.932" endtime="20180501 15:59:17.967"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -835,7 +835,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:50.039" endtime="20180428 00:29:50.212"></status>
+<status status="PASS" starttime="20180501 15:59:17.967" endtime="20180501 15:59:18.097"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -843,8 +843,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:50.213" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M04.</msg>
-<status status="PASS" starttime="20180428 00:29:50.212" endtime="20180428 00:29:50.305"></status>
+<msg timestamp="20180501 15:59:18.098" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M04.</msg>
+<status status="PASS" starttime="20180501 15:59:18.098" endtime="20180501 15:59:18.170"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -852,8 +852,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:50.306" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
-<status status="PASS" starttime="20180428 00:29:50.306" endtime="20180428 00:29:50.361"></status>
+<msg timestamp="20180501 15:59:18.171" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
+<status status="PASS" starttime="20180501 15:59:18.170" endtime="20180501 15:59:18.220"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -861,18 +861,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:50.361" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Data Science.</msg>
-<status status="PASS" starttime="20180428 00:29:50.361" endtime="20180428 00:29:50.456"></status>
+<msg timestamp="20180501 15:59:18.221" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Data Science.</msg>
+<status status="PASS" starttime="20180501 15:59:18.220" endtime="20180501 15:59:18.305"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:29:50.457" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:29:50.456" endtime="20180428 00:29:51.140"></status>
+<msg timestamp="20180501 15:59:18.306" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:18.306" endtime="20180501 15:59:18.809"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:49.957" endtime="20180428 00:29:51.140"></status>
+<status status="PASS" starttime="20180501 15:59:17.904" endtime="20180501 15:59:18.810"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -886,14 +886,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:51.142" endtime="20180428 00:29:51.180"></status>
+<status status="PASS" starttime="20180501 15:59:18.813" endtime="20180501 15:59:18.840"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:51.180" endtime="20180428 00:29:51.225"></status>
+<status status="PASS" starttime="20180501 15:59:18.840" endtime="20180501 15:59:18.871"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -901,7 +901,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:51.225" endtime="20180428 00:29:51.402"></status>
+<status status="PASS" starttime="20180501 15:59:18.872" endtime="20180501 15:59:19.004"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -909,8 +909,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:51.403" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M21.</msg>
-<status status="PASS" starttime="20180428 00:29:51.403" endtime="20180428 00:29:51.497"></status>
+<msg timestamp="20180501 15:59:19.005" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M21.</msg>
+<status status="PASS" starttime="20180501 15:59:19.005" endtime="20180501 15:59:19.083"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -918,8 +918,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:51.498" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
-<status status="PASS" starttime="20180428 00:29:51.497" endtime="20180428 00:29:51.557"></status>
+<msg timestamp="20180501 15:59:19.084" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
+<status status="PASS" starttime="20180501 15:59:19.083" endtime="20180501 15:59:19.138"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -927,18 +927,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:51.558" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Data Science.</msg>
-<status status="PASS" starttime="20180428 00:29:51.557" endtime="20180428 00:29:51.657"></status>
+<msg timestamp="20180501 15:59:19.139" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Data Science.</msg>
+<status status="PASS" starttime="20180501 15:59:19.138" endtime="20180501 15:59:19.218"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:29:51.658" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:29:51.657" endtime="20180428 00:29:52.251"></status>
+<msg timestamp="20180501 15:59:19.218" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:19.218" endtime="20180501 15:59:19.624"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:51.141" endtime="20180428 00:29:52.251"></status>
+<status status="PASS" starttime="20180501 15:59:18.811" endtime="20180501 15:59:19.625"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -952,14 +952,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:52.255" endtime="20180428 00:29:52.290"></status>
+<status status="PASS" starttime="20180501 15:59:19.628" endtime="20180501 15:59:19.670"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:52.291" endtime="20180428 00:29:52.328"></status>
+<status status="PASS" starttime="20180501 15:59:19.672" endtime="20180501 15:59:19.713"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -967,7 +967,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:52.328" endtime="20180428 00:29:52.485"></status>
+<status status="PASS" starttime="20180501 15:59:19.713" endtime="20180501 15:59:19.853"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -975,8 +975,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:52.486" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M21.</msg>
-<status status="PASS" starttime="20180428 00:29:52.486" endtime="20180428 00:29:52.585"></status>
+<msg timestamp="20180501 15:59:19.854" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M21.</msg>
+<status status="PASS" starttime="20180501 15:59:19.853" endtime="20180501 15:59:19.926"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -984,8 +984,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:52.586" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 1.</msg>
-<status status="PASS" starttime="20180428 00:29:52.585" endtime="20180428 00:29:52.704"></status>
+<msg timestamp="20180501 15:59:19.927" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 1.</msg>
+<status status="PASS" starttime="20180501 15:59:19.926" endtime="20180501 15:59:20.011"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -993,18 +993,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:52.704" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Data Science.</msg>
-<status status="PASS" starttime="20180428 00:29:52.704" endtime="20180428 00:29:52.809"></status>
+<msg timestamp="20180501 15:59:20.012" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Data Science.</msg>
+<status status="PASS" starttime="20180501 15:59:20.012" endtime="20180501 15:59:20.097"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:29:52.810" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:29:52.809" endtime="20180428 00:29:53.887"></status>
+<msg timestamp="20180501 15:59:20.099" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:20.098" endtime="20180501 15:59:20.474"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:52.254" endtime="20180428 00:29:53.887"></status>
+<status status="PASS" starttime="20180501 15:59:19.625" endtime="20180501 15:59:20.475"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -1018,14 +1018,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:53.889" endtime="20180428 00:29:53.927"></status>
+<status status="PASS" starttime="20180501 15:59:20.479" endtime="20180501 15:59:20.507"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:53.927" endtime="20180428 00:29:53.978"></status>
+<status status="PASS" starttime="20180501 15:59:20.507" endtime="20180501 15:59:20.547"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -1033,7 +1033,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:53.979" endtime="20180428 00:29:54.165"></status>
+<status status="PASS" starttime="20180501 15:59:20.547" endtime="20180501 15:59:20.669"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -1041,8 +1041,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:54.166" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M21.</msg>
-<status status="PASS" starttime="20180428 00:29:54.166" endtime="20180428 00:29:54.260"></status>
+<msg timestamp="20180501 15:59:20.669" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M21.</msg>
+<status status="PASS" starttime="20180501 15:59:20.669" endtime="20180501 15:59:20.751"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -1050,8 +1050,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:54.261" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 1.</msg>
-<status status="PASS" starttime="20180428 00:29:54.260" endtime="20180428 00:29:54.361"></status>
+<msg timestamp="20180501 15:59:20.751" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 1.</msg>
+<status status="PASS" starttime="20180501 15:59:20.751" endtime="20180501 15:59:20.832"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -1059,18 +1059,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:54.362" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Multimedia.</msg>
-<status status="PASS" starttime="20180428 00:29:54.362" endtime="20180428 00:29:54.462"></status>
+<msg timestamp="20180501 15:59:20.832" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Multimedia.</msg>
+<status status="PASS" starttime="20180501 15:59:20.832" endtime="20180501 15:59:20.911"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:29:54.463" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:29:54.462" endtime="20180428 00:29:55.699"></status>
+<msg timestamp="20180501 15:59:20.911" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:20.911" endtime="20180501 15:59:21.453"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:53.888" endtime="20180428 00:29:55.699"></status>
+<status status="PASS" starttime="20180501 15:59:20.477" endtime="20180501 15:59:21.453"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -1084,14 +1084,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:55.701" endtime="20180428 00:29:55.731"></status>
+<status status="PASS" starttime="20180501 15:59:21.454" endtime="20180501 15:59:21.484"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:55.731" endtime="20180428 00:29:55.769"></status>
+<status status="PASS" starttime="20180501 15:59:21.484" endtime="20180501 15:59:21.527"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -1099,7 +1099,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:55.769" endtime="20180428 00:29:55.932"></status>
+<status status="PASS" starttime="20180501 15:59:21.527" endtime="20180501 15:59:21.687"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -1107,8 +1107,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:55.932" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M22.</msg>
-<status status="PASS" starttime="20180428 00:29:55.932" endtime="20180428 00:29:56.018"></status>
+<msg timestamp="20180501 15:59:21.687" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M22.</msg>
+<status status="PASS" starttime="20180501 15:59:21.687" endtime="20180501 15:59:21.768"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -1116,8 +1116,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:56.018" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
-<status status="PASS" starttime="20180428 00:29:56.018" endtime="20180428 00:29:56.064"></status>
+<msg timestamp="20180501 15:59:21.768" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
+<status status="PASS" starttime="20180501 15:59:21.768" endtime="20180501 15:59:21.816"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -1125,18 +1125,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:56.064" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Multimedia.</msg>
-<status status="PASS" starttime="20180428 00:29:56.064" endtime="20180428 00:29:56.146"></status>
+<msg timestamp="20180501 15:59:21.817" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Multimedia.</msg>
+<status status="PASS" starttime="20180501 15:59:21.816" endtime="20180501 15:59:21.897"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:29:56.147" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:29:56.146" endtime="20180428 00:29:56.666"></status>
+<msg timestamp="20180501 15:59:21.898" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:21.898" endtime="20180501 15:59:22.274"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:55.700" endtime="20180428 00:29:56.667"></status>
+<status status="PASS" starttime="20180501 15:59:21.454" endtime="20180501 15:59:22.276"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -1150,14 +1150,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:56.670" endtime="20180428 00:29:56.709"></status>
+<status status="PASS" starttime="20180501 15:59:22.279" endtime="20180501 15:59:22.303"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:56.710" endtime="20180428 00:29:56.754"></status>
+<status status="PASS" starttime="20180501 15:59:22.303" endtime="20180501 15:59:22.347"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -1165,7 +1165,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:56.756" endtime="20180428 00:29:56.930"></status>
+<status status="PASS" starttime="20180501 15:59:22.347" endtime="20180501 15:59:22.476"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -1173,8 +1173,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:56.931" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M22.</msg>
-<status status="PASS" starttime="20180428 00:29:56.930" endtime="20180428 00:29:57.023"></status>
+<msg timestamp="20180501 15:59:22.477" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M22.</msg>
+<status status="PASS" starttime="20180501 15:59:22.476" endtime="20180501 15:59:22.546"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -1182,8 +1182,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:57.024" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 1.</msg>
-<status status="PASS" starttime="20180428 00:29:57.024" endtime="20180428 00:29:57.125"></status>
+<msg timestamp="20180501 15:59:22.547" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 1.</msg>
+<status status="PASS" starttime="20180501 15:59:22.546" endtime="20180501 15:59:22.626"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -1191,18 +1191,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:57.126" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Software Development.</msg>
-<status status="PASS" starttime="20180428 00:29:57.126" endtime="20180428 00:29:57.224"></status>
+<msg timestamp="20180501 15:59:22.627" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Software Development.</msg>
+<status status="PASS" starttime="20180501 15:59:22.626" endtime="20180501 15:59:22.709"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:29:57.224" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:29:57.224" endtime="20180428 00:29:57.769"></status>
+<msg timestamp="20180501 15:59:22.710" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:22.709" endtime="20180501 15:59:23.417"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:56.669" endtime="20180428 00:29:57.769"></status>
+<status status="PASS" starttime="20180501 15:59:22.279" endtime="20180501 15:59:23.417"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -1216,14 +1216,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:57.771" endtime="20180428 00:29:57.801"></status>
+<status status="PASS" starttime="20180501 15:59:23.421" endtime="20180501 15:59:23.447"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:57.801" endtime="20180428 00:29:57.832"></status>
+<status status="PASS" starttime="20180501 15:59:23.447" endtime="20180501 15:59:23.483"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -1231,7 +1231,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:57.833" endtime="20180428 00:29:57.996"></status>
+<status status="PASS" starttime="20180501 15:59:23.483" endtime="20180501 15:59:23.636"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -1239,8 +1239,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:57.996" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M23.</msg>
-<status status="PASS" starttime="20180428 00:29:57.996" endtime="20180428 00:29:58.084"></status>
+<msg timestamp="20180501 15:59:23.639" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M23.</msg>
+<status status="PASS" starttime="20180501 15:59:23.636" endtime="20180501 15:59:23.725"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -1248,8 +1248,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:58.085" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
-<status status="PASS" starttime="20180428 00:29:58.084" endtime="20180428 00:29:58.143"></status>
+<msg timestamp="20180501 15:59:23.725" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
+<status status="PASS" starttime="20180501 15:59:23.725" endtime="20180501 15:59:23.772"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -1257,18 +1257,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:58.144" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Embedded Systems.</msg>
-<status status="PASS" starttime="20180428 00:29:58.144" endtime="20180428 00:29:58.245"></status>
+<msg timestamp="20180501 15:59:23.772" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Embedded Systems.</msg>
+<status status="PASS" starttime="20180501 15:59:23.772" endtime="20180501 15:59:23.850"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:29:58.246" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:29:58.245" endtime="20180428 00:29:59.080"></status>
+<msg timestamp="20180501 15:59:23.851" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:23.850" endtime="20180501 15:59:24.247"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:57.770" endtime="20180428 00:29:59.080"></status>
+<status status="PASS" starttime="20180501 15:59:23.418" endtime="20180501 15:59:24.248"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -1282,14 +1282,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:59.081" endtime="20180428 00:29:59.141"></status>
+<status status="PASS" starttime="20180501 15:59:24.249" endtime="20180501 15:59:24.300"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:59.141" endtime="20180428 00:29:59.181"></status>
+<status status="PASS" starttime="20180501 15:59:24.300" endtime="20180501 15:59:24.348"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -1297,7 +1297,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:29:59.181" endtime="20180428 00:29:59.339"></status>
+<status status="PASS" starttime="20180501 15:59:24.348" endtime="20180501 15:59:24.480"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -1305,8 +1305,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:59.340" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M23.</msg>
-<status status="PASS" starttime="20180428 00:29:59.339" endtime="20180428 00:29:59.428"></status>
+<msg timestamp="20180501 15:59:24.480" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M23.</msg>
+<status status="PASS" starttime="20180501 15:59:24.480" endtime="20180501 15:59:24.558"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -1314,8 +1314,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:59.429" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
-<status status="PASS" starttime="20180428 00:29:59.428" endtime="20180428 00:29:59.488"></status>
+<msg timestamp="20180501 15:59:24.559" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
+<status status="PASS" starttime="20180501 15:59:24.558" endtime="20180501 15:59:24.602"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -1323,18 +1323,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:29:59.489" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Software Development.</msg>
-<status status="PASS" starttime="20180428 00:29:59.489" endtime="20180428 00:29:59.590"></status>
+<msg timestamp="20180501 15:59:24.603" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Software Development.</msg>
+<status status="PASS" starttime="20180501 15:59:24.603" endtime="20180501 15:59:24.684"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:29:59.591" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:29:59.591" endtime="20180428 00:30:00.999"></status>
+<msg timestamp="20180501 15:59:24.685" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:24.684" endtime="20180501 15:59:25.076"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:59.080" endtime="20180428 00:30:01.000"></status>
+<status status="PASS" starttime="20180501 15:59:24.248" endtime="20180501 15:59:25.076"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -1348,14 +1348,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:30:01.002" endtime="20180428 00:30:01.036"></status>
+<status status="PASS" starttime="20180501 15:59:25.079" endtime="20180501 15:59:25.122"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:30:01.036" endtime="20180428 00:30:01.077"></status>
+<status status="PASS" starttime="20180501 15:59:25.122" endtime="20180501 15:59:25.158"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -1363,7 +1363,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:30:01.077" endtime="20180428 00:30:01.241"></status>
+<status status="PASS" starttime="20180501 15:59:25.158" endtime="20180501 15:59:25.281"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -1371,8 +1371,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:30:01.242" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M21.</msg>
-<status status="PASS" starttime="20180428 00:30:01.241" endtime="20180428 00:30:01.336"></status>
+<msg timestamp="20180501 15:59:25.281" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M21.</msg>
+<status status="PASS" starttime="20180501 15:59:25.281" endtime="20180501 15:59:25.359"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -1380,8 +1380,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:30:01.337" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
-<status status="PASS" starttime="20180428 00:30:01.337" endtime="20180428 00:30:01.394"></status>
+<msg timestamp="20180501 15:59:25.360" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 0.</msg>
+<status status="PASS" starttime="20180501 15:59:25.359" endtime="20180501 15:59:25.405"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -1389,18 +1389,18 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:30:01.394" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Business Intelligence.</msg>
-<status status="PASS" starttime="20180428 00:30:01.394" endtime="20180428 00:30:01.456"></status>
+<msg timestamp="20180501 15:59:25.405" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Business Intelligence.</msg>
+<status status="PASS" starttime="20180501 15:59:25.405" endtime="20180501 15:59:25.454"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:30:01.456" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:30:01.456" endtime="20180428 00:30:02.267"></status>
+<msg timestamp="20180501 15:59:25.454" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:25.454" endtime="20180501 15:59:25.912"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:30:01.001" endtime="20180428 00:30:02.267"></status>
+<status status="PASS" starttime="20180501 15:59:25.078" endtime="20180501 15:59:25.913"></status>
 </kw>
 <kw name="Generate room">
 <arguments>
@@ -1414,14 +1414,14 @@
 <arguments>
 <arg>jquery=[name=date_selected]</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:30:02.269" endtime="20180428 00:30:02.305"></status>
+<status status="PASS" starttime="20180501 15:59:25.914" endtime="20180501 15:59:25.956"></status>
 </kw>
 <kw name="Clear Element Text" library="Selenium2Library">
 <doc>Clears the value of text entry element identified by ``locator``.</doc>
 <arguments>
 <arg>xpath=//input[@name='date_selected']</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:30:02.305" endtime="20180428 00:30:02.344"></status>
+<status status="PASS" starttime="20180501 15:59:25.956" endtime="20180501 15:59:25.997"></status>
 </kw>
 <kw name="Press Key" library="Selenium2Library">
 <doc>Simulates user pressing key on element identified by ``locator``.</doc>
@@ -1429,7 +1429,7 @@
 <arg>jquery=[name=date_selected]</arg>
 <arg>${date}</arg>
 </arguments>
-<status status="PASS" starttime="20180428 00:30:02.344" endtime="20180428 00:30:02.521"></status>
+<status status="PASS" starttime="20180501 15:59:25.997" endtime="20180501 15:59:26.137"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -1437,8 +1437,8 @@
 <arg>xpath=//select[@name="room_selected"]</arg>
 <arg>${room}</arg>
 </arguments>
-<msg timestamp="20180428 00:30:02.522" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M23.</msg>
-<status status="PASS" starttime="20180428 00:30:02.521" endtime="20180428 00:30:02.618"></status>
+<msg timestamp="20180501 15:59:26.138" level="INFO">Selecting options from selection list 'xpath=//select[@name="room_selected"]' by label M23.</msg>
+<status status="PASS" starttime="20180501 15:59:26.138" endtime="20180501 15:59:26.207"></status>
 </kw>
 <kw name="Select From List By Value" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``values``.</doc>
@@ -1446,8 +1446,8 @@
 <arg>xpath=//select[@name="period_selected"]</arg>
 <arg>${period}</arg>
 </arguments>
-<msg timestamp="20180428 00:30:02.619" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 1.</msg>
-<status status="PASS" starttime="20180428 00:30:02.618" endtime="20180428 00:30:02.722"></status>
+<msg timestamp="20180501 15:59:26.207" level="INFO">Selecting options from selection list 'xpath=//select[@name="period_selected"]' by value 1.</msg>
+<status status="PASS" starttime="20180501 15:59:26.207" endtime="20180501 15:59:26.286"></status>
 </kw>
 <kw name="Select From List By Label" library="Selenium2Library">
 <doc>Selects options from selection list ``locator`` by ``labels``.</doc>
@@ -1455,37 +1455,37 @@
 <arg>xpath=//select[@name="major_selected"]</arg>
 <arg>${major}</arg>
 </arguments>
-<msg timestamp="20180428 00:30:02.723" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Network and Communication.</msg>
-<status status="PASS" starttime="20180428 00:30:02.722" endtime="20180428 00:30:02.823"></status>
+<msg timestamp="20180501 15:59:26.287" level="INFO">Selecting options from selection list 'xpath=//select[@name="major_selected"]' by label Network and Communication.</msg>
+<status status="PASS" starttime="20180501 15:59:26.287" endtime="20180501 15:59:26.369"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks button identified by ``locator``.</doc>
 <arguments>
 <arg>สร้างตาราง</arg>
 </arguments>
-<msg timestamp="20180428 00:30:02.824" level="INFO">Clicking button 'สร้างตาราง'.</msg>
-<status status="PASS" starttime="20180428 00:30:02.823" endtime="20180428 00:30:03.719"></status>
+<msg timestamp="20180501 15:59:26.370" level="INFO">Clicking button 'สร้างตาราง'.</msg>
+<status status="PASS" starttime="20180501 15:59:26.370" endtime="20180501 15:59:26.785"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:30:02.268" endtime="20180428 00:30:03.719"></status>
+<status status="PASS" starttime="20180501 15:59:25.913" endtime="20180501 15:59:26.785"></status>
 </kw>
 <kw name="Sleep" library="BuiltIn">
 <doc>Pauses the test executed for the given time.</doc>
 <arguments>
 <arg>${FIVESECOND}</arg>
 </arguments>
-<msg timestamp="20180428 00:30:08.730" level="INFO">Slept 5 seconds</msg>
-<status status="PASS" starttime="20180428 00:30:03.720" endtime="20180428 00:30:08.730"></status>
+<msg timestamp="20180501 15:59:31.787" level="INFO">Slept 5 seconds</msg>
+<status status="PASS" starttime="20180501 15:59:26.786" endtime="20180501 15:59:31.787"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:36.674" endtime="20180428 00:30:08.730" critical="yes"></status>
+<status status="PASS" starttime="20180501 15:59:04.685" endtime="20180501 15:59:31.787" critical="yes"></status>
 </test>
 <kw name="Stop Django and close Browser" type="teardown">
 <kw name="Close Browser" library="Selenium2Library">
 <doc>Closes the current browser.</doc>
-<status status="PASS" starttime="20180428 00:30:08.730" endtime="20180428 00:30:12.009"></status>
+<status status="PASS" starttime="20180501 15:59:31.787" endtime="20180501 15:59:35.083"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:30:08.730" endtime="20180428 00:30:12.009"></status>
+<status status="PASS" starttime="20180501 15:59:31.787" endtime="20180501 15:59:35.083"></status>
 </kw>
-<status status="PASS" starttime="20180428 00:29:24.101" endtime="20180428 00:30:12.009"></status>
+<status status="PASS" starttime="20180501 15:58:53.164" endtime="20180501 15:59:35.083"></status>
 </suite>
 <statistics>
 <total>
@@ -1495,7 +1495,7 @@
 <tag>
 </tag>
 <suite>
-<stat pass="3" fail="0" id="s1" name="Senior Test">Senior Test</stat>
+<stat pass="3" fail="0" id="s1" name="Schedule Room">Schedule Room</stat>
 </suite>
 </statistics>
 <errors>
