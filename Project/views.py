@@ -28,6 +28,23 @@ def data_user(user_model):
     
     return queryset
 
+def err_message(user):
+    if user is not None:
+        if user.is_active:   
+            return [1, "User is valid, active and authenticated"]
+        else:
+            return [0, "The password is valid, but the account has been disabled!"]
+    return [0, "The username and password were incorrect."]
+
+def choice_return(request, err, user_model):
+    form_setting = Settings.objects.get(id=1).forms
+    state = err[1]
+    if err[0] == 1:
+        login(request, user_model)
+        return render(request,"scoreproj.html",{'Projectset':data_user(user_model), 'proj_act':form_setting})
+    else:
+        return render(request, 'login.html', {'err_ms':state})
+
 def login_user(request):
     state = ""
     if request.POST:
@@ -44,22 +61,24 @@ def login_user(request):
             try:
                 if not c.bind():
                     user_model = authenticate(username=username, password=password)
-                    user_model.backend = "django.contrib.auth.backends.ModelBackend"
-                    login(request, user_model)
-                    state = "Valid account"
-                    return render(request,"scoreproj.html",{'Projectset':data_user(user_model), 'proj_act':form_setting})
+                    err = err_message(user_model)
+                    return choice_return(request, err, user_model)
             except Exception:
                 user_model = authenticate(username=username, password=password)
-                user_model.backend = "django.contrib.auth.backends.ModelBackend"
-                login(request, user_model)
-                state = "Valid account"
-                return render(request,"scoreproj.html",{'Projectset':data_user(user_model), 'proj_act':form_setting})
+                err = err_message(user_model)
+                return choice_return(request, err, user_model)
             if user is not None and c.bind():
-                login(request, user)
-                state = "Valid account"
-                return render(request,"scoreproj.html",{'Projectset':data_user(user), 'proj_act':form_setting})
+                if user.is_active:
+                    login(request, user)
+                    return render(request,"scoreproj.html",{'Projectset':data_user(user), 'proj_act':form_setting})
+                else:
+                    state = "The password is valid, but the account has been disabled!"
+                    return render(request, 'login.html', {'err_ms':state})
             else:
-                state = "Inactive account"
+                state = "The username and password were incorrect."
+                return render(request, 'login.html', {'err_ms':state})
         except Exception:
-            return render(request, 'login.html', {'err_ms':state})
+            user_model = authenticate(username=username, password=password)
+            err = err_message(user_model)
+            return choice_return(request, err, user_model)
     return render(request, 'login.html', {'err_ms':state})
