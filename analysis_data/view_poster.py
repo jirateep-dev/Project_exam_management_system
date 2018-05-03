@@ -102,7 +102,7 @@ def generate_poster(request):
                 while len(new_tch) != 3:
                     tch_ran = Teacher.objects.order_by('?').first()
                     load = len(Teacher.objects.get(teacher_name=tch_ran.teacher_name).schepost_teacher.all())
-                    if tch_ran.teacher_name not in new_tch and tch_ran.teacher_name not in old_tch and load <= load_set:
+                    if tch_ran.teacher_name not in new_tch and tch_ran.teacher_name not in old_tch and load <= load_set and tch_ran.teacher_name != ' ':
                         new_tch.append(tch_ran.teacher_name)
                 sum_lev = 0
                 for name in new_tch:
