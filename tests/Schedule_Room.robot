@@ -85,4 +85,10 @@ create schedule room
   Generate room      ${DATE2}      M21      0      Business Intelligence
   Generate room      ${DATE2}      M23      1      Network and Communication
 
+  Execute Javascript    $(document).scrollTop(${100})
+  Capture Page Screenshot
+  Click button                  โครงงานที่ยังไม่ถูกจัด
+  Sleep                         ${FIVESECOND}
+  Execute JavaScript    window.scrollTo(0, document.body.scrollHeight)
+  Capture Page Screenshot
   Sleep     						        ${FIVESECOND}

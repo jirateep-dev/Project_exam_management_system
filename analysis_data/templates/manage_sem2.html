@@ -100,7 +100,7 @@
     <form action="{% url 'manage' %}" method="POST" id="reset_form" style="margin-left: 100px;padding-bottom: 50px;">
         {% csrf_token %}
         <div class='col-md-5'>
-            <button class="btn btn-info" data-toggle="collapse" href="#table_projs" name="projs"><h4 style="font-size: 2em">โครงงานที่ยังไม่ถูกจัด</h4></button>
+                <button type="submit" class="btn btn-info" form="reset_form" name="table_projs" value="1"><h4 style="font-size: 2em">โครงงานที่ยังไม่ถูกจัด</h4></button>
         </div>
         <div class="row btn-bottom" style="margin-left: 80%;margin-top: 30px;">
             <div class='col-md-5'>
@@ -109,13 +109,14 @@
         </div>
     </form>
 
-    <div id="table_projs" class="panel-collapse collapse ">
+    {% if table_projs == "1" %}
         <table class="table table-hover">
             <thead>
                 <tr style="font-size: 1.5em">
                     <th>ปีการศึกษา</th>
                     <th>ภาคเรียนที่</th>
                     <th>รายชื่อโปรเจค</th>
+                    <th>แขนง</th>
                     <th>อาจารย์ที่ปรึกษา</th>
                     <th>อาจารย์ที่ปรึกษาร่วม</th>
                 </tr>
@@ -126,13 +127,14 @@
                         <td class="active">{{proj.proj_years}}</td>
                         <td class="warning">{{proj.proj_semester}}</td>
                         <td class="info">{{proj.proj_name_th}}</td>
+                        <td class="success">{{proj.proj_major}}</td>
                         <td class="danger">{{proj.proj_advisor}}</td>
                         <td class="danger">{{proj.proj_co_advisor}}</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
-    </div>
+    {% endif %}
 
 </div>
 {% endblock %}

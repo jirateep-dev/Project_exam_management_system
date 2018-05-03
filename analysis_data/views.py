@@ -17,7 +17,7 @@ from django.db.models import Q
 from random import randint
 from collections import Counter
 from django.db.models import Max
-from random import randint
+from random import randint, shuffle
 import statistics
 import logging
 
@@ -209,18 +209,10 @@ def manageTeacher(major_id, date_input, period_input):
     temp_tch = []
     setting = Settings.objects.get(id=1)
     major = Major.objects.get(id=major_id)
+    teachers_all = Teacher.objects.all()
 
-    # tch_projNull = Project.objects.filter(proj_years=this_year(), proj_semester=setting.forms, \
-    #                 proj_major=major.major_name, schedule_id=None).values_list('proj_advisor', flat=True).distinct()
-    
     proj_null = Project.objects.filter(proj_years=this_year(), proj_semester=setting.forms, \
                     proj_major=major.major_name, schedule_id=None)
-
-    # for i in tch_projNull:
-    #     if approve_teacher(i, date_input, period_input):
-    #         list_teachers.append(i)
-    #     if len(list_teachers) == 3:
-    #         break
 
     for i in proj_null:
         if approve_teacher(i.proj_advisor, date_input, period_input) and i.proj_advisor not in list_teachers:
@@ -234,6 +226,20 @@ def manageTeacher(major_id, date_input, period_input):
     safe_zone = level_safezone()
 
     templis = list(list_teachers)
+    chk_tch = []
+
+    for i in teachers_all:
+        boo = True
+        for j in templis:
+            last_name = lastname_tch(i.teacher_name)
+            last_name_t = lastname_tch(j)
+            if last_name == last_name_t:
+                boo = False
+        if approve_teacher(i.teacher_name, date_input, period_input) and boo and i.teacher_name not in chk_tch:
+            chk_tch.append(i.teacher_name)
+    
+    count_end = 0
+
     if templis != []:
         while True:
             while len(list_teachers) != 4:
@@ -242,23 +248,24 @@ def manageTeacher(major_id, date_input, period_input):
                 for i in range(len(list_teachers)):
                     last_name = lastname_tch(list_teachers[i])
                     last_name_t = lastname_tch(tch_ran.teacher_name)
-                    # last_name_co = ''
-                    # if i < len(templis):
-                    #     last_name_co = lastname_tch(temp_tch[i])
                     if last_name == last_name_t:
                         check_lastname = False
                 if approve_teacher(tch_ran.teacher_name, date_input, period_input) and check_lastname:
+                    count_end += 1
                     list_teachers.append(tch_ran.teacher_name)
             if len(list_teachers) == 4:
                 sum_lev = 0
                 for name in list_teachers:
                     last_name = lastname_tch(name)
                     sum_lev += Teacher.objects.get(teacher_name__contains=last_name).levels_teacher
-                if (sum_lev/4.0) <= safe_zone['max'] and (sum_lev/4.0) >= safe_zone['min']:
+                avg_s = (sum_lev/4.0)
+                if avg_s <= safe_zone['max'] and avg_s >= safe_zone['min']:
                     break
                 else:
                     list_teachers = list(templis)
-
+            if count_end == len(chk_tch):
+                break
+    shuffle(list_teachers)
     return [templis, list_teachers]
 
 def count_proj(major):
@@ -476,6 +483,7 @@ def manage(request):
         str_link = "manage_sem2.html"
     try:
         reset_selected = int(request.POST.get('reset_gen',None))
+        table_projs = request.POST.get('table_projs',None)
         if reset_selected:
             Project.objects.filter(proj_years=this_year(), proj_semester=sem).update(schedule_id=None)
             DateExam.objects.all().filter(id__endswith=str(sem)).delete()
@@ -492,8 +500,9 @@ def manage(request):
                             Project.objects.filter(id=i.id).update(sche_post_id=None)
         pre = prepare_render()
         return render(request,str_link,{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
-                    'room_period':pre[1], 'proj_null':pre[2], 'proj_act':sem, 'proj_years':this_year()})
+                    'room_period':pre[1], 'proj_null':pre[2], 'proj_act':sem, 'proj_years':this_year(), 'table_projs':table_projs})
     except Exception as error:
+        table_projs = request.POST.get('table_projs',None)
         pre = prepare_render()
         return render(request,str_link,{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
-                    'room_period':pre[1], 'proj_null':pre[2], 'proj_act':sem, 'proj_years':this_year()})
+                    'room_period':pre[1], 'proj_null':pre[2], 'proj_act':sem, 'proj_years':this_year(), 'table_projs':table_projs})
