@@ -380,20 +380,6 @@ def manage_room(request):
             for obj in s:
                 list_proj_id.append(obj.id)
 
-        # proj_tch_advisor = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=this_year(), proj_semester=sem, \
-        #                 proj_advisor__in=[list_teachers[0], list_teachers[1], list_teachers[2]], \
-        #                 schedule_id=None, proj_major=major.major_name)))
-        # for i in range(3):
-        #     proj_of_teacher = pd.DataFrame(list(Project.objects.values('id').filter(proj_years=this_year(), proj_semester=sem, \
-        #                 proj_advisor=list_teachers[i], schedule_id=None, proj_major=major.major_name)))
-        #     if not proj_of_teacher.empty:
-        #         rand_index = randint(0,len(proj_of_teacher)-1)
-        #         if proj_of_teacher.iloc[rand_index]['id'] not in list_proj_id and len(list_proj_id) < 5:
-        #             list_proj_id.append(proj_of_teacher.iloc[rand_index]['id'])
-        # for i in range(len(proj_tch_advisor)):
-        #     if not proj_tch_advisor.empty:
-        #         if proj_tch_advisor.iloc[i]['id'] not in list_proj_id and len(list_proj_id) < 5:
-        #             list_proj_id.append(proj_tch_advisor.iloc[i]['id'])
     if list_proj_id == [] and not (list_teachers == [] or len(list_teachers) < 4):
         date = DateExam.objects.get(id=id_dateexam)
         sche = ScheduleRoom.objects.filter(date_id_id=date.id)
@@ -402,7 +388,9 @@ def manage_room(request):
         DateExam.objects.filter(id=id_dateexam).delete()
 
     NoneType = type(None)
-    max_count = ScheduleRoom.objects.all().aggregate(Max('teacher_group'))['teacher_group__max']
+
+    proj_id = Project.objects.values_list('id', flat=True).filter(proj_years=this_year(), proj_semester=sem)
+    max_count = ScheduleRoom.objects.filter(proj_id_id__in=proj_id).aggregate(Max('teacher_group'))['teacher_group__max']
     if type(max_count) == NoneType:
         max_count = 0
 

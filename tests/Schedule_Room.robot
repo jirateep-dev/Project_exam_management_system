@@ -11,30 +11,25 @@ ${TENSECOND}      		10.0
 ${ONEMINUTE}      		60.0
 ${USER}      			bundit
 ${PASS}      			ad123456
-${DATE1}          15/05/2018
-${DATE2}          16/05/2018
+${DATE1}          29/05/2018
+${DATE2}          30/05/2018
 
 *** Settings ***
 
-# Documentation		  Django Robot Tests
 Library         	Selenium2Library  timeout=10  implicit_wait=0
-# Library         	DjangoLibrary  ${HOSTNAME}  ${PORT}  path=Project/Project  manage=Project/manage.py  settings=Project.settings
 Library           BuiltIn
 Library           String
 Suite Setup     	Start Django and open Browser
 Suite Teardown    Stop Django and close Browser
 
-
 *** Keywords ***
 
 Start Django and open Browser
-  # Start Django
   Open Browser    ${SERVER}    ${BROWSER}
   Maximize Browser Window
 
 Stop Django and close Browser
   Close Browser
-  # Stop Django
 
 Generate room
   [Arguments]    ${date}    ${room}    ${period}    ${major}
@@ -59,10 +54,23 @@ visit manage_page before create schedule room
   Click Link    link=จัดห้องสอบ
   Sleep    		${ONESECOND}
 
-create schedule room
-  Click button 						      ล้างข้อมูล
+check result for create 1 room and 1 period time in schedule_room
+  Click button                  ล้างข้อมูล
 
-  Generate room      ${DATE1}      M03      0      Software Development
+  Focus                         jquery=[name=date_selected]
+  Clear Element Text            xpath=//input[@name='date_selected']
+  Press Key                     jquery=[name=date_selected]      ${DATE1}
+
+  Select From List By Label     xpath=//select[@name="room_selected"]     M03
+  Select From List By Value     xpath=//select[@name="period_selected"]    0
+  Select From List By Label     xpath=//select[@name="major_selected"]    Software Development
+
+  Capture Page Screenshot
+  Click button                  สร้างตาราง
+  Capture Page Screenshot
+
+create schedule room
+
   Generate room      ${DATE1}      M04      0      Software Development
   Generate room      ${DATE1}      M03      1      Software Development
   Generate room      ${DATE1}      M04      1      Software Development
@@ -92,3 +100,11 @@ create schedule room
   Execute JavaScript    window.scrollTo(0, document.body.scrollHeight)
   Capture Page Screenshot
   Sleep     						        ${FIVESECOND}
+
+visit table_room page and check table schedule room
+  Click Link    link=ตารางการจัดห้องสอบ
+  Execute Javascript    $(document).scrollTop(${500})
+  Capture Page Screenshot
+  Click Link    link=ตารางการสอบโปรเจค
+  Sleep             ${THREESECOND}
+  Capture Page Screenshot
