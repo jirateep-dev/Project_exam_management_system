@@ -373,7 +373,7 @@ def scoreproj(request):
         teacher_sp = Teacher.objects.get(login_user_id=user_id)
         proj_selected = request.POST.get("data_proj", None)
         if type(proj_selected) is not type(None):
-            proj = Project.objects.get(proj_name_th=proj_selected, proj_semester=form_setting)
+            proj = Project.objects.get(proj_years=this_year(), proj_name_th=proj_selected, proj_semester=form_setting)
 
             lname_tch = lastname_tch(teacher_sp.teacher_name)
             lname_adv = lastname_tch(proj.proj_advisor)
