@@ -20,33 +20,35 @@
             </div>
         </div>
         <div id="table_poster" class="panel-collapse collapse in">
-            <table class="table table-hover">
-                <thead>
-                    <label style="margin-left:30%;">SAFE ZONE MIN : </label><label style="margin-left:20px;color: green">{{safezone.min}}</label>
-                    <label style="margin-left:5%;">SAFE ZONE MAX : </label><label style="margin-left:20px;color: red">{{safezone.max}}</label>
+            <div class="table100 ver2 m-b-110">
+                <table class="table table-hover" style="text-align: center" data-vertable="ver2" >
+                    <thead>
+                        <label style="margin-left:30%;">SAFE ZONE MIN : </label><label style="margin-left:20px;color: green">{{safezone.min}}</label>
+                        <label style="margin-left:5%;">SAFE ZONE MAX : </label><label style="margin-left:20px;color: red">{{safezone.max}}</label>
 
-                    <tr style="font-size: 1.5em">
-                        <th>ลำดับ</th>
-                        <th>รายชื่อโปรเจค</th>
-                        <th>อาจารย์คนที่ 1</th>
-                        <th>อาจารย์คนที่ 2</th>
-                        <th>อาจารย์คนที่ 3</th>
-                        <th>ค่าเฉลี่ยความเข้มงวด</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for obj in result %} 
-                        <tr style="font-size: 1.1em">
-                            <td class="active">{{obj.id}}</td>
-                            <td class="warning">{{obj.proj_name}}</td>
-                            <td class="info">{{obj.teacher1}}</td>
-                            <td class="active">{{obj.teacher2}}</td>
-                            <td class="warning">{{obj.teacher3}}</td>
-                            <td class="info">{{obj.avg}}</td>
+                        <tr class="row100 head" style="font-size: 1.5em">
+                            <th class="column100 column2" data-column="column2">ลำดับ</th>
+                            <th class="column100 column3" data-column="column3">รายชื่อโปรเจค</th>
+                            <th class="column100 column4" data-column="column4">อาจารย์คนที่ 1</th>
+                            <th class="column100 column5" data-column="column5">อาจารย์คนที่ 2</th>
+                            <th class="column100 column6" data-column="column6">อาจารย์คนที่ 3</th>
+                            <th class="column100 column7" data-column="column7">ค่าเฉลี่ยความเข้มงวด</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for obj in result %} 
+                            <tr class="row100" style="font-size: 1.1em">
+                                <td class="active column100 column2" data-column="column2">{{obj.id}}</td>
+                                <td class="warning column100 column3" data-column="column3" style="text-align: left">{{obj.proj_name}}</td>
+                                <td class="active column100 column4" data-column="column4" style="text-align: left">{{obj.teacher1}}</td>
+                                <td class="warning column100 column5" data-column="column5" style="text-align: left">{{obj.teacher2}}</td>
+                                <td class="active column100 column6" data-column="column6" style="text-align: left">{{obj.teacher3}}</td>
+                                <td class="success column100 column7" data-column="column7">{{obj.avg}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     {% endif %}
 

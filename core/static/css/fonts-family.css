@@ -58,7 +58,10 @@ h1,h2,h3,h4,p,a,label,td,span,option,input{
 	 }
 	 .collapse.in{
 	     display:block !important;
-	 }
+     }
+     #btn_manage{
+        margin-left: 0 !important;
+     }
 }
 
 @media screen and (max-width: 992px){
@@ -204,5 +207,8 @@ h1,h2,h3,h4,p,a,label,td,span,option,input{
     }
     table.table.table-hover{
         width: 100% !important;
+    }
+    #btn_manage{
+        margin-left: 0 !important;
     }
 }
