@@ -39,24 +39,31 @@
             </form>
         </div>
         <div class="jumbotron" style="padding: 0;padding-top: 0;padding-bottom: 10%">
-            <table class="table table-hover" style="margin-top: 50px;background-color:cornsilk">
-                <thead>
-                <tr style="background-color: slategray;color: aliceblue">
-                    {% for col_name in col_de%}
-                    <th style="text-align: center"><h4 style="font-size: 2.2em">{{col_name}}</h4></t>
-                    {% endfor %}
-                </tr>
-                </thead>
-                <tbody>
-                    {% for data in teachers%}
-                    <tr>
-                        {% for i in data%}
-                        <td><h4 style="font-size: 1.2em">{{i}}</h4></td>
+            <div class="table100 ver5 m-b-110">
+                <table class="table table-hover" style="text-align: center" data-vertable="ver5" >
+                    <thead>
+                    <tr class="row100 head" >
+                        {% for col_name in col_de%}
+                        <th style="text-align: center"><h4 style="font-size: 2.2em">{{col_name}}</h4></t>
                         {% endfor %}
                     </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for data in teachers%}
+                        <tr class="row100">
+                            {% for i in data%}
+                                {% if forloop.counter == 1 %}
+                                <td class="column100 column{{ forloop.counter|add:2 }}" \
+                                data-column="column{{ forloop.counter|add:2 }}"><h4 style="font-size: 1.3em;text-align: left">{{i}}</h4></td>
+                                {% else %}
+                                    <td class="column100 column{{ forloop.counter|add:2 }}" data-column="column{{ forloop.counter|add:2 }}"><h4 style="font-size: 1.3em;">{{i}}</h4></td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
 
     </div>

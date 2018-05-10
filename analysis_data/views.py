@@ -467,8 +467,8 @@ def manage(request):
     sem = Settings.objects.get(id=1).forms
     str_link = "manage.html"
         
-    if sem == 2:
-        str_link = "manage_sem2.html"
+    # if sem == 2:
+    #     str_link = "manage_sem2.html"
     try:
         reset_selected = int(request.POST.get('reset_gen',None))
         table_projs = request.POST.get('table_projs',None)

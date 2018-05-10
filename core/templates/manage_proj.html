@@ -138,25 +138,33 @@
     </div>
     
 </div>
-<div class="jumbotron" style="padding-left: 5%;padding-right: 5%;margin-top: 30px;">
-    <table class="table table-hover" style="background-color:cornsilk">
-        <thead>
-        <tr style="background-color: slategray;color: aliceblue">
-            {% for col_name in col_result%}
-            <th style="text-align: center;"><h4 style="font-size: 2.2em;">{{col_name}}</h4></t>
-            {% endfor %}
-        </tr>
-        </thead>
-        <tbody>
-            {% for data in list_proj%}
-            <tr>
-                {% for i in data%}
-                <td><h4 style="font-size: 1.2em;">{{i}}</h4></td>
+<div class="jumbotron" style="padding-left: 5%;padding-right: 5%;margin-top: 30px;background: white">
+    <div class="table100 ver5 m-b-110">
+        <table class="table table-hover" style="text-align: center" data-vertable="ver5" >
+            <thead>
+            <tr class="row100 head" style="background-color: slategray;color: aliceblue">
+                {% for col_name in col_result%}
+                <th class="column100 column{{ forloop.counter|add:2 }}" data-column="column{{ forloop.counter|add:2 }}" style="text-align: center;">
+                    <h4 style="font-size: 2.2em;">{{col_name}}</h4></t>
                 {% endfor %}
             </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for data in list_proj%}
+                <tr class="row100">
+                    {% for i in data%}
+                        {% if forloop.counter == 3 or forloop.counter == 4 or forloop.counter == 6 or forloop.counter == 7 %}
+                        <td class="column100 column{{ forloop.counter|add:2 }}" \
+                        data-column="column{{ forloop.counter|add:2 }}"><h4 style="font-size: 1.3em;text-align: left">{{i}}</h4></td>
+                        {% else %}
+                            <td class="column100 column{{ forloop.counter|add:2 }}" data-column="column{{ forloop.counter|add:2 }}"><h4 style="font-size: 1.3em;">{{i}}</h4></td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     <!-- Modal -->
     <div class="modal fade" id="del_modal" role="dialog">
         <div class="modal-dialog modal-md">

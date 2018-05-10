@@ -13,6 +13,12 @@
     <link href="{% static 'datepicker-1.6.4/css/bootstrap-datepicker.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/fonts-family.css' %}" rel="stylesheet">
     <link href="{% static 'css/navbar.css' %}" rel="stylesheet">
+
+    <link href="{% static 'vendor/animate/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/select2/select2.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/perfect-scrollbar/perfect-scrollbar.css' %}" rel="stylesheet">
+    <!-- <link href="{% static 'css/util.css' %}" rel="stylesheet"> -->
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
     <!-- <link href="{% static 'css/style.css' %}" rel="stylesheet"> -->
 </head>
 
@@ -56,14 +62,20 @@
 
     {% block content %} {% endblock %}
 
+    <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+
     <!-- Core Scripts - Include with every page -->
     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'datepicker-1.6.4/js/bootstrap-datepicker.min.js' %}"></script>
     <script src="{% static 'js/bootstrap-toggle.min.js' %}"></script>
+    <script src="{% static 'js/click_on_top.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/popper.js' %}"></script>
+    <script src="{% static 'vendor/select2/select2.min.js' %}"></script>
     <!-- <script src="{% static 'js/index.js' %}"></script> -->
-
-    {% block javascript %} {% endblock %}
+    
+    {% block javascript %}{% endblock %}
 
 
 </body>
