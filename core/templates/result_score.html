@@ -74,6 +74,9 @@
                                         <option selected="selected" disabled hidden style="font-size: 2em">ประเภท</option>
                                         <option value="1" style="font-size: 2em">คะแนนโปรเจค</option>
                                         <option value="2" style="font-size: 2em">คะแนนอาจารย์ที่ปรึกษา</option>
+                                        {% if proj_act == 2 %}
+                                        <option value="3" style="font-size: 2em">คะแนนโปสเตอร์</option>
+                                        {% endif %}
                                     </select>
                                 </div>
                             </div>

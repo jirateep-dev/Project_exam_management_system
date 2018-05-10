@@ -110,7 +110,7 @@ def export_script(request):
     # not present
     proj = Project.objects.filter(id__lte=218)
     teacher = Teacher.objects.filter(id__lte=32)
-    with open('script_scoreproj.txt','w') as new_file:
+    with open('script_scoreproj.txt','w', encoding='utf-8-sig') as new_file:
         new_file.write( 'Title = Analytic Scoring Project\r\n' + \
                         'facet = 3\r\n' + \
                         'Pt-biserial = measure\r\n' + \
@@ -158,7 +158,7 @@ def export_script(request):
 
     
 
-    with open('script_scorepost.txt','w') as new_file:
+    with open('script_scorepost.txt','w', encoding='utf-8-sig') as new_file:
         new_file.write( 'Title = Analytic Scoring Poster\r\n' + \
                         'facet = 3\r\n' + \
                         'Pt-biserial = measure\r\n' + \
@@ -219,7 +219,7 @@ def export_script(request):
         response = HttpResponse(content_type="application/x-zip-compressed")
         response["Content-Disposition"] = "attachment; filename=script.zip"
         
-        in_memory.seek(0)    
+        in_memory.seek(0)
         response.write(in_memory.read())
         
         return response

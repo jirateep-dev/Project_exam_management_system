@@ -4,6 +4,7 @@ from . import views, view_poster, views_facet
 
 urlpatterns = [
     url(r'^$', views.manage, name='manage'),
+    url(r'^generate_poster/$', view_poster.generate_poster, name='generate_poster'),
     url(r'^manage_poster/$', view_poster.manage_poster, name='manage_poster'),
     url(r'^manage_room/$', views.manage_room, name='manage_room'),
     url(r'^table_room/$', views.table_room, name='table_room'),

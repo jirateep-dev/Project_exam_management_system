@@ -33,7 +33,7 @@
                         <td class="danger">{{result.room_name}}</td>
                         <td class="warning">{{result.date_exam}}</td>
                         <td class="success">{{result.proj_name_th}}</td>
-                        <td class="success">{{result.proj_advisor}}</td>
+                        <td class="warning">{{result.proj_advisor}}</td>
                         <td class="danger">{{result.major_name}}</td>
                         <td class="info">{{result.time_exam}}</td>
                     </tr>
@@ -71,9 +71,15 @@
                         </tr>
                         {% if teacher.count_group == 4 %}
                             <tr style="font-size: 1.1em">
-                                <td class="success"></td>
-                                <td class="success">ค่าเฉลี่ยกลุ่ม</td>
-                                <td class="success">{{teacher.avg}}</td>
+                                {% if teacher.avg > safezone.max or teacher.avg < safezone.min%}
+                                    <td class="danger"></td>
+                                    <td class="danger">ค่าเฉลี่ยกลุ่ม</td>
+                                    <td class="danger">{{teacher.avg}}</td>
+                                {% else %}
+                                    <td class="success"></td>
+                                    <td class="success">ค่าเฉลี่ยกลุ่ม</td>
+                                    <td class="success">{{teacher.avg}}</td>
+                                {% endif %}
                             </tr>
                         {% endif %}
                     {% endfor %}

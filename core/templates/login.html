@@ -26,17 +26,11 @@
 				<div class="fieldWrapper">
 					<input type="password" name="password" id="password" placeholder="Password">
 				</div>
-				<button type="submit" value="login" >LOGIN</button>
+				<button type="submit" id="btn_login" value="login" >LOGIN</button>
 				<input type="hidden" name="next" value="{{ next }}" />
 			</form>
-
+			<h4 style="color:darkred;text-align: center">{{err_ms}}</h4>
 		</div>
-		{% if form.errors %}
-			{% if not user.is_active %}
-				<h4 style="color:darkred;text-align: center">ท่านไม่ได้รับอนุญาติให้เข้าสู่ระบบในช่วงเวลานี้</h4>
-			{% endif %}
-		{% endif %}
-		<h4 style="color:darkred;text-align: center">{{err_ms}}</h4>
 		
 		<ul class="bg-bubbles">
 			<li></li>

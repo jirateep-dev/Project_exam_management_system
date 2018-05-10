@@ -193,7 +193,7 @@ def manage_proj(request):
     if request.method == 'POST':
         mproj = request.POST.get("mproj", None)
         if mproj == "mproj_add":
-            return render(request, "mproj_add.html", {'teachers':teacher, 'majors':majors})
+            return render(request, "mproj_add.html", {'teachers':teacher, 'majors':majors, 'proj_act':info_setting.forms})
         if mproj == "mproj_edit":
             col_proj = 8
             list_projs = []
@@ -202,7 +202,7 @@ def manage_proj(request):
                 format_html("<button name="'"project_edit"'" type="'"submit"'" class="'"btn btn-warning"'" \
                 form="'"manage_proj"'" value=""'"+str(i.proj_semester)+i.proj_name_th+"'""><h4 style="'"font-size: 1.7em;"'">แก้ไข</h4></button>")])
             
-            return render(request, "manage_proj.html", {"col_result":LIST_COL_PROJ[:col_proj], "list_proj":list_projs})
+            return render(request, "manage_proj.html", {"col_result":LIST_COL_PROJ[:col_proj], "list_proj":list_projs, 'proj_act':info_setting.forms})
             # return render(request, "mproj_edit.html", {'proj':projs})
         if mproj == "mproj_del":
             col_proj = 8
@@ -211,7 +211,7 @@ def manage_proj(request):
                 list_projs.append([i.proj_years, i.proj_semester, i.proj_name_th, i.proj_name_en, i.proj_major, i.proj_advisor, i.proj_co_advisor, \
                 format_html("<button type="'"button"'"  class="'"open-Dialog btn btn-danger"'" data-toggle="'"modal"'" data-target="'"#del_modal"'"\
                 data-id=""'"+str(i.proj_semester)+i.proj_name_th+"'""><h4 style="'"font-size: 1.7em;"'">ลบ</h4></button>")])
-            return render(request, "manage_proj.html", {"col_result":LIST_COL_PROJ[:col_proj], "list_proj":list_projs})
+            return render(request, "manage_proj.html", {"col_result":LIST_COL_PROJ[:col_proj], "list_proj":list_projs, 'proj_act':info_setting.forms})
 
         pj_pk = request.POST.get('proj_pk', None)
         np_th = request.POST.get("proj_name_th", None)
@@ -373,9 +373,11 @@ def scoreproj(request):
         teacher_sp = Teacher.objects.get(login_user_id=user_id)
         proj_selected = request.POST.get("data_proj", None)
         if type(proj_selected) is not type(None):
-            proj = Project.objects.get(proj_name_th=proj_selected, proj_semester=form_setting)
+            proj = Project.objects.get(proj_years=this_year(), proj_name_th=proj_selected, proj_semester=form_setting)
 
-            if teacher_sp.teacher_name == proj.proj_advisor:
+            lname_tch = lastname_tch(teacher_sp.teacher_name)
+            lname_adv = lastname_tch(proj.proj_advisor)
+            if lname_tch == lname_adv:
                 for i in range(len(LIST_COL_AD)):
                     lis_select.append('select_option'+str(i))
                 return render(request, "scoreadvisor.html", {'Projectset':proj, 'column_name':LIST_COL_AD,\
@@ -408,20 +410,22 @@ def result_sem1(request):
     info_setting = Settings.objects.get(id=1)
     project = Project.objects.filter(proj_years=this_year(), proj_semester=info_setting.forms)
     lis_stu = []
+    max_sc = 220
 
     for num in range(len(project)):
         if info_setting.forms == 1:
             stu = Student.objects.filter(proj1_id_id=project[num].id)
+            max_sc = 150
         else:
             stu = Student.objects.filter(proj2_id_id=project[num].id)
 
         # calculate score project (percentage)
         if info_setting.forms == 1:
-            test = ScoreProj.objects.annotate(result_scoreproj = ((F('presentation')+F('presentation_media')+F('question'))*90/100) + \
-                (F('report')*90/100) + ((F('discover')+F('analysis'))*70/100) + ((F('quantity')+F('levels'))*90/100)).filter(proj_id_id=project[num].id)
+            test = ScoreProj.objects.annotate(result_scoreproj = (F('presentation')+F('presentation_media')+F('question')+\
+                F('report')+F('discover')+F('analysis')+F('quantity')+F('levels'))*0.75).filter(proj_id_id=project[num].id)
         else:
-            test = ScoreProj.objects.annotate(result_scoreproj = ((F('presentation')+F('presentation_media')+F('question'))*80/100) + \
-                (F('report')*80/100) + ((F('discover')+F('analysis'))*70/100) + ((F('quantity')+F('levels')+F('quality'))*70/100)).filter(proj_id_id=project[num].id)
+            test = ScoreProj.objects.annotate(result_scoreproj = (F('presentation')+F('presentation_media')+F('question')+\
+                F('report')+F('discover')+F('analysis')+F('quantity')+F('levels')+F('quality'))*0.444).filter(proj_id_id=project[num].id)
         avg_scorep = 0
         for i in test:
             avg_scorep += i.result_scoreproj
@@ -429,20 +433,20 @@ def result_sem1(request):
             avg_scorep = avg_scorep / len(test)
 
         # calculate score advisor (percentage)
-        test = ScoreAdvisor.objects.annotate(result_scoreproj = (F('propose')+F('planning')+F('tool')+\
-            F('advice')+F('improve')+F('quality_report')+F('quality_project'))*60/100).filter(proj_id_id=project[num].id)
+        test = ScoreAdvisor.objects.annotate(result_score_advicsor = (F('propose')+F('planning')+F('tool')+\
+            F('advice')+F('improve')+F('quality_report')+F('quality_project'))*0.5714).filter(proj_id_id=project[num].id)
         avg_scoread = 0
         for i in test:
-            avg_scoread += i.result_scoreproj
+            avg_scoread += i.result_score_advicsor
         if len(test) != 0:
             avg_scoread = avg_scoread / len(test)
 
         # calculate score poster (percentage)
-        test = ScorePoster.objects.annotate(result_scoreproj = (F('time_spo')+F('character_spo')+F('presentation_spo')+\
-            F('question_spo')+F('media_spo')+F('quality_spo'))*80/100).filter(proj_id_id=project[num].id)
+        test = ScorePoster.objects.annotate(result_scorepost = ((F('time_spo')+F('character_spo')+F('presentation_spo')+\
+            F('question_spo')+F('media_spo')+F('quality_spo'))*0.33)).filter(proj_id_id=project[num].id)
         avg_scorepo = 0
         for i in test:
-            avg_scorepo += i.result_scoreproj
+            avg_scorepo += i.result_scorepost
         if len(test) != 0:
             avg_scorepo = avg_scorepo / len(test)
 
@@ -450,11 +454,11 @@ def result_sem1(request):
             if info_setting.forms == 1:
                 lis_stu.append([i.student_id, i.student_name, project[num].proj_name_th, "%.2f" %avg_scorep, "%.2f" %avg_scoread, \
                 format_html("<button name="'"detail"'" type="'"submit"'" class="'"btn btn-success"'" \
-                form="'"detail_score"'" value="+project[num].proj_name_th+"><h4 style="'"font-size: 1.7em;"'">ดูรายละเอียด</h4></button>")])
+                form="'"detail_score"'" value='"+project[num].proj_name_th+"'><h4 style="'"font-size: 1.7em;"'">ดูรายละเอียด</h4></button>")])
             else:
                 lis_stu.append([i.student_id, i.student_name, project[num].proj_name_th, "%.2f" %avg_scorep, "%.2f" %avg_scorepo, "%.2f" %avg_scoread, \
                 format_html("<button name="'"detail"'" type="'"submit"'" class="'"btn btn-success"'" \
-                form="'"detail_score"'" value="+project[num].proj_name_th+"><h4 style="'"font-size: 1.7em;"'">ดูรายละเอียด</h4></button>")])
+                form="'"detail_score"'" value='"+project[num].proj_name_th+"'><h4 style="'"font-size: 1.7em;"'">ดูรายละเอียด</h4></button>")])
 
     if info_setting.forms == 2:
         return render(request,"result_score.html", {'proj_act':info_setting.forms, 'this_year':this_year(), \
@@ -464,32 +468,38 @@ def result_sem1(request):
 
 @login_required(login_url="login/")
 def detail_score(request):
-    if request.method == 'POST':
-        proj_name = request.POST.get("detail", None)
-        sem = Settings.objects.get(id=1).forms
-        proj = Project.objects.get(proj_name_th=proj_name, proj_semester=sem)
-        teacher = Teacher.objects.all()
-        result_sproj = []
-        result_spost = []
-        result_sadvisor = []
-        for i in teacher:
-            if i.score_projs.filter(proj_id_id=proj.id).exists():
-                t_name = i.teacher_name
-                sc_de =  i.score_projs.get(proj_id_id=proj.id)
-                result_sproj.append([t_name, sc_de.presentation_media, sc_de.presentation, sc_de.question, sc_de.report,\
-                            sc_de.discover, sc_de.analysis, sc_de.quantity, sc_de.levels, sc_de.quality])
-            if i.score_advisor.filter(proj_id_id=proj.id).exists():
-                sc_ad = i.score_advisor.get(proj_id_id=proj.id)
-                t_ad_name = i.teacher_name
-                result_sadvisor.append([t_ad_name, sc_ad.propose, sc_ad.planning, sc_ad.tool, sc_ad.advice, sc_ad.improve,\
-                 sc_ad.quality_report, sc_ad.quality_project])
-            if i.score_posters.filter(proj_id_id=proj.id).exists():
-                sc_post = i.score_posters.get(proj_id_id=proj.id)
-                t_ad_name = i.teacher_name
-                result_spost.append([t_ad_name, sc_post.time_spo, sc_post.character_spo, sc_post.presentation_spo,\
-                 sc_post.question_spo, sc_post.media_spo, sc_post.quality_spo])
-
-            
+    try:
+        if request.method == 'POST':
+            proj_name = request.POST.get("detail", None)
+            sem = Settings.objects.get(id=1).forms
+            proj = Project.objects.get(proj_name_th=proj_name, proj_semester=sem)
+            teacher = Teacher.objects.all()
+            result_sproj = []
+            result_spost = []
+            result_sadvisor = []
+            for i in teacher:
+                if i.score_projs.filter(proj_id_id=proj.id).exists():
+                    t_name = i.teacher_name
+                    sc_de =  i.score_projs.get(proj_id_id=proj.id)
+                    result_sproj.append([t_name, sc_de.presentation_media, sc_de.presentation, sc_de.question, sc_de.report,\
+                                sc_de.discover, sc_de.analysis, sc_de.quantity, sc_de.levels, sc_de.quality])
+                if i.score_advisor.filter(proj_id_id=proj.id).exists():
+                    sc_ad = i.score_advisor.get(proj_id_id=proj.id)
+                    t_ad_name = i.teacher_name
+                    result_sadvisor.append([t_ad_name, sc_ad.propose, sc_ad.planning, sc_ad.tool, sc_ad.advice, sc_ad.improve,\
+                    sc_ad.quality_report, sc_ad.quality_project])
+                if i.score_posters.filter(proj_id_id=proj.id).exists():
+                    sc_post = i.score_posters.get(proj_id_id=proj.id)
+                    t_ad_name = i.teacher_name
+                    result_spost.append([t_ad_name, sc_post.time_spo, sc_post.character_spo, sc_post.presentation_spo,\
+                    sc_post.question_spo, sc_post.media_spo, sc_post.quality_spo])
+    except Exception as e:
+        return render(request, "detail_score.html", {'this_year':this_year(), 'proj_name':proj_name, 'col_de':LIST_COL_DE[0],\
+         'result':[["Error :", "please generate schedule_poster and then generate form_score again"]],\
+          'result1':[["Error :", "please generate schedule_poster and then generate form_score again"]],\
+          'result2':[["Error :", "please generate schedule_poster and then generate form_score again"]],\
+          'col_de1':LIST_COL_DE[1],'col_de2':LIST_COL_DE[2], 'proj_act':sem})
+    
     return render(request, "detail_score.html", {'this_year':this_year(), 'proj_name':proj_name, 'col_de':LIST_COL_DE[0],\
          'result':result_sproj, 'result1':result_spost, 'col_de1':LIST_COL_DE[1],'col_de2':LIST_COL_DE[2], 'result2':result_sadvisor, 'proj_act':sem})
 
@@ -520,9 +530,15 @@ def update_scoreproj(request):
 
         
         if not teacher_sp.score_projs.filter(proj_id_id=proj.id).exists() and lastname_tch(teacher_sp.teacher_name) != lastname_tch(proj.proj_advisor):
-            score_proj = ScoreProj(proj_id_id=proj.id, presentation=lis_selected[0], question=lis_selected[1], report=lis_selected[2],\
-                            presentation_media=lis_selected[3], discover=lis_selected[4], analysis=lis_selected[5], \
-                            quantity=lis_selected[6], levels=lis_selected[7])
+            if info_setting.forms == 1:
+                score_proj = ScoreProj(proj_id_id=proj.id, presentation=lis_selected[0], question=lis_selected[1], report=lis_selected[2],\
+                                presentation_media=lis_selected[3], discover=lis_selected[4], analysis=lis_selected[5], \
+                                quantity=lis_selected[6], levels=lis_selected[7])
+            else:
+                score_proj = ScoreProj(proj_id_id=proj.id, presentation=lis_selected[0], question=lis_selected[1], report=lis_selected[2],\
+                                presentation_media=lis_selected[3], discover=lis_selected[4], analysis=lis_selected[5], \
+                                quantity=lis_selected[6], levels=lis_selected[7], quality=lis_selected[8])
+            
             score_proj.save()
             teacher_sp.score_projs.add(score_proj)
             teacher_sp.save()

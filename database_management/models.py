@@ -4,9 +4,11 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django_prometheus.models import ExportModelOperationsMixin
 
 import datetime
 
+# class Major(ExportModelOperationsMixin('major'),models.Model):
 class Major(models.Model):
     major_name = models.CharField(max_length=1024)
     objects = models.Manager()
@@ -17,6 +19,7 @@ class Major(models.Model):
     def __str__(self):
         return self.major_name
 
+# class Room(ExportModelOperationsMixin('room'),models.Model):
 class Room(models.Model):
     room_name = models.CharField(max_length=1024)
     objects = models.Manager()
@@ -27,6 +30,7 @@ class Room(models.Model):
     def __str__(self):
         return self.room_name
 
+# class TimeExam(ExportModelOperationsMixin('timeexam'),models.Model):
 class TimeExam(models.Model):
     time_exam = models.CharField(max_length=256)
     time_period = models.IntegerField(default=0)
@@ -35,6 +39,7 @@ class TimeExam(models.Model):
     class Meta:
         verbose_name_plural = 'ตารางเวลา'
 
+# class DateExam(ExportModelOperationsMixin('dateexam'),models.Model):
 class DateExam(models.Model):
     id = models.CharField(max_length=255, primary_key=True)
     date_exam = models.CharField(max_length=256)
@@ -48,8 +53,10 @@ class DateExam(models.Model):
     def __str__(self):
         return self.date_exam
 
+# class Project(ExportModelOperationsMixin('project'),models.Model):
 class Project(models.Model):
     schedule_id = models.IntegerField(blank=True, null=True)
+    sche_post_id = models.IntegerField(blank=True, null=True)
     proj_years = models.IntegerField(default=0)
     proj_semester = models.IntegerField(default=1)
     proj_name_th = models.CharField(max_length=1024)
@@ -65,6 +72,7 @@ class Project(models.Model):
     def __str__(self):
         return self.proj_name_th
 
+# class ScheduleRoom(ExportModelOperationsMixin('scheduleroom'),models.Model):
 class ScheduleRoom(models.Model):
     room_id = models.ForeignKey(Room, on_delete=models.CASCADE)
     date_id = models.ForeignKey(DateExam, on_delete=models.CASCADE, null=True)
@@ -75,8 +83,18 @@ class ScheduleRoom(models.Model):
     objects = models.Manager()
 
     class Meta:
-        verbose_name_plural = 'ตารางกำหนดการ'
+        verbose_name_plural = 'ตารางกำหนดการโปรเจค'
 
+# class SchedulePoster(ExportModelOperationsMixin('scheduleposter'),models.Model):
+class SchedulePoster(models.Model):
+    date_post = models.CharField(max_length=256)
+    proj_id = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
+    objects = models.Manager()
+
+    class Meta:
+        verbose_name_plural = 'ตารางกำหนดการโปสเตอร์'
+
+# class ScoreProj(ExportModelOperationsMixin('scoreproj'),models.Model):
 class ScoreProj(models.Model):
     proj_id = models.ForeignKey(Project, on_delete=models.CASCADE)
     presentation = models.IntegerField(default=0)
@@ -93,6 +111,7 @@ class ScoreProj(models.Model):
     class Meta:
         verbose_name_plural = 'ตาราง คะแนนโปรเจค'
 
+# class ScorePoster(ExportModelOperationsMixin('scoreposter'),models.Model):
 class ScorePoster(models.Model):
     proj_id = models.ForeignKey(Project, on_delete=models.CASCADE)
     time_spo = models.IntegerField(default=0)
@@ -106,6 +125,7 @@ class ScorePoster(models.Model):
     class Meta:
         verbose_name_plural = 'ตาราง คะแนนโพสเตอร์'
 
+# class ScoreAdvisor(ExportModelOperationsMixin('scoreadvisor'),models.Model):
 class ScoreAdvisor(models.Model):
     proj_id = models.ForeignKey(Project, on_delete=models.CASCADE)
     propose = models.IntegerField(default=0)
@@ -120,6 +140,7 @@ class ScoreAdvisor(models.Model):
     class Meta:
         verbose_name_plural = 'ตาราง คะแนนที่ปรึกษา'
 
+# class Teacher(ExportModelOperationsMixin('teacher'),models.Model):
 class Teacher(models.Model):
     login_user = models.ForeignKey(User, on_delete=models.CASCADE, unique=True)
     teacher_name = models.CharField(max_length=1024)
@@ -131,6 +152,7 @@ class Teacher(models.Model):
     score_advisor = models.ManyToManyField(ScoreAdvisor)
     major_teacher = models.ManyToManyField(Major)
     schedule_teacher = models.ManyToManyField(ScheduleRoom)
+    schepost_teacher = models.ManyToManyField(SchedulePoster)
     objects = models.Manager()
 
     class Meta:
@@ -140,6 +162,7 @@ class Teacher(models.Model):
     def __str__(self):
         return self.teacher_name
 
+# class Student(ExportModelOperationsMixin('student'),models.Model):
 class Student(models.Model):
     proj1_id = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, related_name='+')
     proj2_id = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, related_name='+')
@@ -153,9 +176,10 @@ class Student(models.Model):
     def __str__(self):
         return self.student_id
 
+# class Settings(ExportModelOperationsMixin('setting'),models.Model):
 class Settings(models.Model):
     load = models.IntegerField(default=8)
-    load_post = models.IntegerField(default=8)
+    load_post = models.IntegerField(default=6)
     activate = models.IntegerField(default=1)
     forms = models.IntegerField(default=1)
     objects = models.Manager()
