@@ -17,7 +17,7 @@
             <div class="table100 ver3 m-b-110">
                 <table class="table table-hover" style="text-align: center" data-vertable="ver3" >
                     <thead>
-                        <tr class="row100 head" style="font-size: 1.5em">
+                        <tr class="row100 head" style="font-size: 1.5em;background: rgb(173, 173, 173)">
                             <th class="column100 column2" data-column="column2">กลุ่มอาจารย์</th>
                             <th class="column100 column3" data-column="column3">ห้อง</th>
                             <th class="column100 column4" data-column="column4">วันที่</th>
@@ -30,13 +30,13 @@
                     <tbody>
                         {% for result in ScheduleRoom %} 
                         <tr class="row100" style="font-size: 1.1em">
-                            <td class="active column100 column2" data-column="column2">{{result.teacher_group}}</td>
-                            <td class="danger column100 column3" data-column="column3">{{result.room_name}}</td>
-                            <td class="warning column100 column4" data-column="column4">{{result.date_exam}}</td>
-                            <td class="success column100 column5" data-column="column5" style="text-align: left">{{result.proj_name_th}}</td>
-                            <td class="warning column100 column6" data-column="column6">{{result.proj_advisor}}</td>
-                            <td class="danger column100 column7" data-column="column7">{{result.major_name}}</td>
-                            <td class="active column100 column8" data-column="column8">{{result.time_exam}}</td>
+                            <td class=" column100 column2" data-column="column2">{{result.teacher_group}}</td>
+                            <td class=" column100 column3" data-column="column3">{{result.room_name}}</td>
+                            <td class=" column100 column4" data-column="column4">{{result.date_exam}}</td>
+                            <td class=" column100 column5" data-column="column5" style="text-align: left">{{result.proj_name_th}}</td>
+                            <td class=" column100 column6" data-column="column6">{{result.proj_advisor}}</td>
+                            <td class=" column100 column7" data-column="column7">{{result.major_name}}</td>
+                            <td class=" column100 column8" data-column="column8">{{result.time_exam}}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -59,7 +59,7 @@
                             <th><label>SAFE ZONE MIN : </label><label style="margin-left:20px;color: green">{{safezone.min}}</label></th>
                             <th><label>SAFE ZONE MAX : </label><label style="margin-left:20px;color: red">{{safezone.max}}</label></th>
                         </tr>
-                        <tr style="font-size: 1.5em" class="row100 head">
+                        <tr style="font-size: 1.5em;background: rgb(173, 173, 173)" class="row100 head">
                             <th class="column100 column2" data-column="column2">กลุ่มอาจารย์</th>
                             <th class="column100 column3" data-column="column3">รายชื่ออาจารย์</th>
                             <th class="column100 column4" data-column="column4">ค่าความเข้มงวด</th>
@@ -68,9 +68,9 @@
                     <tbody>
                         {% for teacher in result_teacher %} 
                             <tr style="font-size: 1.1em" class="row100">
-                                <td class="active" data-column="column2">{{teacher.proj_group_exam}}</td>
-                                <td class="warning" data-column="column3" style="text-align: left">{{teacher.teacher_name}}</td>
-                                <td class="info" data-column="column4">{{teacher.levels_teacher}}</td>
+                                <td class="column100 column2" >{{teacher.proj_group_exam}}</td>
+                                <td class="column100 column3" style="text-align: left">{{teacher.teacher_name}}</td>
+                                <td class="column100 column4" >{{teacher.levels_teacher}}</td>
                             </tr>
                             {% if teacher.count_group == 4 %}
                                 <tr style="font-size: 1.1em" class="row100">

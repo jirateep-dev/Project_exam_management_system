@@ -432,9 +432,9 @@ def table_room(request):
             avg = sum_lv/4.0
             teacher_groups.append({'proj_group_exam': i['teacher_group'], \
                                 'teacher_name': tch_obj.teacher_name, \
-                                'levels_teacher': tch_obj.levels_teacher, \
+                                'levels_teacher': str("{:.3f}".format(tch_obj.levels_teacher)), \
                                 'count_group':j+1, \
-                                'avg':avg})
+                                'avg':str("{:.3f}".format(avg))})
             if count_proj == 3:
                 sum_lv, avg = 0, 0
 

@@ -79,6 +79,8 @@
                     {% for key, values in room_period.items %}
                         <tr class="row100">
                             <td rowspan="2" class="column100 column1" data-column="column1"><h4 style="font-size: 1.3em">{{key}}</h4></td>
+                        </tr>
+                        <tr class="row100">
                             <td class="column100 column2" data-column="column2"><h4 style="font-size: 1.3em">ช่วงเช้า</h4></td>
                             {% for i in values.0%}
                                 {% if i == 'Available' %}
@@ -95,6 +97,9 @@
                                     </td>
                                 {% endif %}
                             {% endfor %}
+                        </tr>
+                        <tr class="row100">
+                            <td rowspan="2" class="column100 column1" data-column="column1"></td>
                         </tr>
                         <tr class="row100">
                             <td class="column100 column2" data-column="column2"><h4 style="font-size: 1.3em">ช่วงบ่าย</h4></td>
