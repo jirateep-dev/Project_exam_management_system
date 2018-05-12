@@ -73,7 +73,7 @@ def prepare_render():
 
             for i in range(1, len(tch_lis)+1):
                 in_result['teacher'+str(i)] = list(tch_lis.keys())[i-1]
-            in_result['avg'] = sum_v / 3.0
+            in_result['avg'] = str("{:.3f}".format(sum_v / 3.0))
             result.append(in_result)
 
     return result

@@ -66,19 +66,19 @@
                 {% endfor %}
             </h4>
         </div>
-            <div class="table100 ver2 m-b-110">
-                <table style="text-align: center" data-vertable="ver2">
+            <div class="table100 ver5 m-b-110">
+                <table style="text-align: center" data-vertable="ver5">
                     <tr class="row100 head">
-                        <th style="text-align: center" class="column100 column1" data-column="column1"><h4 style="font-size: 2.3em">วันที่</h4></th>
+                        <th style="text-align: center;font-size: 1.7em" class="column100 column1" data-column="column1">วันที่</th>
                         <th class="column100 column2" data-column="column2"> </th>
                         {% for room in rooms%}
-                            <th style="text-align: center" class="column100 column{{ forloop.counter|add:2 }}" \
-                             data-column="column{{ forloop.counter|add:2 }}"><h4 style="font-size: 2.3em"> {{room}}</h4></th>
+                            <th style="text-align: center;font-size: 1.7em" class="column100 column{{ forloop.counter|add:2 }}" \
+                             data-column="column{{ forloop.counter|add:2 }}">{{room}}</th>
                         {% endfor %}
                     </tr>
                     {% for key, values in room_period.items %}
                         <tr class="row100">
-                            <td rowspan="2" class="column100 column1" data-column="column1"><h4 style="font-size: 1.3em">{{key}}</h4></td>
+                            <td rowspan="2"><h4 style="font-size: 1.3em">{{key}}</h4></td>
                         </tr>
                         <tr class="row100">
                             <td class="column100 column2" data-column="column2"><h4 style="font-size: 1.3em">ช่วงเช้า</h4></td>
@@ -99,7 +99,7 @@
                             {% endfor %}
                         </tr>
                         <tr class="row100">
-                            <td rowspan="2" class="column100 column1" data-column="column1"></td>
+                            <td rowspan="2"></td>
                         </tr>
                         <tr class="row100">
                             <td class="column100 column2" data-column="column2"><h4 style="font-size: 1.3em">ช่วงบ่าย</h4></td>

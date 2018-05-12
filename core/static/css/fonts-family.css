@@ -7,6 +7,10 @@ label{
 td{
     font-size: 1.5em;
 }
+th{
+    text-align: center;
+    font-size: 1.5em;
+}
 span{
     font-size: 1.2em;
 }
@@ -19,7 +23,7 @@ span{
 option{
     font-size: 1.6em;
 }
-h1,h2,h3,h4,p,a,label,td,span,option,input{
+h1,h2,h3,h4,p,a,label,td,th,span,option,input{
 	font-family: "Fontcraft";
 }
 @font-face{

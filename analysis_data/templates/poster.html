@@ -20,8 +20,8 @@
             </div>
         </div>
         <div id="table_poster" class="panel-collapse collapse in">
-            <div class="table100 ver2 m-b-110">
-                <table class="table table-hover" style="text-align: center" data-vertable="ver2" >
+            <div class="table100 ver5 m-b-110">
+                <table class="table table-hover" style="text-align: center" data-vertable="ver5" >
                     <thead>
                         <label style="margin-left:30%;">SAFE ZONE MIN : </label><label style="margin-left:20px;color: green">{{safezone.min}}</label>
                         <label style="margin-left:5%;">SAFE ZONE MAX : </label><label style="margin-left:20px;color: red">{{safezone.max}}</label>
@@ -38,12 +38,12 @@
                     <tbody>
                         {% for obj in result %} 
                             <tr class="row100" style="font-size: 1.1em">
-                                <td class="active column100 column2" data-column="column2">{{obj.id}}</td>
-                                <td class="warning column100 column3" data-column="column3" style="text-align: left">{{obj.proj_name}}</td>
-                                <td class="active column100 column4" data-column="column4" style="text-align: left">{{obj.teacher1}}</td>
-                                <td class="warning column100 column5" data-column="column5" style="text-align: left">{{obj.teacher2}}</td>
-                                <td class="active column100 column6" data-column="column6" style="text-align: left">{{obj.teacher3}}</td>
-                                <td class="success column100 column7" data-column="column7">{{obj.avg}}</td>
+                                <td class=" column100 column2" data-column="column2">{{obj.id}}</td>
+                                <td class=" column100 column3" data-column="column3" style="text-align: left">{{obj.proj_name}}</td>
+                                <td class=" column100 column4" data-column="column4" style="text-align: left">{{obj.teacher1}}</td>
+                                <td class=" column100 column5" data-column="column5" style="text-align: left">{{obj.teacher2}}</td>
+                                <td class=" column100 column6" data-column="column6" style="text-align: left">{{obj.teacher3}}</td>
+                                <td class=" column100 column7" data-column="column7">{{obj.avg}}</td>
                             </tr>
                         {% endfor %}
                     </tbody>

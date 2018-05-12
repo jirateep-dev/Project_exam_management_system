@@ -220,6 +220,7 @@ th, td {
 
 .table100.ver2 .hov-column-head-ver2 {
   background-color: #484848 !important;
+  color: rgb(255, 255, 255);
 }
 
 .table100.ver2 .row100 td:hover {
