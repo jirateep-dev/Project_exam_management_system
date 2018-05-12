@@ -159,9 +159,6 @@ def upload_csv(request):
  
     return render(request,"upload_csv.html", {'proj_act':sem})
 
-# /////////////////////////////////////////////////////////////////////////////////////////////////////////
-# /////////////////////////////////////      old code here    ////////////////////////////////////////////
-# /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 def approve_teacher(tch_name, date_selected, period_selected):
     load = Settings.objects.get(id=1).load
@@ -432,9 +429,9 @@ def table_room(request):
             avg = sum_lv/4.0
             teacher_groups.append({'proj_group_exam': i['teacher_group'], \
                                 'teacher_name': tch_obj.teacher_name, \
-                                'levels_teacher': tch_obj.levels_teacher, \
+                                'levels_teacher': str("{:.3f}".format(tch_obj.levels_teacher)), \
                                 'count_group':j+1, \
-                                'avg':avg})
+                                'avg':str("{:.3f}".format(avg))})
             if count_proj == 3:
                 sum_lv, avg = 0, 0
 
@@ -467,8 +464,8 @@ def manage(request):
     sem = Settings.objects.get(id=1).forms
     str_link = "manage.html"
         
-    if sem == 2:
-        str_link = "manage_sem2.html"
+    # if sem == 2:
+    #     str_link = "manage_sem2.html"
     try:
         reset_selected = int(request.POST.get('reset_gen',None))
         table_projs = request.POST.get('table_projs',None)

@@ -47,6 +47,13 @@ def level_safezone():
 
     return {'min':min_safe, 'max':max_safe}
 
+def upload_poster(request):
+    sem = Settings.objects.get(id=1).forms
+    return render(request,"upload_csv.html", {'proj_act':sem})
+    
+def export_poster(request):
+    return HttpResponseRedirect(reverse("manage_poster"))
+
 def prepare_render():
     result = []
 
@@ -73,7 +80,7 @@ def prepare_render():
 
             for i in range(1, len(tch_lis)+1):
                 in_result['teacher'+str(i)] = list(tch_lis.keys())[i-1]
-            in_result['avg'] = sum_v / 3.0
+            in_result['avg'] = str("{:.3f}".format(sum_v / 3.0))
             result.append(in_result)
 
     return result

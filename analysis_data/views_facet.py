@@ -27,7 +27,8 @@ col_de = ['รายชื่ออาจารย์','การวัดผล
 def detail_teacher():
     # test limite id32
     tch = Teacher.objects.filter(id__lte=32)
-    teachers = [[i.teacher_name, str(i.measure_sproj), str(i.measure_spost), str(i.levels_teacher)] for i in tch]
+    teachers = [[i.teacher_name, str("{:.3f}".format(i.measure_sproj)), \
+    str("{:.3f}".format(i.measure_spost)), str("{:.3f}".format(i.levels_teacher))] for i in tch]
     return teachers
 
 def avg(lis):
@@ -74,9 +75,9 @@ def import_script(request):
             if num > 6 and chk:
                 print(line.strip())
                 if type_data == 1:
-                    Teacher.objects.filter(id=int(spt[22])).update(measure_sproj=format(float(spt[6]), '.3f'))
+                    Teacher.objects.filter(id=int(spt[22])).update(measure_sproj="{:.3f}".format(float(spt[6])))
                 if type_data == 2:
-                    Teacher.objects.filter(id=int(spt[22])).update(measure_spost=format(float(spt[6]), '.3f'))
+                    Teacher.objects.filter(id=int(spt[22])).update(measure_spost="{:.3f}".format(float(spt[6])))
         tch_all = Teacher.objects.all()
 
         lis_measure = [[],[]]
@@ -99,7 +100,7 @@ def import_script(request):
         tch_all = Teacher.objects.all()
         for i in tch_all:
             mean_i = avg([i.measure_sproj, i.measure_spost])
-            Teacher.objects.filter(id = i.id).update(levels_teacher=format(float(mean_i), '.3f'))
+            Teacher.objects.filter(id = i.id).update(levels_teacher="{:.3f}".format(float(mean_i)))
     except Exception as e:
         messages.error(request,e)
         return HttpResponseRedirect(reverse("facet"))

@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block content %}
 <div class="container" style="width: 100%;padding: 5%;padding-top: 0">
     <div class="row" style="width: 100%;">
-        <div class="container" style="text-align: center"><h1 style="font-size: 6.5em;margin-bottom: 30px;">ตารางการจัดการสอบ</h1></div>
+        <div class="container" style="text-align: center;margin-top: 2%;"><h1 style="font-size: 6.5em;">ตารางการจัดการสอบ</h1></div>
         <div class="jumbotron well well-lg" style="background: #ffffff;">
             <h4 style="font-size: 3.3em;color: #353b48">การสอบโปรเจคภาคเรียนที่ {{proj_act}} ปีการศึกษา {{proj_years}}</h4>
         </div>
@@ -14,32 +14,34 @@
             </div>
         </div>
         <div id="table_project" class="panel-collapse collapse in">
-            <table class="table table-hover" id="table_project">
-                <thead class="thead-dark">
-                    <tr style="font-size: 1.5em">
-                        <th>กลุ่มอาจารย์</th>
-                        <th>ห้อง</th>
-                        <th>วันที่</th>
-                        <th>รายชื่อโปรเจค</th>
-                        <th>อาจารย์ที่ปรึกษา</th>
-                        <th>แขนงโปรเจค</th>
-                        <th>เวลา</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for result in ScheduleRoom %} 
-                    <tr style="font-size: 1.1em">
-                        <td class="active">{{result.teacher_group}}</td>
-                        <td class="danger">{{result.room_name}}</td>
-                        <td class="warning">{{result.date_exam}}</td>
-                        <td class="success">{{result.proj_name_th}}</td>
-                        <td class="warning">{{result.proj_advisor}}</td>
-                        <td class="danger">{{result.major_name}}</td>
-                        <td class="info">{{result.time_exam}}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="table100 ver5 m-b-110">
+                <table class="table table-hover" style="text-align: center" data-vertable="ver5" >
+                    <thead>
+                        <tr class="row100 head" style="font-size: 1.5em;background: rgb(173, 173, 173)">
+                            <th class="column100 column2" data-column="column2">กลุ่มอาจารย์</th>
+                            <th class="column100 column3" data-column="column3">ห้อง</th>
+                            <th class="column100 column4" data-column="column4">วันที่</th>
+                            <th class="column100 column5" data-column="column5">รายชื่อโปรเจค</th>
+                            <th class="column100 column6" data-column="column6">อาจารย์ที่ปรึกษา</th>
+                            <th class="column100 column7" data-column="column7">แขนงโปรเจค</th>
+                            <th class="column100 column8" data-column="column8">เวลา</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in ScheduleRoom %} 
+                        <tr class="row100" style="font-size: 1.1em">
+                            <td class=" column100 column2" data-column="column2">{{result.teacher_group}}</td>
+                            <td class=" column100 column3" data-column="column3">{{result.room_name}}</td>
+                            <td class=" column100 column4" data-column="column4">{{result.date_exam}}</td>
+                            <td class=" column100 column5" data-column="column5" style="text-align: left">{{result.proj_name_th}}</td>
+                            <td class=" column100 column6" data-column="column6">{{result.proj_advisor}}</td>
+                            <td class=" column100 column7" data-column="column7">{{result.major_name}}</td>
+                            <td class=" column100 column8" data-column="column8">{{result.time_exam}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="panel panel-default">
             <div class="panel-heading" data-toggle="collapse" href="#table_teacher">
@@ -49,42 +51,47 @@
             </div>
         </div>
         <div id="table_teacher" class="panel-collapse collapse in">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th><label>SAFE ZONE MIN : </label><label style="margin-left:20px;color: green">{{safezone.min}}</label></th>
-                        <th><label>SAFE ZONE MAX : </label><label style="margin-left:20px;color: red">{{safezone.max}}</label></th>
-                    </tr>
-                    <tr style="font-size: 1.5em">
-                        <th>กลุ่มอาจารย์</th>
-                        <th>รายชื่ออาจารย์</th>
-                        <th>ค่าความเข้มงวด</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for teacher in result_teacher %} 
-                        <tr style="font-size: 1.1em">
-                            <td class="active">{{teacher.proj_group_exam}}</td>
-                            <td class="warning">{{teacher.teacher_name}}</td>
-                            <td class="info">{{teacher.levels_teacher}}</td>
+            <div class="table100 ver5 m-b-110">
+                <table class="table table-hover" style="text-align: center" data-vertable="ver5" >
+                    <thead>
+                        <div class="row" style="text-align: center">
+                            <div class="col-sm-6">
+                                <label>SAFE ZONE MIN : </label><label style="margin-left:20px;color: green">{{safezone.min}}</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>SAFE ZONE MAX : </label><label style="margin-left:20px;color: red">{{safezone.max}}</label>
+                            </div>
+                        </div>
+                        <tr style="font-size: 1.5em;background: rgb(173, 173, 173)" class="row100 head">
+                            <th class="column100 column2" data-column="column2">กลุ่มอาจารย์</th>
+                            <th class="column100 column3" data-column="column3">รายชื่ออาจารย์</th>
+                            <th class="column100 column4" data-column="column4">ค่าความเข้มงวด</th>
                         </tr>
-                        {% if teacher.count_group == 4 %}
-                            <tr style="font-size: 1.1em">
-                                {% if teacher.avg > safezone.max or teacher.avg < safezone.min%}
-                                    <td class="danger"></td>
-                                    <td class="danger">ค่าเฉลี่ยกลุ่ม</td>
-                                    <td class="danger">{{teacher.avg}}</td>
-                                {% else %}
-                                    <td class="success"></td>
-                                    <td class="success">ค่าเฉลี่ยกลุ่ม</td>
-                                    <td class="success">{{teacher.avg}}</td>
-                                {% endif %}
+                    </thead>
+                    <tbody>
+                        {% for teacher in result_teacher %} 
+                            <tr style="font-size: 1.1em" class="row100">
+                                <td class="column100 column2" >{{teacher.proj_group_exam}}</td>
+                                <td class="column100 column3" style="text-align: left">{{teacher.teacher_name}}</td>
+                                <td class="column100 column4" >{{teacher.levels_teacher}}</td>
                             </tr>
-                        {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
+                            {% if teacher.count_group == 4 %}
+                                <tr style="font-size: 1.1em" class="row100">
+                                    {% if teacher.avg > safezone.max or teacher.avg < safezone.min%}
+                                        <td class="danger" data-column="column2"></td>
+                                        <td class="danger" data-column="column3">ค่าเฉลี่ยกลุ่ม</td>
+                                        <td class="danger" data-column="column4">{{teacher.avg}}</td>
+                                    {% else %}
+                                        <td class="success" data-column="column2"></td>
+                                        <td class="success" data-column="column3">ค่าเฉลี่ยกลุ่ม</td>
+                                        <td class="success" data-column="column4">{{teacher.avg}}</td>
+                                    {% endif %}
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     
