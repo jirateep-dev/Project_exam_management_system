@@ -47,6 +47,13 @@ def level_safezone():
 
     return {'min':min_safe, 'max':max_safe}
 
+def upload_poster(request):
+    sem = Settings.objects.get(id=1).forms
+    return render(request,"upload_csv.html", {'proj_act':sem})
+    
+def export_poster(request):
+    return HttpResponseRedirect(reverse("manage_poster"))
+
 def prepare_render():
     result = []
 
