@@ -47,13 +47,6 @@ def level_safezone():
 
     return {'min':min_safe, 'max':max_safe}
 
-def upload_poster(request):
-    sem = Settings.objects.get(id=1).forms
-    return render(request,"upload_csv.html", {'proj_act':sem})
-    
-def export_poster(request):
-    return HttpResponseRedirect(reverse("manage_poster"))
-
 def prepare_render():
     result = []
 
@@ -84,6 +77,87 @@ def prepare_render():
             result.append(in_result)
 
     return result
+
+def upload_poster(request):
+    # if not GET, then proceed
+    try:
+        sem = Settings.objects.get(id=1).forms
+        csv_file = request.FILES["csv_file"]
+        proj2 = Project.objects.filter(proj_years=this_year(), proj_semester=sem)
+        teachers = Teacher.objects.all()
+        
+        if not csv_file.name.endswith('.csv'):
+            messages.error(request,'File is not CSV type')
+            return HttpResponseRedirect(reverse("manage"))
+        #if file is too large, return
+        if csv_file.multiple_chunks():
+            messages.error(request,"Uploaded file is too big (%.2f MB)." % (csv_file.size/(1000*1000),))
+            return HttpResponseRedirect(reverse("manage"))
+        
+        file_data = csv_file.read().decode('UTF-8')
+        lines = file_data.splitlines()
+        
+        #loop over the lines and save them in db. If error , store as string and then display
+        count_line = 0
+        date = ''
+        tch_name = ''
+        for line in lines:
+            fields = line.split(",")
+            if "การสอบโปสเตอร์ ณ วันที่" in fields[0] and count_line == 0:
+                sp = fields[0].split()
+                date = sp[-1]
+                for obj in proj2:
+                    SchedulePoster.objects.filter(proj_id_id=obj.id).delete()
+                proj2.update(sche_post_id=None)
+            if count_line >= 2:
+                proj = Project.objects.filter(proj_years=this_year(), proj_semester=sem, proj_name_th=fields[1])
+                schedule_post = SchedulePoster(date_post=date, proj_id_id=proj[0].id)
+                schedule_post.save()
+                proj.update(sche_post_id=schedule_post.id)
+                for i in range(2, 5):
+                    if Teacher.objects.filter(teacher_name=fields[i]).exists():
+                        tch_name = fields[i]
+                    tch = Teacher.objects.get(teacher_name=tch_name)
+                    if not tch.schepost_teacher.filter(proj_id_id=proj[0].id).exists() and \
+                        not tch.schepost_teacher.filter(proj_id_id=proj[0].id).exists() and \
+                        not tch.schepost_teacher.filter(proj_id_id=proj[0].id).exists():
+                        tch.schepost_teacher.add(schedule_post)
+                        tch.save()
+                
+            count_line += 1
+            
+    except Exception as e:
+        logging.getLogger("error_logger").error("Unable to upload file. "+repr(e))
+        messages.error(request,"Unable to upload file. "+repr(e))
+        return HttpResponseRedirect(reverse("manage_poster"))
+ 
+    return render(request,"upload_csv.html", {'proj_act':sem})
+    
+def export_poster(request):
+    pre = prepare_render()
+    date = SchedulePoster.objects.all().values_list('date_post', flat=True).distinct()
+    date_post = ''
+    if len(date) != 0:
+        date_post = date[len(date)-1]
+
+    lis_ex = [["การสอบโปสเตอร์ ณ วันที่ "+date_post], ["ลำดับ", "รายชื่อโปรเจค", "อาจารย์คนที่ 1", "อาจารย์คนที่ 2", "อาจารย์คนที่ 3"]]
+    lis_line = ['----------','----------','----------','----------','----------']
+
+    for obj in pre:
+        lis_ex.append([obj['id'], obj['proj_name'],obj['teacher1'],obj['teacher2'],obj['teacher3']])
+    
+    with open('schedule_poster.csv','w', newline='', encoding='utf-8-sig') as new_file:
+        csv_writer = csv.writer(new_file, delimiter=',')
+        csv_writer.writerows(lis_ex)
+    new_file.closed
+
+    with open('schedule_poster.csv', 'rb') as schedule_poster:
+        response = HttpResponse(schedule_poster.read())
+        response['content_type'] = 'application/schedule_poster'
+        response['Content-Disposition'] = 'attachment;filename=schedule_poster.csv'
+        return response
+
+    return HttpResponseRedirect(reverse("manage_poster"))
 
 @admin_required(login_url="login/")
 def generate_poster(request):
