@@ -7,19 +7,19 @@
                 <form action="{% url 'export_forms' %}" method="post" id="export_forms">
                     {% csrf_token %}
                     <button type="submit" name="mproj" value="mproj_edit" form="export_forms"\
-                    class="btn btn-info" style="width: 100%;"><h2 style="font-size: 3em">ส่งออกฟอร์ม</h2></button>
+                    class="btn btn-info" style="width: 100%;height: 80px;"><h2 style="font-size: 3em">ส่งออกฟอร์ม</h2></button>
                 </form>
             </div>
             <div class="jumbotron col-sm-4" style="padding: 0;margin-top: 3%">
                     <button type="submit" data-toggle="modal" data-target="#import_score"\
-                    class="btn btn-success" style="width: 100%;"><h2 style="font-size: 3em">นำเข้าคะแนน</h2></button>
+                    class="btn btn-success" style="width: 100%;height: 80px;"><h2 style="font-size: 3em">นำเข้าคะแนน</h2></button>
                 </form>
             </div>
             <div class="jumbotron col-sm-4" style="padding: 0;margin-top: 3%">
                 <!-- <form action="{% url 'reset_score' %}" method="post" id="reset_score">
                     {% csrf_token %} -->
                     <button type="submit" data-toggle="modal" data-target="#reset_scores"\
-                    class="btn btn-danger" style="width: 100%;"><h2 style="font-size: 3em">ลบผลคะแนน</h2></button>
+                    class="btn btn-danger" style="width: 100%;height: 80px;"><h2 style="font-size: 3em">ลบผลคะแนน</h2></button>
                 <!-- </form> -->
             </div>
         </div>
@@ -105,7 +105,7 @@
                         <tr class="row100 head" style="background-color: slategray;color: aliceblue">
                             {% for col_name in col_result%}
                             <th class="column100 column{{ forloop.counter|add:2 }}" data-column="column{{ forloop.counter|add:2 }}" style="text-align: center;">
-                                <h4 style="font-size: 2.2em;">{{col_name}}</h4></t>
+                                <h4 style="font-size: 1.6em;">{{col_name}}</h4></t>
                             {% endfor %}
                         </tr>
                         </thead>

@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block content %}
 <div class="container" style="width: 100%;padding: 5%;padding-top: 0">
     <div class="row" style="width: 100%;">
-        <div class="container" style="text-align: center"><h1 style="font-size: 6.5em;margin-bottom: 30px;">ตารางการจัดการสอบ</h1></div>
+        <div class="container" style="text-align: center;margin-top: 2%;"><h1 style="font-size: 6.5em;">ตารางการจัดการสอบ</h1></div>
         <div class="jumbotron well well-lg" style="background: #ffffff;">
             <h4 style="font-size: 3.3em;color: #353b48">การสอบโปรเจคภาคเรียนที่ {{proj_act}} ปีการศึกษา {{proj_years}}</h4>
         </div>
@@ -54,11 +54,14 @@
             <div class="table100 ver5 m-b-110">
                 <table class="table table-hover" style="text-align: center" data-vertable="ver5" >
                     <thead>
-                        <tr>
-                            <th></th>
-                            <th><label>SAFE ZONE MIN : </label><label style="margin-left:20px;color: green">{{safezone.min}}</label></th>
-                            <th><label>SAFE ZONE MAX : </label><label style="margin-left:20px;color: red">{{safezone.max}}</label></th>
-                        </tr>
+                        <div class="row" style="text-align: center">
+                            <div class="col-sm-6">
+                                <label>SAFE ZONE MIN : </label><label style="margin-left:20px;color: green">{{safezone.min}}</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>SAFE ZONE MAX : </label><label style="margin-left:20px;color: red">{{safezone.max}}</label>
+                            </div>
+                        </div>
                         <tr style="font-size: 1.5em;background: rgb(173, 173, 173)" class="row100 head">
                             <th class="column100 column2" data-column="column2">กลุ่มอาจารย์</th>
                             <th class="column100 column3" data-column="column3">รายชื่ออาจารย์</th>

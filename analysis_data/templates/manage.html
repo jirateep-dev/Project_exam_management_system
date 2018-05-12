@@ -2,7 +2,7 @@
 
 <div class="container" style="width: 100%;padding: 5%;padding-top: 0">
     <div class="row" style="width: 100%;">
-        <div class="container" style="text-align: center"><h1 style="font-size: 6.5em;margin-bottom: 30px;">จัดการสอบ</h1></div>
+        <div class="container" style="text-align: center;margin-top: 3%;"><h1 style="font-size: 6.5em;margin-bottom: 30px;">จัดการสอบ</h1></div>
         <div class="jumbotron col-sm-8 well well-lg" style="background: #ffffff;text-align: center;">
             <h1 style="color: #353b48;font-size: 4.5em;">การสอบโปรเจคภาคเรียนที่ {{proj_act}} ปีการศึกษา {{proj_years}}</h1>
         </div>
@@ -69,10 +69,10 @@
             <div class="table100 ver5 m-b-110">
                 <table style="text-align: center" data-vertable="ver5">
                     <tr class="row100 head">
-                        <th style="text-align: center;font-size: 1.7em" class="column100 column1" data-column="column1">วันที่</th>
+                        <th style="text-align: center;font-size: 2.2em" class="column100 column1" data-column="column1">วันที่</th>
                         <th class="column100 column2" data-column="column2"> </th>
                         {% for room in rooms%}
-                            <th style="text-align: center;font-size: 1.7em" class="column100 column{{ forloop.counter|add:2 }}" \
+                            <th style="text-align: center;font-size: 2.2em" class="column100 column{{ forloop.counter|add:2 }}" \
                              data-column="column{{ forloop.counter|add:2 }}">{{room}}</th>
                         {% endfor %}
                     </tr>
