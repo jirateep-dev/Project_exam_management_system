@@ -33,6 +33,7 @@ Stop Django and close Browser
 
 Generate room
   [Arguments]    ${date}    ${room}    ${period}    ${major}
+  Execute Javascript            $(document).scrollTop(${500})
   Focus                         jquery=[name=date_selected]
   Clear Element Text            xpath=//input[@name='date_selected']
   Press Key                     jquery=[name=date_selected]      ${date}
@@ -55,6 +56,7 @@ visit manage_page before create schedule room
   Sleep    		${ONESECOND}
 
 check result for create 1 room and 1 period time in schedule_room
+  Execute Javascript    $(document).scrollTop(${500})
   Click button                  ล้างข้อมูล
 
   Focus                         jquery=[name=date_selected]
@@ -93,17 +95,16 @@ create schedule room
   Generate room      ${DATE2}      M21      0      Business Intelligence
   Generate room      ${DATE2}      M23      1      Network and Communication
 
-  Execute Javascript    $(document).scrollTop(${100})
+  Execute Javascript    $(document).scrollTop(${500})
   Capture Page Screenshot
   Click button                  โครงงานที่ยังไม่ถูกจัด
-  Sleep                         ${FIVESECOND}
-  Execute JavaScript    window.scrollTo(0, document.body.scrollHeight)
+  Execute Javascript    $(document).scrollTop(${1500})
   Capture Page Screenshot
   Sleep     						        ${FIVESECOND}
 
 visit table_room page and check table schedule room
   Click Link    link=ตารางการจัดห้องสอบ
-  Execute Javascript    $(document).scrollTop(${500})
+  Execute Javascript    $(document).scrollTop(${200})
   Capture Page Screenshot
   Click Link    link=ตารางการสอบโปรเจค
   Sleep             ${THREESECOND}

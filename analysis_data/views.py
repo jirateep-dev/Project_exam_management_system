@@ -407,7 +407,7 @@ def manage_room(request):
                     # teacher_r = Teacher.objects.filter(teacher_name__contains=last_name).update(proj_group_exam=max_count+1)
     pre = prepare_render()
     return render(request,"manage.html",{'rooms': Room.objects.all(), 'majors':Major.objects.all(), 'proj_count': pre[0],
-                    'room_period':pre[1]})
+                    'room_period':pre[1], 'proj_act':sem})
 
 def table_room(request):
     teacher_groups = []
