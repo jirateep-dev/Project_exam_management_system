@@ -80,11 +80,11 @@
                                     {% if teacher.avg > safezone.max or teacher.avg < safezone.min%}
                                         <td class="danger" data-column="column2"></td>
                                         <td class="danger" data-column="column3">ค่าเฉลี่ยกลุ่ม</td>
-                                        <td class="danger" data-column="column4">{{teacher.avg}}</td>
+                                        <td class="danger" data-column="column4">{{teacher.avg|floatformat:3}}</td>
                                     {% else %}
                                         <td class="success" data-column="column2"></td>
                                         <td class="success" data-column="column3">ค่าเฉลี่ยกลุ่ม</td>
-                                        <td class="success" data-column="column4">{{teacher.avg}}</td>
+                                        <td class="success" data-column="column4">{{teacher.avg|floatformat:3}}</td>
                                     {% endif %}
                                 </tr>
                             {% endif %}

@@ -431,7 +431,7 @@ def table_room(request):
                                 'teacher_name': tch_obj.teacher_name, \
                                 'levels_teacher': str("{:.3f}".format(tch_obj.levels_teacher)), \
                                 'count_group':j+1, \
-                                'avg':str("{:.3f}".format(avg))})
+                                'avg':float("{:.3f}".format(avg))})
             if count_proj == 3:
                 sum_lv, avg = 0, 0
 
