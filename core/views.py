@@ -25,8 +25,8 @@ LIST_COL = ['สื่อการนำเสนอ','การนำเสน�
 LIST_COL_AD = ['การพัฒนาโครงงานตามวัตถุประสงค์','การปฏิบัติได้ตรงตามแผนที่วางไว้','การเลือกทฤษฏีและเครื่องมือ','การเข้าพบอาจารย์ที่ปรึกษา',\
             'การปรับปรุงแก้ไขรายงาน','คุณภาพของรายงาน','คุณภาพของโครงงาน']
 LIST_COL_PO = ['การตรงต่อเวลา','บุคลิกภาพและการแต่งกาย','ความชัดเจนในการอธิบาย','ความชัดเจนในการตอบคำถาม','ความชัดเจนของสื่อ','คุณภาพของโครงงาน']
-LIST_COL_RE = ['รหัสนักศึกษา','ชื่อ-นามสกุล','ชื่อโปรเจค','คะแนนโปรเจค (60%)','คะแนนอาจารย์ที่ปรึกษา (40%)', 'รายละอียด']
-LIST_COL_RE2 = ['รหัสนักศึกษา','ชื่อ-นามสกุล','ชื่อโปรเจค','คะแนนโปรเจค (40%)','คะแนนโปสเตอร์ (20%)','คะแนนอาจารย์ที่ปรึกษา (40%)', 'รายละอียด']
+LIST_COL_RE = ['รหัสนักศึกษา','ชื่อ-นามสกุล','ชื่อโปรเจค','คะแนนโปรเจค (60%)','คะแนนอาจารย์ที่ปรึกษา (40%)', 'ผลรวมคะแนน', 'รายละอียด']
+LIST_COL_RE2 = ['รหัสนักศึกษา','ชื่อ-นามสกุล','ชื่อโปรเจค','คะแนนโปรเจค (40%)','คะแนนโปสเตอร์ (20%)','คะแนนอาจารย์ที่ปรึกษา (40%)', 'ผลรวมคะแนน', 'รายละอียด']
 LIST_COL_DE = [['รายชื่ออาจารย์']+LIST_COL, ['รายชื่ออาจารย์']+LIST_COL_PO , ['อาจารย์ที่ปรึกษา']+LIST_COL_AD]
 LIST_COL_PROJ = ['ปีการศึกษา', 'เทอม', 'ชื่อโปรเจค(TH)', 'ชื่อโปรเจค(EN)', 'แขนง', 'ที่ปรึกษา', 'ที่ปรึกษา(ร่วม)', 'รายละเอียด']
 
@@ -421,11 +421,11 @@ def result_sem1(request):
 
         # calculate score project (percentage)
         if info_setting.forms == 1:
-            test = ScoreProj.objects.annotate(result_scoreproj = (F('presentation')+F('presentation_media')+F('question')+\
-                F('report')+F('discover')+F('analysis')+F('quantity')+F('levels'))*0.75).filter(proj_id_id=project[num].id)
+            test = ScoreProj.objects.annotate(result_scoreproj = ((F('presentation')+F('presentation_media')+F('question'))/3.0+\
+                F('report')+(F('discover')+F('analysis'))*1.5+(F('quantity')+F('levels'))/2.0)).filter(proj_id_id=project[num].id)
         else:
-            test = ScoreProj.objects.annotate(result_scoreproj = (F('presentation')+F('presentation_media')+F('question')+\
-                F('report')+F('discover')+F('analysis')+F('quantity')+F('levels')+F('quality'))*0.444).filter(proj_id_id=project[num].id)
+            test = ScoreProj.objects.annotate(result_scoreproj = ((F('presentation')+F('presentation_media')+F('question'))*0.667+\
+                F('report')*2+(F('discover')+F('analysis'))*1.5+F('quantity')+F('levels')+F('quality'))*0.4).filter(proj_id_id=project[num].id)
         avg_scorep = 0
         for i in test:
             avg_scorep += i.result_scoreproj
@@ -453,11 +453,11 @@ def result_sem1(request):
         for i in stu:
             if info_setting.forms == 1:
                 lis_stu.append([i.student_id, i.student_name, project[num].proj_name_th, "%.2f" %avg_scorep, "%.2f" %avg_scoread, \
-                format_html("<button name="'"detail"'" type="'"submit"'" class="'"btn btn-success"'" \
+                "%.2f" %(avg_scorep+avg_scoread), format_html("<button name="'"detail"'" type="'"submit"'" class="'"btn btn-success"'" \
                 form="'"detail_score"'" value='"+project[num].proj_name_th+"'><h4 style="'"font-size: 1.7em;"'">ดูรายละเอียด</h4></button>")])
             else:
                 lis_stu.append([i.student_id, i.student_name, project[num].proj_name_th, "%.2f" %avg_scorep, "%.2f" %avg_scorepo, "%.2f" %avg_scoread, \
-                format_html("<button name="'"detail"'" type="'"submit"'" class="'"btn btn-success"'" \
+                "%.2f" %(avg_scorep+avg_scorepo+avg_scoread), format_html("<button name="'"detail"'" type="'"submit"'" class="'"btn btn-success"'" \
                 form="'"detail_score"'" value='"+project[num].proj_name_th+"'><h4 style="'"font-size: 1.7em;"'">ดูรายละเอียด</h4></button>")])
 
     if info_setting.forms == 2:

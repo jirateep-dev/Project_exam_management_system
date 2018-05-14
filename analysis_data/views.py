@@ -62,6 +62,14 @@ def export_csv(request):
             lis_ex.append(lis_line)
 
         lis_ex.append(lis_sub)
+
+    proj_null = proj.filter(schedule_id=None)
+
+    for i in range(4):
+        lis_ex.append(lis_line)
+    lis_ex.append(['ลำดับ', 'ชื่อโปรเจคภาษาไทย', 'ชื่อโปรเจคภาษาอังกฤษ', 'แขนง', 'อาจารย์ที่ปรึกษา', 'อาจารย์ที่ปรึกษา(ร่วม)'])
+    for idx,item in enumerate(proj_null):
+        lis_ex.append([idx, item.proj_name_th, item.proj_name_en, item.proj_major, item.proj_advisor, item.proj_co_advisor])
     
     with open('schedule_room.csv','w', newline='', encoding='utf-8-sig') as new_file:
         csv_writer = csv.writer(new_file, delimiter=',')
