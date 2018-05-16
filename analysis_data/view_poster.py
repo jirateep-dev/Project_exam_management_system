@@ -19,6 +19,7 @@ from random import randint
 from collections import Counter
 from django.db.models import Max
 from random import randint
+import random
 import statistics
 import logging
 
@@ -51,13 +52,21 @@ def prepare_render():
     result = []
 
     projs = Project.objects.filter(proj_years=this_year(), proj_semester=2)
+    proj_2 = Project.objects.all()
+    sch_post = SchedulePoster.objects.all()
+    lis_sch = []
     tch = Teacher.objects.all()
 
-    for i in range(1, len(projs)+1):
+    for proj in sch_post:
+        for p in projs:
+            if p.id == proj.proj_id_id:
+                lis_sch.append(proj.proj_id_id)
+
+    for i in range(1, len(lis_sch)+1):
         in_result = {}
         tch_lis = {}
         
-        post_id = projs[i-1].sche_post_id
+        post_id = proj_2.get(id=lis_sch[i-1]).sche_post_id
 
         for t in tch:
             if t.schepost_teacher.filter(id=post_id).exists():
@@ -69,7 +78,7 @@ def prepare_render():
                 sum_v += value
 
             in_result['id'] = i
-            in_result['proj_name'] = projs[i-1].proj_name_th
+            in_result['proj_name'] = proj_2.get(id=lis_sch[i-1]).proj_name_th
 
             for i in range(1, len(tch_lis)+1):
                 in_result['teacher'+str(i)] = list(tch_lis.keys())[i-1]
@@ -166,12 +175,14 @@ def generate_poster(request):
     teachers = Teacher.objects.all()
     projs_sem2 = Project.objects.filter(proj_years=this_year(), proj_semester=2).filter(~Q(schedule_id=None))
     projs = Project.objects.filter(proj_years=this_year(), proj_semester=2, sche_post_id=None)
+    lis_inx = [i for i in range(len(projs))]
     sche = ScheduleRoom.objects.filter(semester=1)
     safe_zone = level_safezone()
     load_set = Settings.objects.get(id=1).load_post
 
     if len(projs) != 0:
-        for new in projs:
+        for index in range(len(projs)):
+            new = projs[lis_inx.pop(random.randrange(len(lis_inx)))]
             old_tch = []
             for old in projs_sem2:
                 if new.proj_name_th == old.proj_name_th:
