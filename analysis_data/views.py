@@ -40,6 +40,7 @@ def export_csv(request):
 
     lis_ex = [["date", "room", "time", "proj_name_th", "proj_name_en", "proj_major", "proj_advisor", "proj_co_advisor", \
     "teacher_group", "teacher1", "teacher2", "teacher3", "teacher4"]]
+    
     lis_line = ['----------','----------','----------','----------','----------','----------',\
     '----------','----------','----------','----------','----------','----------','----------']
 
@@ -70,6 +71,14 @@ def export_csv(request):
     lis_ex.append(['ลำดับ', 'ชื่อโปรเจคภาษาไทย', 'ชื่อโปรเจคภาษาอังกฤษ', 'แขนง', 'อาจารย์ที่ปรึกษา', 'อาจารย์ที่ปรึกษา(ร่วม)'])
     for idx,item in enumerate(proj_null):
         lis_ex.append([idx, item.proj_name_th, item.proj_name_en, item.proj_major, item.proj_advisor, item.proj_co_advisor])
+    
+    for i in range(4):
+        lis_ex.append(lis_line)
+    lis_ex.append(["ลำดับ", "รายชื่ออาจารย์"])
+
+    for i in teachers:
+        lis_ex.append([i.id, i.teacher_name])
+
     
     with open('schedule_room.csv','w', newline='', encoding='utf-8-sig') as new_file:
         csv_writer = csv.writer(new_file, delimiter=',')

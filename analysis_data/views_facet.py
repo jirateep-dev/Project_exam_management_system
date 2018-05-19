@@ -17,6 +17,7 @@ from zipfile import ZipFile
 import logging
 import numpy
 import statistics
+import chardet
 
 log = logging.getLogger('django.db.backends')
 log.setLevel(logging.DEBUG)
@@ -204,16 +205,22 @@ def export_script(request):
         new_file.close()
     
     in_memory = BytesIO()
+
     with ZipFile(in_memory, "a") as zip:
 
-        with open('script_scoreproj.txt', 'rb') as script_scoreproj:
+        with open('script_scoreproj.txt', 'rb') as file:
+            raw = file.read(32) # at most 32 bytes are returned
+            encoding = chardet.detect(raw)['encoding']
+        
+
+        with open('script_scoreproj.txt', newline='', encoding=encoding) as script_scoreproj:
             zip.writestr("script_scoreproj.txt", script_scoreproj.read())
-        with open('script_scorepost.txt', 'rb') as script_scorepost:
+        with open('script_scorepost.txt', newline='', encoding=encoding) as script_scorepost:
             zip.writestr("script_scorepost.txt", script_scorepost.read())
         
         # fix for Linux zip files read in Windows
         for file in zip.filelist:
-            file.create_system = 0    
+            file.create_system = 0
             
         zip.close()
 
