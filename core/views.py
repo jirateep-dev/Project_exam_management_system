@@ -282,8 +282,10 @@ def manage_proj(request):
                 std2_nstr = pre_std2+std2_fname+' '+std2_lname
                 std_dic = {'std1':{'pk':std1_pk, 'std_id':std1_id, 'name':std1_nstr}, \
                 'std2':{'pk':std2_pk, 'std_id':std2_id, 'name':std2_nstr}}
-                manage_student(std_dic['std1'], p_semester, get_proj)
-                manage_student(std_dic['std2'], p_semester, get_proj)
+                if std1_pk != '':
+                    manage_student(std_dic['std1'], p_semester, get_proj)
+                if std2_pk != '':
+                    manage_student(std_dic['std2'], p_semester, get_proj)
             
             else:
                 new_proj = Project(proj_years=p_year, proj_semester=p_semester, proj_name_th=np_th, proj_name_en=np_en,\
@@ -294,8 +296,10 @@ def manage_proj(request):
                 std2_nstr = pre_std2+std2_fname+' '+std2_lname
                 std_dic = {'std1':{'pk':std1_pk, 'std_id':std1_id, 'name':std1_nstr}, \
                 'std2':{'pk':std2_pk, 'std_id':std2_id, 'name':std2_nstr}}
-                manage_student(std_dic['std1'], p_semester, new_proj)
-                manage_student(std_dic['std2'], p_semester, new_proj)
+                if std1_pk != '':
+                    manage_student(std_dic['std1'], p_semester, new_proj)
+                if std2_pk != '':
+                    manage_student(std_dic['std2'], p_semester, new_proj)
 
             return HttpResponseRedirect(reverse("manage_proj"))
         

@@ -1,7 +1,7 @@
 *** Variables ***
 
-${HOSTNAME}             127.0.0.1
-${PORT}                 8000
+${HOSTNAME}             161.246.38.112
+${PORT}                 80
 ${SERVER}               http://${HOSTNAME}:${PORT}/
 ${BROWSER}              Chrome
 ${ONESECOND}      		1.0
