@@ -93,7 +93,7 @@
                         </div>
                         <div class='col-md-6'>
                             <label>ชื่อ-นามสกุล อาจารย์ที่ปรึกษา(ร่วม) :</label>
-                            <select class="form-control" class="select" style="width: 100%;height: 35px;" name="cot_name" required style="font-size: 2em">
+                            <select class="form-control" class="select" style="width: 100%;height: 35px;" name="cot_name" style="font-size: 2em">
                                 <option selected="selected">{{proj.proj_co_advisor}}</option>
                                 {% for teacher in teachers %}
                                     <option value="{{teacher.teacher_name}}">{{teacher.teacher_name}}</option>

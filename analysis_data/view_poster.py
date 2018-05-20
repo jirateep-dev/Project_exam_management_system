@@ -144,7 +144,10 @@ def upload_poster(request):
     
 def export_poster(request):
     pre = prepare_render()
+    sem = Settings.objects.get(id=1).forms
     date = SchedulePoster.objects.all().values_list('date_post', flat=True).distinct()
+    teachers = Teacher.objects.all()
+    projs = Project.objects.filter(proj_years=this_year(), proj_semester=sem)
     date_post = ''
     if len(date) != 0:
         date_post = date[len(date)-1]
@@ -154,6 +157,20 @@ def export_poster(request):
 
     for obj in pre:
         lis_ex.append([obj['id'], obj['proj_name'],obj['teacher1'],obj['teacher2'],obj['teacher3']])
+    
+    for i in range(4):
+        lis_ex.append(lis_line)
+    lis_ex.append(["ลำดับ", "รายชื่ออาจารย์"])
+
+    for i in teachers:
+        lis_ex.append([i.id, i.teacher_name])
+
+    for i in range(4):
+        lis_ex.append(lis_line)
+    lis_ex.append(["ลำดับ", "รายชื่อโปรเจค"])
+
+    for i in range(1, len(projs)+1):
+        lis_ex.append([i, projs[i-1].proj_name_th])
     
     with open('schedule_poster.csv','w', newline='', encoding='utf-8-sig') as new_file:
         csv_writer = csv.writer(new_file, delimiter=',')
