@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block content %}
 
-<div class="container">
+<div class="container" style="width: 75%">
     <div class="row">
         <div class="container" style="text-align: center;margin-top: 3%;"><h1 style="font-size: 6.5em;">FACET</h1></div>
         <div class="jumbotron" style="padding: 15%;padding-top: 5%;padding-bottom: 10%">
@@ -61,14 +61,16 @@
                     <tbody>
                         {% for data in teachers%}
                         <tr class="row100">
+                            {% with forloop.counter as loop %}
                             {% for i in data%}
                                 {% if forloop.counter == 1 %}
                                 <td class="column100 column{{ forloop.counter|add:2 }}" \
-                                data-column="column{{ forloop.counter|add:2 }}"><h4 style="font-size: 1.3em;text-align: left">XXXXXXXX</h4></td>
+                                data-column="column{{ forloop.counter|add:2 }}"><h4 style="font-size: 1.3em;text-align: left">teacher{{loop}}</h4></td>
                                 {% else %}
                                     <td class="column100 column{{ forloop.counter|add:2 }}" data-column="column{{ forloop.counter|add:2 }}"><h4 style="font-size: 1.3em;">{{i}}</h4></td>
                                 {% endif %}
                             {% endfor %}
+                            {% endwith %}
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -98,7 +100,7 @@
                     type: 'area'
                 },
                 title: {
-                    text: 'ตารางการแบ่ง SAFE ZONE จากผลการประเมิน'
+                    text: 'Chart การแบ่ง SAFE ZONE จากผลการประเมิน'
                 },
                 annotations: [{
                     labelOptions: {
