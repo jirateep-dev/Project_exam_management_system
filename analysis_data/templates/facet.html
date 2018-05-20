@@ -38,7 +38,17 @@
                 </button>
             </form>
         </div>
-        <div class="jumbotron" style="padding: 0;margin: 0">
+        {% if chart_facet.levels.min != 0 and chart_facet.levels.max != 0 %}
+            <div id="container" style="min-width: 30%; height: 100%; margin: 0 auto;padding-top: 5%;"></div>
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading" data-toggle="collapse" href="#table_teacher">
+                <h4 class="panel-title">
+                    <a style="font-size: 2em">ตารางรายชื่ออาจารย์และผลการประเมิน</a>
+                </h4>
+            </div>
+        </div>
+        <div id="table_teacher" class="panel-collapse collapse in">
             <div class="table100 ver5 m-b-110">
                 <table class="table table-hover" style="text-align: center" data-vertable="ver5" >
                     <thead>
@@ -65,6 +75,140 @@
                 </table>
             </div>
         </div>
+        
+        {% block javascript %} 
+            <script type="text/javascript">
+                var minus_normal = "{{chart_facet.levels.minus_normal}}"
+                var minus_sd1 = "{{chart_facet.levels.minus_sd1}}"
+                var min = "{{chart_facet.levels.min}}"
+                var cal_med = "{{chart_facet.levels.cal_med}}"
+                var max = "{{chart_facet.levels.max}}"
+                var plus_sd1 = "{{chart_facet.levels.plus_sd1}}"
+                var plus_normal = "{{chart_facet.levels.plus_normal}}"
+
+                var c_normal = "{{chart_facet.count.normal}}"
+                var c_minus_sd1 = "{{chart_facet.count.minus_sd1}}"
+                var c_plus_sd1 = "{{chart_facet.count.plus_sd1}}"
+                var c_minus_sd05 = "{{chart_facet.count.minus_sd05}}"
+                var c_plus_sd05 = "{{chart_facet.count.plus_sd05}}"
+                var c_safe = "{{chart_facet.count.safe}}"
+
+                Highcharts.chart('container', {
+                chart: {
+                    type: 'area'
+                },
+                title: {
+                    text: 'ตารางการแบ่ง SAFE ZONE จากผลการประเมิน'
+                },
+                annotations: [{
+                    labelOptions: {
+                    backgroundColor: 'rgba(0,0,0,0.7)',
+                    verticalAlign: 'top'
+                    },
+                    labels: [{
+                        point: {
+                            xAxis: 0,
+                            yAxis: 0,
+                            x: 3,
+                            y: 0
+                        },
+                        text: 'normal : '+c_normal+' คน'
+                    }
+                    ,{
+                        point: {
+                            xAxis: 0,
+                            yAxis: 0,
+                            x: 2,
+                            y: 1.5
+                        },
+                        text: '-1SD : '+c_minus_sd1+' คน'
+                    },{
+                        point: {
+                            xAxis: 0,
+                            yAxis: 0,
+                            x: 4,
+                            y: 1.5
+                        },
+                        text: '+1SD : '+c_plus_sd1+' คน'
+                    },{
+                        point: {
+                            xAxis: 0,
+                            yAxis: 0,
+                            x: 3.5,
+                            y: 2.5
+                        },
+                        text: '-0.5SD : '+c_minus_sd05+' คน'
+                    },{
+                        point: {
+                            xAxis: 0,
+                            yAxis: 0,
+                            x: 2.5,
+                            y: 2.5
+                        },
+                        text: '+0.5SD : '+c_plus_sd05+' คน'
+                    },{
+                        point: {
+                            xAxis: 0,
+                            yAxis: 0,
+                            x: 3,
+                            y: 3.5
+                        },
+                        text: 'SAFE ZONE'+c_safe+' คน'
+                    }]
+                }],
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: 0,
+                    y: 60,
+                    floating: true,
+                    borderWidth: 1,
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+                },
+                xAxis: {
+                    categories: [minus_normal, minus_sd1, min, cal_med, max, plus_sd1, plus_normal],
+                },
+                yAxis: {
+                    title: {
+                        text: ''
+                    },
+                },
+                tooltip: {
+                    formatter: function () {
+                        return '<b>' + this.series.name + '</b><br/>' + this.x;
+                    }
+                },
+                plotOptions: {
+                    area: {
+                        fillOpacity: 0.5
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'SAFE ZONE',
+                    data: [null, null, 4, 4, 4, null, null]
+                }, {
+                    name: '-0.5SD',
+                    data: [null, null, 3, 3, null, null, null]
+                }, {
+                    name: '+0.5SD',
+                    data: [null, null, null, 3, 3, null, null]
+                }, {
+                    name: '-1SD',
+                    data: [null, 2, 2, 2, null, null, null]
+                }, {
+                    name: '+1SD',
+                    data: [null, null, null, 2, 2, 2,null]
+                }, {
+                    name: 'normal',
+                    data: [1, 1, 1, 1, 1, 1, 1]
+                }]
+                });
+            </script>
+        {% endblock %}
 
     </div>
 </div>

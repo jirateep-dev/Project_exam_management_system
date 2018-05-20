@@ -36,9 +36,48 @@ def avg(lis):
     """uses floating-point division."""
     return sum(lis) / float(len(lis))
 
+def level_safezone():
+    levels = Teacher.objects.all().values_list('levels_teacher', flat=True).order_by('levels_teacher')
+    tch = Teacher.objects.all().order_by('levels_teacher')
+    cal_med = statistics.median(levels)
+    sd_value = statistics.stdev(levels)
+    plus_sd1 = Teacher.objects.filter(levels_teacher__lte=cal_med+sd_value).filter(levels_teacher__gte=cal_med)\
+            .values_list('levels_teacher', flat=True).order_by('levels_teacher')
+    minus_sd1 = Teacher.objects.filter(levels_teacher__lte=cal_med).filter(levels_teacher__gte=cal_med-sd_value)\
+            .values_list('levels_teacher', flat=True).order_by('levels_teacher')
+    
+    min_safe = statistics.median(minus_sd1)
+    max_safe = statistics.median(plus_sd1)
+
+    return {'min':min_safe, 'max':max_safe, 'minus_sd1':minus_sd1[0], \
+            'plus_sd1':plus_sd1[len(plus_sd1)-1], 'cal_med':cal_med, 'minus_normal':tch[0].levels_teacher, 'plus_normal':tch[len(tch)-1].levels_teacher}
+
+def len_teacher(min_in, max_in):
+    teachers = Teacher.objects.all().order_by('levels_teacher')
+    lis = []
+
+    for i in teachers:
+        if i.levels_teacher <= max_in and i.levels_teacher >= min_in:
+            lis.append(i)
+
+    return len(lis)
+
+def chart_facet():
+    dic = level_safezone()
+    tch = Teacher.objects.all().order_by('levels_teacher')
+    count_teacher = {'normal':len(tch),\
+                     'minus_sd1':len_teacher(dic.get('minus_sd1'), dic.get('cal_med')),\
+                     'plus_sd1':len_teacher(dic.get('cal_med'), dic.get('plus_sd1')), \
+                     'minus_sd05':len_teacher(dic.get('min'), dic.get('cal_med')),\
+                     'plus_sd05':len_teacher(dic.get('cal_med'), dic.get('max')), \
+                     'safe':len_teacher(dic.get('cal_med'), dic.get('max'))+len_teacher(dic.get('min'), dic.get('cal_med'))}
+    result = {'count':count_teacher, 'levels':dic}
+    return result
+
 def facet(request):
     sem = Settings.objects.get(id=1).forms
-    return render(request, 'facet.html', {'teachers':detail_teacher(), 'col_de':col_de, 'proj_act':sem})
+    return render(request, 'facet.html', {'teachers':detail_teacher(), 'col_de':col_de,\
+                 'proj_act':sem, 'chart_facet':chart_facet()})
 
 def import_script(request):
     files = request.FILES["script_file"]
