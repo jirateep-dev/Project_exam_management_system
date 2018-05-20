@@ -80,15 +80,15 @@ def export_csv(request):
         lis_ex.append([i.id, i.teacher_name])
 
     
-    with open('schedule_room.csv','w', newline='', encoding='utf-8-sig') as new_file:
+    with open('schedule_room_sem'+str(setting.forms)+'.csv','w', newline='', encoding='utf-8-sig') as new_file:
         csv_writer = csv.writer(new_file, delimiter=',')
         csv_writer.writerows(lis_ex)
     new_file.closed
 
-    with open('schedule_room.csv', 'rb') as schedule_room:
+    with open('schedule_room_sem'+str(setting.forms)+'.csv', 'rb') as schedule_room:
         response = HttpResponse(schedule_room.read())
         response['content_type'] = 'application/schedule_room'
-        response['Content-Disposition'] = 'attachment;filename=schedule_room.csv'
+        response['Content-Disposition'] = 'attachment;filename='+'schedule_room_sem'+str(setting.forms)+'.csv'
         return response
 
     return HttpResponseRedirect(reverse("manage"))
