@@ -1,0 +1,140 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container" style="width: 100%;padding: 5%;padding-top: 0">
+    <div class="row" style="width: 100%;">
+        <div class="container" style="text-align: center"><h1 style="font-size: 6.5em;margin-bottom: 30px;">จัดการสอบ</h1></div>
+        <div class="jumbotron col-sm-8 well well-lg" style="background: #ffffff;text-align: center;">
+            <h1 style="color: #353b48;font-size: 4em;">การสอบโปรเจคภาคเรียนที่ {{proj_act}} ปีการศึกษา {{proj_years}}</h1>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+                <div class="panel-heading" data-toggle="collapse" href="#upload_file" style="background: #ffffff;text-align: center">
+                    <h4 class="panel-title" style="color: #353b48;font-size: 1.5em">
+                        <label style="font-size: 1.3em"><u>นำเข้าไฟล์</u></label>
+                        <label style="font-size: 1.3em">ตารางสอบ</label>
+                    </h4>
+                </div>
+            </div>
+            <div id="upload_file" class="panel-collapse collapse">
+                <form action="{% url 'upload_csv' %}" method="POST" enctype="multipart/form-data" \
+                    class="form-horizontal" >
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="name" class="col-md-3 col-sm-3 col-xs-12 control-label">ไฟล์: </label>
+                        <div class="col-md-8">
+                            <input type="file" name="csv_file" id="csv_file" required="True" class="form-control">
+                        </div>                    
+                    </div>
+                    <div class="form-group">                    
+                        <div class="col-md-3 col-sm-3 col-xs-12 col-md-offset-3" style="margin-bottom:10px;">
+                            <button class="btn btn-primary"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span>นำเข้า </button>
+                        </div> 
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class='container col-sm-12' style="background-color: #dfe6e9;text-align: center;">
+            <h4>
+                <label for="sel1">จำนวนโปรเจคที่เหลือ :</label>
+                {% for pc in proj_count %}
+                    <span style="font-size: 1.7em">BI : {{pc.bi}}  | </span>
+                    <span style="font-size: 1.7em">DS : {{pc.ds}}  | </span>
+                    <span style="font-size: 1.7em">ES : {{pc.es}}  | </span>
+                    <span style="font-size: 1.7em">MU : {{pc.mu}}  | </span>
+                    <span style="font-size: 1.7em">NW : {{pc.nw}}  | </span>
+                    <span style="font-size: 1.7em">SD : {{pc.se}} </span>
+                {% endfor %}
+            </h4>
+        </div>
+        
+        <table class='table table-bordered table-striped col-md-8' style="text-align: center">
+            <tr>
+                <th style="text-align: center"><h4 style="font-size: 2.3em">วันที่</h4></th>
+                <th> </th>
+                {% for room in rooms%}
+                    <th style="text-align: center"><h4 style="font-size: 2em">{{room}}</h4></th>
+                {% endfor %}
+            </tr>
+            {% for key, values in room_period.items %}
+                <tr>
+                    <td rowspan="2"><h4 style="font-size: 1.3em">{{key}}</h4></td>
+                    <td><h4 style="font-size: 1.3em">ช่วงเช้า</h4></td>
+                    {% for i in values.0%}
+                        {% if i == 'Available' %}
+                            <td><h4 style="font-size: 1.3em;color: green">{{i}}</h4></td>
+                        {% endif %}
+                        {% if i == 'Error' %}
+                            <td><h4 style="font-size: 1.3em;color: red">{{i}}</h4></td>
+                        {% endif %}
+                        {% if i != 'Available' and i != 'Error' %}
+                            <td>
+                                {% for j in i%}
+                                    <h4 style="font-size: 1.3em">{{j}}</h4>
+                                {% endfor %}
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td><h4 style="font-size: 1.3em">ช่วงบ่าย</h4></td>
+                    {% for i in values.1%}
+                        {% if i == 'Available' %}
+                            <td><h4 style="font-size: 1.3em;color: green">{{i}}</h4></td>
+                        {% endif %}
+                        {% if i == 'Error' %}
+                            <td><h4 style="font-size: 1.3em;color: red">{{i}}</h4></td>
+                        {% endif %}
+                        {% if i != 'Available' and i != 'Error' %}
+                            <td>
+                                {% for j in i%}
+                                    <h4 style="font-size: 1.3em">{{j}}</h4>
+                                {% endfor %}
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <hr>
+    <form action="{% url 'manage' %}" method="POST" id="reset_form" style="margin-left: 100px;padding-bottom: 50px;">
+        {% csrf_token %}
+        <div class='col-md-5'>
+                <button type="submit" class="btn btn-info" form="reset_form" name="table_projs" value="1"><h4 style="font-size: 2em">โครงงานที่ยังไม่ถูกจัด</h4></button>
+        </div>
+        <div class="row btn-bottom" style="margin-left: 80%;margin-top: 30px;">
+            <div class='col-md-5'>
+                <button type="submit" class="btn btn-danger" form="reset_form" name="reset_gen" value="1"><h4 style="font-size: 2em">ล้างข้อมูล</h4></button>
+            </div>
+        </div>
+    </form>
+
+    {% if table_projs == "1" %}
+        <table class="table table-hover">
+            <thead>
+                <tr style="font-size: 1.5em">
+                    <th>ปีการศึกษา</th>
+                    <th>ภาคเรียนที่</th>
+                    <th>รายชื่อโปรเจค</th>
+                    <th>แขนง</th>
+                    <th>อาจารย์ที่ปรึกษา</th>
+                    <th>อาจารย์ที่ปรึกษาร่วม</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for proj in proj_null %} 
+                    <tr style="font-size: 1.1em">
+                        <td class="active">{{proj.proj_years}}</td>
+                        <td class="warning">{{proj.proj_semester}}</td>
+                        <td class="info">{{proj.proj_name_th}}</td>
+                        <td class="success">{{proj.proj_major}}</td>
+                        <td class="danger">{{proj.proj_advisor}}</td>
+                        <td class="danger">{{proj.proj_co_advisor}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+</div>
+{% endblock %}

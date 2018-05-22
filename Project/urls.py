@@ -20,6 +20,7 @@ from . import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('core.urls')),
+    # url('', include('django_prometheus.urls')),
     # url(r'^login/', auth_views.login, {'template_name': 'login.html'}, name='login'),
     url(r'^login/', views.login_user, name='login'),
     url(r'^logout/', auth_views.logout, {'next_page': '/login'}), 

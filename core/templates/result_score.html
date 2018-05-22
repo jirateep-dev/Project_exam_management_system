@@ -2,28 +2,129 @@
 
 <div class="container" style="width: 100%;padding: 10%;padding-top: 0">
     <div class="row" style="width: 100%;">
-        <div class="container" style="text-align: center"><h1 style="font-size: 5.5em;">ผลคะแนน ภาคเรียนที่ 1 ปีการศึกษา {{this_year}}</h1></div>
-        <div class="jumbotron">
+        <div class="container" style="text-align: center;margin-top: 3%"><h1 style="font-size: 5.5em;">ผลคะแนน ภาคเรียนที่ {{proj_act}} ปีการศึกษา {{this_year}}</h1>
+            <div class="jumbotron col-sm-4" style="padding: 0;margin-top: 3%">
+                <form action="{% url 'export_forms' %}" method="post" id="export_forms">
+                    {% csrf_token %}
+                    <button type="submit" name="mproj" value="mproj_edit" form="export_forms"\
+                    class="btn btn-info" style="width: 100%;height: 80px;"><h2 style="font-size: 3em">ส่งออกฟอร์ม</h2></button>
+                </form>
+            </div>
+            <div class="jumbotron col-sm-4" style="padding: 0;margin-top: 3%">
+                    <button type="submit" data-toggle="modal" data-target="#import_score"\
+                    class="btn btn-success" style="width: 100%;height: 80px;"><h2 style="font-size: 3em">นำเข้าคะแนน</h2></button>
+                </form>
+            </div>
+            <div class="jumbotron col-sm-4" style="padding: 0;margin-top: 3%">
+                <!-- <form action="{% url 'reset_score' %}" method="post" id="reset_score">
+                    {% csrf_token %} -->
+                    <button type="submit" data-toggle="modal" data-target="#reset_scores"\
+                    class="btn btn-danger" style="width: 100%;height: 80px;"><h2 style="font-size: 3em">ลบผลคะแนน</h2></button>
+                <!-- </form> -->
+            </div>
+        </div>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="import_score" role="dialog">
+            <div class="modal-dialog modal-md">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <form action="{% url 'import_score' %}" method="POST" id="import_score" enctype="multipart/form-data">
+                        {% csrf_token %}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <label class="modal-title">นำเข้าคะแนน</label>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" >
+                            <h2 for="name">ไฟล์ csv: </h2>
+                            <input type="file" name="score_file" id="score_file" required="True" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button class="btn btn-primary"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span>อัพโหลด </button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="reset_scores" role="dialog">
+            <div class="modal-dialog modal-md">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <form action="{% url 'reset_score' %}" method="POST" enctype="multipart/form-data" \
+                    class="form-horizontal" >
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <label class="modal-title">ล้างคะแนน</label>
+                            <label>ภาคเรียนที่ {{proj_act}} ปีการศึกษา {{this_year}}</label>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="name" class="col-md-3 col-sm-3 col-xs-12 control-label">เลือก: </label>
+                                <div class="col-md-8">
+                                    <select class="form-control" class="select" style="width: 100%;height: 100%;margin-top: 3%;" name="reset_types">
+                                        <option selected="selected" disabled hidden style="font-size: 2em">ประเภท</option>
+                                        <option value="1" style="font-size: 2em">คะแนนโปรเจค</option>
+                                        <option value="2" style="font-size: 2em">คะแนนอาจารย์ที่ปรึกษา</option>
+                                        {% if proj_act == 2 %}
+                                        <option value="3" style="font-size: 2em">คะแนนโปสเตอร์</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-danger" style="margin-right: 10%;"> 
+                                    <span class="glyphicon glyphicon-remove" style="margin-right:5px;"></span> ยืนยันการล้าง</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+        <hr>
+
+        <div class="jumbotron" style="padding: 0">
             <form action="{% url 'detail_score' %}" method="post" id="detail_score">
                 {% csrf_token %} 
-                <table class="table table-hover" style="background-color:cornsilk">
-                    <thead>
-                    <tr style="background-color: slategray;color: aliceblue">
-                        {% for col_name in col_result%}
-                        <th style="text-align: center;"><h4 style="font-size: 2.2em;">{{col_name}}</h4></t>
-                        {% endfor %}
-                    </tr>
-                    </thead>
-                    <tbody>
-                        {% for data in list_student%}
-                        <tr>
-                            {% for i in data%}
-                            <td><h4 style="font-size: 1.2em;">{{i}}</h4></td>
+                <div class="table100 ver5 m-b-110">
+                    <table class="table table-hover" style="text-align: center" data-vertable="ver5">
+                        <thead>
+                        <tr class="row100 head" style="background-color: slategray;color: aliceblue">
+                            {% for col_name in col_result%}
+                            <th class="column100 column{{ forloop.counter|add:2 }}" data-column="column{{ forloop.counter|add:2 }}" style="text-align: center;">
+                                <h4 style="font-size: 1.6em;">{{col_name}}</h4></t>
                             {% endfor %}
                         </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {% for data in list_student%}
+                            <tr class="row100">
+                                {% for i in data%}
+                                    {% if forloop.counter == 2 or forloop.counter == 3 %}
+                                    <td class="column100 column{{ forloop.counter|add:2 }}" \
+                                    data-column="column{{ forloop.counter|add:2 }}"><h4 style="font-size: 1.2em;text-align: left">{{i}}</h4></td>
+                                    {% else %}
+                                        <td class="column100 column{{ forloop.counter|add:2 }}" data-column="column{{ forloop.counter|add:2 }}"><h4 style="font-size: 1.2em;">{{i}}</h4></td>
+                                    {% endif %}
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </form>
         </div>
     </div>

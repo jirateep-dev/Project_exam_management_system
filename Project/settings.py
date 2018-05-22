@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 # AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
-AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",'django.contrib.auth.backends.ModelBackend',)
+AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend","django.contrib.auth.backends.ModelBackend",)
 
 # Initiate TLS on connection.
 LDAP_AUTH_USE_TLS = False
@@ -97,6 +97,7 @@ LOGGING = {
 # Application definition
 
 INSTALLED_APPS = [
+    # 'django_prometheus',
     'core',
     'database_management',
     'analysis_data',
@@ -110,6 +111,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # 'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -117,6 +119,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'Project.urls'
@@ -155,6 +158,7 @@ WSGI_APPLICATION = 'Project.wsgi.application'
 # }
 DATABASES = {
     'default': {
+        # 'ENGINE': 'django_prometheus.db.backends.mysql', 
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'senior_db',
         'USER': 'root',
@@ -163,6 +167,12 @@ DATABASES = {
         'PORT': '3306',
     }
 }
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django_prometheus.cache.backends.filebased.FileBasedCache',
+#         'LOCATION': '/var/tmp/django_cache',
+#     }
+# }
 MYSQL_ROOT_PASSWORD = 'root'
 
 # DATABASES = {

@@ -1,0 +1,4 @@
+cd F:\Senior_proj\Project\tests
+F:
+robot F:\Senior_proj\Project\tests\Schedule_Room.robot
+

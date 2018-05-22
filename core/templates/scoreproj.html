@@ -2,7 +2,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="container" style="text-align: center"><h1 style="font-size: 6.5em;">คะแนนโปรเจค</h1></div>
+        <div class="container" style="text-align: center;margin-top: 3%;"><h1 style="font-size: 6.5em;">คะแนนโปรเจค</h1></div>
         <div class="jumbotron">
             <h4 style="font-size: 3em">เลือกโปรเจคที่ต้องการให้คะแนน</h4>
             <form action="{% url 'scoreproj' %}" method="post" id="scoreproj">
@@ -20,7 +20,7 @@
             </form>
         </div>
         
-        <button name="submit_proj" type="submit" class="btn btn-success" form="scoreproj"><h4 style="font-size: 2em">เลือกโปรเจค</h4></button>
+        <button id="submit_proj" name="submit_proj" type="submit" class="btn btn-success" form="scoreproj"><h4 style="font-size: 2em">เลือกโปรเจค</h4></button>
         <div class="col-xs-10">
         </div>
     </div>

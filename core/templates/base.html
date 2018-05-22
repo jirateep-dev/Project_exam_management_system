@@ -13,6 +13,12 @@
     <link href="{% static 'datepicker-1.6.4/css/bootstrap-datepicker.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/fonts-family.css' %}" rel="stylesheet">
     <link href="{% static 'css/navbar.css' %}" rel="stylesheet">
+
+    <link href="{% static 'vendor/animate/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/select2/select2.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/perfect-scrollbar/perfect-scrollbar.css' %}" rel="stylesheet">
+    <!-- <link href="{% static 'css/util.css' %}" rel="stylesheet"> -->
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
     <!-- <link href="{% static 'css/style.css' %}" rel="stylesheet"> -->
 </head>
 
@@ -21,39 +27,59 @@
     <img src="{% static 'imgs/logo.png' %}" class="img-responsive center-block" style="background: #ffffff;margin-top: 50px;padding-bottom: 30px;width: 30%;">
     </div>
     <div class="container-fluid" style="padding: 0;">
-        <h3>
-            <ul class="nav nav-tabs" id="actived" style="background: #353b48;">
-                <li><a href="/scoreproj" style="color: #ffffff;">คะแนนโปรเจค</a></li>
-                {% if proj_act == 2 %}
-                <li><a href="/scoreposter" style="color: #ffffff;">คะแนนโปสเตอร์</a></li>
-                {% endif %}
-                {% if user.is_superuser %}
-                <li><a href="/manage" style="color: #ffffff;">จัดห้องสอบ</a></li>
-                <li><a href="/manage/table_room" style="color: #ffffff;">ตารางการจัดห้องสอบ</a></li>
-                <li><a href="/result_sem1" style="color: #ffffff;">ผลคะแนนภาคเรียนที่ 1</a></li>
-                <!-- <li><a href="/result_sem1">ผลคะแนนภาคเรือนที่ 2</a></li> -->
-                <li><a href="/manage_proj" style="color: #ffffff;">จัดการโครงงาน</a></li>
-                <li><a href="/facet" style="color: #ffffff;">FACET</a></li>
-                {% endif %}
-                <div class="nav nav-tabs navbar-right pull-right" style="padding-right: 30px;border: 0">
+        <nav class="navbar navbar-default" style="margin: 0;" data-spy="affix" data-offset-top="197">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myNavbar" aria-expanded="false">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav" id="actived" style="background: #353b48;width: 100%;font-size: 1.7em">
+                    <li><a href="/scoreproj" style="color: #ffffff;">คะแนนโปรเจค</a></li>
                     {% if user.is_superuser %}
-                    <li><a href="/settings" style="color: #ffffff;"><span class="glyphicon glyphicon-wrench " style="font-size: .6em;"></span> ตั้งค่าระบบ</a></li>
+                        {% if proj_act == 2 %}
+                            <li><a href="/manage/manage_poster" style="color: #ffffff;">จัดการสอบโปสเตอร์</a></li>
+                        {% endif %}
+                        <li><a href="/manage" style="color: #ffffff;">จัดห้องสอบ</a></li>
+                        <li><a href="/manage/table_room" style="color: #ffffff;">ตารางการจัดห้องสอบ</a></li>
+                        <li><a href="/result_sem1" style="color: #ffffff;">ผลคะแนนภาคเรียนที่ {{proj_act}}</a></li>
+                        <!-- <li><a href="/result_sem1">ผลคะแนนภาคเรือนที่ 2</a></li> -->
+                        <li><a href="/manage_proj" style="color: #ffffff;">จัดการโครงงาน</a></li>
+                        <li><a href="/manage/facet" style="color: #ffffff;">FACET</a></li>
                     {% endif %}
-                    <li><a href="/logout" style="color: #ffffff;"><span class="glyphicon glyphicon-log-out" style="font-size: .6em;"></span> ออกจากระบบ</a></li>
-                </div>
-            </ul>
-        </h3>
+                    <div class="nav nav navbar-nav navbar-right" style="padding-right: 30px;border: 0">
+                        {% if user.is_superuser %}
+                            <li><a href="/settings" style="color: #ffffff;"><span class="glyphicon glyphicon-wrench " style="font-size: .6em;"></span> ตั้งค่าระบบ</a></li>
+                        {% endif %}
+                        <li><a href="/logout" style="color: #ffffff;"><span class="glyphicon glyphicon-log-out" style="font-size: .6em;"></span> ออกจากระบบ</a></li>
+                    </div>
+                </ul>
+            </div>
+        </nav>
     </div>
 
     {% block content %} {% endblock %}
+
+    <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
 
     <!-- Core Scripts - Include with every page -->
     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'datepicker-1.6.4/js/bootstrap-datepicker.min.js' %}"></script>
     <script src="{% static 'js/bootstrap-toggle.min.js' %}"></script>
+    <script src="{% static 'js/click_on_top.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/popper.js' %}"></script>
+    <script src="{% static 'vendor/select2/select2.min.js' %}"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/annotations.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <!-- <script src="{% static 'js/index.js' %}"></script> -->
-    {% block javascript %} {% endblock %}
+    
+    {% block javascript %}{% endblock %}
 
 
 </body>
