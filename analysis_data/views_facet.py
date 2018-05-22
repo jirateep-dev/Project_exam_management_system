@@ -27,7 +27,8 @@ col_de = ['รายชื่ออาจารย์','การวัดผล
 
 def detail_teacher():
     # test limite id32
-    tch = Teacher.objects.filter(id__lte=32)
+    # tch = Teacher.objects.filter(id__lte=32)
+    tch = Teacher.objects.all()
     teachers = [[i.teacher_name, str("{:.3f}".format(i.measure_sproj)), \
     str("{:.3f}".format(i.measure_spost)), str("{:.3f}".format(i.levels_teacher))] for i in tch]
     return teachers
@@ -149,8 +150,10 @@ def import_script(request):
 
 def export_script(request):
     # not present
-    proj = Project.objects.filter(id__lte=218)
-    teacher = Teacher.objects.filter(id__lte=32)
+    # proj = Project.objects.filter(id__lte=218)
+    # teacher = Teacher.objects.filter(id__lte=32)
+    proj = Project.objects.all()
+    teacher = Teacher.objects.all()
     with open('script_scoreproj.txt','w', encoding='utf-8-sig') as new_file:
         new_file.write( 'Title = Analytic Scoring Project\r\n' + \
                         'facet = 3\r\n' + \
@@ -183,21 +186,22 @@ def export_script(request):
         list_teacher = []
 
         # query only not fake score ///////////////////////////////////////////////////////////////
-        score_proj = ScoreProj.objects.filter(id__lte=469)
+        # score_proj = ScoreProj.objects.filter(id__lte=469)
+        score_proj = ScoreProj.objects.all()
 
         for s in score_proj:
             teacher_relate = Teacher.objects.filter(score_projs__proj_id_id=s.proj_id_id).filter(score_projs__id=s.id)
             for t in teacher_relate:
                 list_teacher.append(t.id)
         
+        run = 0
         for i in score_proj:
-            new_file.write(str(i.proj_id_id)+','+str(list_teacher[i.id-1])+','+'1-9'+','+str(i.presentation)+','+str(i.question)+','+\
+            new_file.write(str(i.proj_id_id)+','+str(list_teacher[run])+','+'1-9'+','+str(i.presentation)+','+str(i.question)+','+\
             str(i.report)+','+str(i.presentation_media)+','+str(i.discover)+','+\
             str(i.analysis)+','+str(i.quantity)+','+str(i.levels)+','+str(i.quality)+'\r\n')
+            run += 1
 
         new_file.close()
-
-    
 
     with open('script_scorepost.txt','w', encoding='utf-8-sig') as new_file:
         new_file.write( 'Title = Analytic Scoring Poster\r\n' + \
@@ -230,16 +234,19 @@ def export_script(request):
 
         list_teacher = []
         # query only not fake score ///////////////////////////////////////////////////////////////
-        score_post = ScorePoster.objects.filter(id__lte=469)
+        # score_post = ScorePoster.objects.filter(id__lte=469)
+        score_post = ScorePoster.objects.all()
 
         for s in score_post:
             teacher_relate = Teacher.objects.filter(score_posters__proj_id_id=s.proj_id_id).filter(score_posters__id=s.id)
             for t in teacher_relate:
                 list_teacher.append(t.id)
         
+        run = 0
         for i in score_post:
-            new_file.write(str(i.proj_id_id)+','+str(list_teacher[i.id-1])+','+'1-6'+','+str(i.time_spo)+','+str(i.character_spo)+','+\
+            new_file.write(str(i.proj_id_id)+','+str(list_teacher[run])+','+'1-6'+','+str(i.time_spo)+','+str(i.character_spo)+','+\
             str(i.presentation_spo)+','+str(i.question_spo)+','+str(i.media_spo)+','+str(i.quality_spo)+'\r\n')
+            run += 1
 
         new_file.close()
     

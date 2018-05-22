@@ -27,7 +27,6 @@ Suite Teardown    Stop Django and close Browser
 Start Django and open Browser
   Open Browser    ${SERVER}    ${BROWSER}
   Maximize Browser Window
-  Sleep       ${TENSECOND}
 
 Stop Django and close Browser
   Close Browser

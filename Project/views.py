@@ -13,18 +13,23 @@ def this_year():
 
 def data_user(user_model):
     projid_teacher = []
-    if user_model.is_authenticated:
-        user_id = user_model.id
-        teacher_sp = Teacher.objects.get(login_user_id=user_id)
-        projs = teacher_sp.schedule_teacher.all()
-        for i in projs:
-            projid_teacher.append(i.proj_id_id)
-    queryset = []
-    info_setting = Settings.objects.get(id=1)
-    form_setting = info_setting.forms
-    for i in range(len(projid_teacher)):
-        if Project.objects.filter(proj_years=this_year(), proj_semester=form_setting, id=projid_teacher[i]).exists():
-            queryset.append(Project.objects.get(id=projid_teacher[i]))
+    
+
+    try:
+        if user_model.is_authenticated:
+            user_id = user_model.id
+            teacher_sp = Teacher.objects.get(login_user_id=user_id)
+            projs = teacher_sp.schedule_teacher.all()
+            for i in projs:
+                projid_teacher.append(i.proj_id_id)
+        queryset = []
+        info_setting = Settings.objects.get(id=1)
+        form_setting = info_setting.forms
+        for i in range(len(projid_teacher)):
+            if Project.objects.filter(proj_years=this_year(), proj_semester=form_setting, id=projid_teacher[i]).exists():
+                queryset.append(Project.objects.get(id=projid_teacher[i]))
+    except Exception:
+        return False
     
     return queryset
 
@@ -39,7 +44,8 @@ def err_message(user):
 def choice_return(request, err, user_model):
     form_setting = Settings.objects.get(id=1).forms
     state = err[1]
-    if err[0] == 1:
+    data = data_user(user_model)
+    if err[0] == 1 and data != False:
         login(request, user_model)
         return render(request,"scoreproj.html",{'Projectset':data_user(user_model), 'proj_act':form_setting})
     else:
