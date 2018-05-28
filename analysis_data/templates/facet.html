@@ -65,7 +65,7 @@
                             {% for i in data%}
                                 {% if forloop.counter == 1 %}
                                 <td class="column100 column{{ forloop.counter|add:2 }}" \
-                                data-column="column{{ forloop.counter|add:2 }}"><h4 style="font-size: 1.3em;text-align: left">teacher{{loop}}</h4></td>
+                                data-column="column{{ forloop.counter|add:2 }}"><h4 style="font-size: 1.3em;text-align: left">{{i}}</h4></td>
                                 {% else %}
                                     <td class="column100 column{{ forloop.counter|add:2 }}" data-column="column{{ forloop.counter|add:2 }}"><h4 style="font-size: 1.3em;">{{i}}</h4></td>
                                 {% endif %}

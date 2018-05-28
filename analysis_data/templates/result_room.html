@@ -72,7 +72,7 @@
                         {% for teacher in result_teacher %} 
                             <tr style="font-size: 1.1em" class="row100">
                                 <td class="column100 column2" >{{teacher.proj_group_exam}}</td>
-                                <td class="column100 column3" style="text-align: left">teacher{{teacher.proj_group_exam}}</td>
+                                <td class="column100 column3" style="text-align: left">{{teacher.teacher_name}}</td>
                                 <td class="column100 column4" >{{teacher.levels_teacher}}</td>
                             </tr>
                             {% if teacher.count_group == 4 %}
