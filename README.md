@@ -24,3 +24,9 @@ pip install -r requirements.txt
 ```
 python manage.py runserver
 ```
+<br />
+
+## FACET
+สำหรับโปรแกรม FACET <br />
+สามารถ download และติดตั้งตามขั้นตอนได้ที่ลิ้ง <br />
+* [https://www.winsteps.com/minifac.htm](https://www.winsteps.com/minifac.htm)
